@@ -74,15 +74,21 @@ $documentacion = [
                                             <div class="card-body no-scroll" style="max-height: 120px; overflow-y: auto;">
                                                 <?php if (!empty($doc['data'])): ?>
                                                     <?php foreach($doc['data'] as $item): ?>
-														<?php
-															$bgColor = match($item['categoriaId']) {
-																'ARCHIVO AUTORIZADO' => 'success',
-																'ESTADO PENDIENTE' => 'info',
-																default => 'danger',
-															};
-															$colorVer = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'white' : 'white';
-															$colorBorrar = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'danger' : 'white';
-														?>
+                                                        <?php
+                                                            switch($item['categoriaId']) {
+                                                                case 'ARCHIVO AUTORIZADO':
+                                                                    $bgColor = 'success';
+                                                                    break;
+                                                                case 'ESTADO PENDIENTE':
+                                                                    $bgColor = 'info';
+                                                                    break;
+                                                                default:
+                                                                    $bgColor = 'danger';
+                                                                    break;
+                                                            }
+                                                            $colorVer = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'white' : 'white';
+                                                            $colorBorrar = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'danger' : 'white';
+                                                        ?>
 														<div class="
 														bg-<?= $bgColor ?>
 														shadow rounded-lg pt-2 pb-1 px-3  my-1">

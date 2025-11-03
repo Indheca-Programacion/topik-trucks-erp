@@ -487,11 +487,17 @@
 												<?php if (!empty($doc['data'])): ?>
 													<?php foreach($doc['data'] as $item): ?>
 														<?php
-															$bgColor = match($item['categoriaId']) {
-																'ARCHIVO AUTORIZADO' => 'success',
-																'ESTADO PENDIENTE' => 'info',
-																default => 'danger',
-															};
+															switch($item['categoriaId']) {
+																case 'ARCHIVO AUTORIZADO':
+																	$bgColor = 'success';
+																	break;
+																case 'ESTADO PENDIENTE':
+																	$bgColor = 'info';
+																	break;
+																default:
+																	$bgColor = 'danger';
+																	break;
+															}
 															$colorVer = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'white' : 'info';
 															$colorBorrar = ($item['categoriaId'] == 'ARCHIVO AUTORIZADO' || $item['categoriaId'] == 'ESTADO PENDIENTE') ? 'danger' : 'white';
 														?>

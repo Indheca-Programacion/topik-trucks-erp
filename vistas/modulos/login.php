@@ -21,7 +21,7 @@
   <!-- Custom -->
   <link rel="stylesheet" href="<?php echo Route::rutaServidor(); ?>vistas/css/login.css">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-color: #db515fff;">
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">

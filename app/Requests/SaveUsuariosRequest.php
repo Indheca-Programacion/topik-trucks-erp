@@ -18,6 +18,8 @@ class SaveUsuariosRequest extends Request
             'correo' => 'required|email|max:100',
             'foto' => 'image:png:jpeg|maxSize:2000000',
             'firma' => 'image:png:jpeg|maxSize:2000000',
+            'salario' => 'decimal',
+            'costoManoObra' => 'decimal',
             'empresaId' => 'exists:'.CONST_BD_SECURITY.'.empresas:id'
         ];
 

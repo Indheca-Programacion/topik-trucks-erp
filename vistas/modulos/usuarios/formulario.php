@@ -252,11 +252,38 @@
 
 		</div> 
 		<!-- <div class="box box-warning"> -->
-
-
-
 		
+		<div class="card card-success card-outine">
+			<div class="card-header">
+				<h3 class="card-title">Documentacion</h3>
+				<div class="card-tools">
+					<input type="file" id="inputDocumentoUsuario" style="display: none;" multiple accept="application/pdf">
+					<button type="button" class="btn btn-sm btn-success" id="btnAgregarDocumento" title="Agregar Documento">
+						<i class="fas fa-plus"></i> Agregar
+					</button>
+				</div>
+			</div>
+			<div class="card-body">
 
+				<?php foreach($usuario->documentos as $documento) { ?>					
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<span class="text-uppercase"><?php echo fString($documento["titulo"]); ?></span>
+						<div>
+							<?php if (!empty($documento["archivo"])) : ?>
+								<button data-ruta="<?php echo $documento["ruta"]; ?>" class="btn btn-sm btn-info" type="button" data-toggle="modal" data-target="#modalVerDocumentoUsuario" title="Ver Documento">
+									<i class="fas fa-eye"></i>
+								</button>
+								<button type="button" class="btn btn-sm btn-danger btnEliminarDocumento" data-id="<?php echo $documento["id"]; ?>" title="Eliminar">
+									<i class="fas fa-trash"></i>
+								</button>
+							<?php else: ?>
+								<span class="text-muted">Sin archivo</span>
+							<?php endif; ?>
+						</div>
+					</div>
+				<?php } ?>
+			</div> <!-- <div class="box-body"> -->
+		</div> <!-- <div class="box box-success"> -->
 
 	</div> <!-- <div class="col-md-6"> -->
 

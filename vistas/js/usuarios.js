@@ -515,4 +515,95 @@
 
   // })
 
+  /*=============================================
+  SUBIR DOCUMENTO
+  =============================================*/
+  $('#btnAgregarDocumento').on('click', function(){
+    $('#inputDocumentoUsuario').click();
+  });
+
+  $('#inputDocumentoUsuario').on('change', function(){
+    let files = document.getElementById('inputDocumentoUsuario').files;
+    if ( files.length == 0 ) return;
+
+    let formData = new FormData();
+    formData.append('accion', 'subirDocumentoUsuario');
+
+    // Agregar todos los archivos seleccionados
+    for (let i = 0; i < files.length; i++) {
+      formData.append('documentos[]', files[i]);
+    }
+    formData.append('usuarioId', usuarioId);
+
+    $.ajax({
+      url:  rutaAjax+'app/Ajax/UsuarioAjax.php' ,
+      type: 'POST',
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function(response) {
+
+        const respuesta = JSON.parse(response);
+        if(respuesta.respuestaMessage == "Error al subir el documento"){
+
+          crearToast('bg-danger', 'Error al subir el documento', 'OK', response.respuestaMessage);
+          return;
+        }
+
+        crearToast('bg-success', 'Documento subido con exito', 'OK', response.respuestaMessage);
+        location.reload();
+      },
+      error: function(xhr, status, error) {
+        console.log(error)
+      },
+    });
+  });
+
+  $('.btnEliminarDocumento').on('click', function(){
+    let documentoId = $(this).data('id');
+    Swal.fire({
+      title: '¿Estás Seguro de querer eliminar este Documento?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, quiero eliminarlo!',
+      cancelButtonText:  'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        $.ajax({
+          url:  rutaAjax+'app/Ajax/UsuarioAjax.php' ,
+          type: 'POST',
+          data: {
+                    accion:'eliminarDocumentoUsuario',
+                    documentoId:documentoId,
+                },
+          success: function(response) {
+            const respuesta = JSON.parse(response);
+           if(respuesta.error){
+              crearToast('bg-danger', 'Error al eliminar el documento', 'OK', response.errorMessage);
+              return;
+            }
+            crearToast('bg-success', 'Documento eliminado con exito ', 'OK', response.respuestaMessage);
+            location.reload();
+          }
+        });
+      }
+    });
+  });
+
+  $('#modalVerDocumentoUsuario').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let ruta = button.data('ruta');
+    let modal = $(this);
+    modal.find('.modal-body iframe').attr('src', ruta);
+  });
+
+  $('#modalVerDocumentoUsuario').on('hidden.bs.modal', function (event) {
+    let modal = $(this);
+    modal.find('.modal-body iframe').attr('src', '');
+  });
+
 });

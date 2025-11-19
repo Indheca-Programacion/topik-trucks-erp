@@ -115,6 +115,7 @@ class UsuariosController
 
             $usuario->consultarPerfiles();
             $usuario->consultarPermisos();
+            $usuario->consultarDocumentos();
 
             require_once "app/Models/Perfil.php";
             $perfil = New \App\Models\Perfil;

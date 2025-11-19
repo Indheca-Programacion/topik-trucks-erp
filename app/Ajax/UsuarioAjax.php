@@ -114,10 +114,114 @@ class UsuarioAjax
         echo json_encode($respuesta);
 	}
 
+	public function subirDocumentoUsuario()
+	{
+		$respuesta["error"] = false;
+
+        // Validar Autorizacion
+        $usuario = New Usuario;
+        if ( usuarioAutenticado() ) {
+
+            $usuario->consultar("usuario", usuarioAutenticado()["usuario"]);
+            
+            if ( !Autorizacion::perfil($usuario, CONST_ADMIN) && !Autorizacion::permiso($usuario, "servicios", "actualizar") ) {
+
+                $respuesta["error"] = true;
+                $respuesta["errorMessage"] = "No está autorizado a modificar Servicios.";
+
+            }
+        
+        } else {
+
+            $respuesta["error"] = true;
+            $respuesta["errorMessage"] = "Usuario no Autenticado, intente de nuevo.";
+
+        }
+		
+        if ( $respuesta["error"] ) {
+
+            echo json_encode($respuesta);
+            return;
+
+        }
+
+		$usuario -> id = $this->usuarioId;
+
+		if(!$usuario -> subirDocumentoUsuario($_FILES['documentos'])){
+
+			$respuesta["error"] = true;
+			$respuesta["errorMessage"] = "Error al subir el(los) documento(s).";
+		}else{
+			$respuesta["error"] = false;
+			$respuesta["mensaje"] = "Documento(s) subido(s) correctamente.";
+
+		}
+
+		echo json_encode($respuesta);
+	}
+
+	public function eliminarDocumentoUsuario()
+	{
+		$respuesta["error"] = false;
+
+		// Validar Autorizacion
+		$usuario = New Usuario;
+		if ( usuarioAutenticado() ) {
+
+			$usuario->consultar("usuario", usuarioAutenticado()["usuario"]);
+			
+			if ( !Autorizacion::perfil($usuario, CONST_ADMIN) && !Autorizacion::permiso($usuario, "servicios", "actualizar") ) {
+
+				$respuesta["error"] = true;
+				$respuesta["errorMessage"] = "No está autorizado a modificar Servicios.";
+
+			}
+		
+		} else {
+
+			$respuesta["error"] = true;
+			$respuesta["errorMessage"] = "Usuario no Autenticado, intente de nuevo.";
+
+		}
+		
+		if ( $respuesta["error"] ) {
+
+			echo json_encode($respuesta);
+			return;
+
+		}
+
+		$usuario -> documentoId = $this->documentoId;
+
+		if(!$usuario -> eliminarDocumentoUsuario()){
+
+			$respuesta["error"] = true;
+			$respuesta["errorMessage"] = "Error al eliminar el documento.";
+		}else{
+			$respuesta["error"] = false;
+			$respuesta["mensaje"] = "Documento eliminado correctamente.";
+
+		}
+
+		echo json_encode($respuesta);
+	}
 }
 
-/*=============================================
-TABLA DE USUARIOS
-=============================================*/
 $activar = new UsuarioAjax();
-$activar -> mostrarTabla();
+
+if (isset($_POST["accion"])) {
+	if($_POST["accion"] == "subirDocumentoUsuario"){
+		$activar->usuarioId = $_POST["usuarioId"];
+		$activar -> subirDocumentoUsuario();
+	}elseif($_POST["accion"] == "eliminarDocumentoUsuario"){
+		$activar->documentoId = $_POST["documentoId"];
+		$activar -> eliminarDocumentoUsuario();
+	}else{
+		echo "Acción no definida";
+	}
+}else{
+	/*=============================================
+	TABLA DE USUARIOS
+	=============================================*/
+	$activar -> mostrarTabla();
+}

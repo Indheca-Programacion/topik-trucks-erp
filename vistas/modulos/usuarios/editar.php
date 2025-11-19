@@ -5,7 +5,7 @@
 	$id_zona = isset($old["id_zona"]) ? $old["id_zona"] : "";
 	$id_almacen = isset($old["id_almacen"]) ? $old["id_almacen"] : "";
 
-
+	$perfilAlmacenista = isset($perfilAlmacenista) ? $perfilAlmacenista : false;
 
 	use App\Route;
 ?>
@@ -223,6 +223,27 @@
 			<button type="button" class="btn btn-primary btnAsignarPuesto">Asignar</button>
 			</div>
     	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalVerDocumentoUsuario" tabindex="-1" role="dialog" aria-labelledby="modalVerDocumentoUsuarioLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalVerDocumentoUsuarioTitle">Ver Documento</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+				<iframe id="iframeDocumentoUsuario" src="" width="100%" height="500px"></iframe>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
 	</div>
 </div>
 

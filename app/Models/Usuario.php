@@ -32,7 +32,8 @@ class Usuario extends UsuarioPolicy
         'firma' => 'string',
         'empresaId' => 'integer',
         'ubicacionId' => 'integer',
-        'ultimoIngreso' => 'date'
+        'ultimoIngreso' => 'date',
+        'usuarioIdCreacion' => 'integer',
     ];
 
     protected $bdName = CONST_BD_SECURITY;
@@ -164,6 +165,14 @@ class Usuario extends UsuarioPolicy
         $resultado = Conexion::queryAll($this->bdName, $query, $error);
         
         $this->permisos = array_column($resultado, "nombre");
+
+    }
+
+    public function consultarDocumentos($item = null, $valor = null) {
+
+        $resultado = Conexion::queryAll($this->bdName, "SELECT UD.* FROM usuario_documentos UD WHERE UD.usuarioId = $this->id", $error);
+        
+        $this->documentos = $resultado;
 
     }
 
@@ -582,5 +591,87 @@ class Usuario extends UsuarioPolicy
         unset($servicios);
 
         return $registros;
+    }
+
+    public function subirDocumentoUsuario($archivos)
+    {
+
+        for ($i = 0; $i < count($archivos['name']); $i++) { 
+        
+            // Agregar al request el nombre, formato y ruta final del archivo
+            $ruta = "";
+            if ( $archivos["tmp_name"][$i] != "" ) {
+
+                $archivo = $archivos["name"][$i];
+                $tipo = $archivos["type"][$i];
+                $tmp_name = $archivos["tmp_name"][$i];
+
+                $directorio = "vistas/uploaded-files/usuarios/documentos/"; // Valor por defecto
+                // $aleatorio = mt_rand(10000000,99999999);
+                $extension = '';
+
+                if ( $archivos["type"][$i] == "application/pdf" ) $extension = ".pdf";
+
+                if ( $extension != '') {
+                    // $ruta = $directorio.$aleatorio.$extension;
+                    do {
+                        $ruta = fRandomNameFile($directorio, $extension);
+                    } while ( file_exists('../../'.$ruta) );
+                }
+
+            }
+
+            $insertar = array();
+            // Request con el nombre del archivo
+            $insertar["usuarioId"] = $this->id;
+            $insertar["titulo"] = $archivo;
+            $insertar["archivo"] = $archivo;
+            $insertar["formato"] = $tipo;
+            $insertar["ruta"] = $ruta;
+            $insertar["usuarioIdCreacion"] = usuarioAutenticado()["id"];
+
+            $arrayPDOParam = array();        
+            $arrayPDOParam["usuarioId"] = self::$type[$this->keyName];
+            $arrayPDOParam["titulo"] = "string";
+            $arrayPDOParam["archivo"] = "string";
+            $arrayPDOParam["formato"] = "string";
+            $arrayPDOParam["ruta"] = "string";
+            $arrayPDOParam["usuarioIdCreacion"] = self::$type["usuarioIdCreacion"];
+
+            $campos = fCreaCamposInsert($arrayPDOParam);
+
+            $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO usuario_documentos " . $campos, $insertar, $arrayPDOParam, $error);
+
+            if ( $respuesta && $ruta != "" ) {
+                move_uploaded_file($tmp_name, '../../'.$ruta);
+            }
+
+        }
+
+        return $respuesta;
+    }
+
+    public function eliminarDocumentoUsuario()
+    {
+        // Agregar al request para eliminar el registro
+        $datos = array();
+        $datos["id"] = $this->documentoId;
+        
+        $arrayPDOParam = array();
+        $arrayPDOParam["id"] = self::$type["id"];
+
+        // Consultar el documento para obtener la ruta y eliminar el archivo físicamente
+        $documento = Conexion::queryUnique($this->bdName, "SELECT * FROM usuario_documentos WHERE id = $this->documentoId", $error);
+
+        $respuesta = Conexion::queryExecute($this->bdName, "DELETE FROM usuario_documentos WHERE id = :id", $datos, $arrayPDOParam, $error);
+
+        if ( $respuesta && !is_null($documento["ruta"]) ) {
+
+            // Eliminar físicamente el archivo (si tiene)
+            fDeleteFile('../../'.$documento["ruta"]);
+
+        }
+
+        return $respuesta;
     }
 }

@@ -13,7 +13,8 @@
 		$firma = $usuario->firma;
 		$empresaId = isset($old["empresaId"]) ? $old["empresaId"] : $usuario->empresaId;
 		$ubicacionId = isset($old["ubicacionId"]) ? $old["ubicacionId"] : $usuario->ubicacionId;
-
+		$salario = isset($old["salario"]) ? $old["salario"] : ( isset($usuario->salario) ? $usuario->salario : "" );
+		$costoManoObra = isset($old["costoManoObra"]) ? $old["costoManoObra"] : ( isset($usuario->costoManoObra) ? $usuario->costoManoObra : "" );
 
 	} else {
 		$usuarioField = isset($old["usuario"]) ? $old["usuario"] : "";
@@ -29,7 +30,8 @@
 		$firma = null;
 		$empresaId = isset($old["empresaId"]) ? $old["empresaId"] : "";
 		$ubicacionId = isset($old["ubicacionId"]) ? $old["ubicacionId"] : "";
-
+		$salario = isset($old["salario"]) ? $old["salario"] : 0;
+		$costoManoObra = isset($old["costoManoObra"]) ? $old["costoManoObra"] : 0;
 
 	}
 ?>
@@ -252,7 +254,8 @@
 
 		</div> 
 		<!-- <div class="box box-warning"> -->
-		
+			
+		<?php if ( isset($usuario->id) ) : ?>
 		<div class="card card-success card-outine">
 			<div class="card-header">
 				<h3 class="card-title">Documentacion</h3>
@@ -284,6 +287,27 @@
 				<?php } ?>
 			</div> <!-- <div class="box-body"> -->
 		</div> <!-- <div class="box box-success"> -->
+		<?php endif; ?>
+
+		<div class="card card-info card-outline">
+			<div class="card-header">
+			  <h3 class="card-title">Salario</h3>
+			</div>
+			<div class="card-body">
+
+				<div class="form-group">
+					<label for="salario">Salario:</label>
+					<input type="text" step="0.01" name="salario" value="<?php echo $salario; ?>" class="form-control form-control-sm campoConDecimal" placeholder="Ingresa el salario del usuario">
+				</div>
+
+				<div class="form-group">
+					<label for="costoManoObra">Costo Mano de obra (H):</label>
+					<input type="text" step="0.01" name="costoManoObra" value="<?php echo $costoManoObra; ?>" class="form-control form-control-sm campoConDecimal" placeholder="Ingresa el costo de mano de obra por hora">
+				</div>
+
+			</div> <!-- <div class="box-body"> -->
+
+		</div> <!-- <div class="box box-info"> -->
 
 	</div> <!-- <div class="col-md-6"> -->
 

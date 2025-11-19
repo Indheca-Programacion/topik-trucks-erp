@@ -32,14 +32,6 @@
     </div> 
 
     <div class="row">
-      
-      <?php if ( count($horasTrabajadasCentro) ) : ?>
-      <div class="col-lg-8">
-        <?php
-          include "reportes/grafico-horas-trabajadas.php";
-        ?>
-      </div>
-      <?php endif; ?>
 
       <div class="col-md-4">
         <?php
@@ -55,9 +47,6 @@
           <div class="card-body">
             <div id="chat-assistant">
               <p><strong>¿En qué puedo ayudarte?</strong></p>
-              <?php if ( $usuarioAutenticado->checkPermiso("estimaciones-aut") || $usuarioAutenticado->checkAdmin()) : ?>
-                <a class="btn btn-success btn-block mb-2" href="<?= Route::names('estimaciones.index') ?>">Mostrar Estimaciones sin autorizar</a>
-              <?php endif; ?>
               <?php if ( $usuarioAutenticado->checkPerfil("pagos") || $usuarioAutenticado->checkAdmin()) : ?>
                 <a class="btn btn-warning btn-block mb-2" href="<?= Route::names('pagos.index') ?>">Subir comprobantes de pago</a>
               <?php endif; ?>
@@ -70,18 +59,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-6">
-        <?php
-          include "reportes/maquinarias-sin-cargas-de-combustible.php";
-        ?>
-      </div>
-
-      <div class="col-md-6">
-      <?php
-        include "reportes/maquinarias-con-servicio-proximo.php";
-      ?>
       </div>
 
     </div>

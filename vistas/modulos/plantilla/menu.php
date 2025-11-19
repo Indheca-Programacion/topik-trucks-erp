@@ -43,54 +43,6 @@
             </a>
           </li>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("maquinarias") || $usuarioAutenticado->checkPermiso("servicios") || $usuarioAutenticado->checkPermiso("informacion-tecnica") || $usuarioAutenticado->checkPermiso("generadores") ): ?>
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-truck-moving"></i>
-              <p>
-                Operaciones
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("maquinarias") ): ?>
-              <li class="nav-item">
-                <a href="maquinarias" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Maquinarias</p>
-                </a>
-              </li>
-              <?php endif ?>
-              <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicios") ): ?>
-              <li class="nav-item">
-                <a href="servicios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Servicios</p>
-                </a>
-              </li>
-              <?php endif ?>
-              <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("informacion-tecnica") ): ?>
-              <li class="nav-item">
-                <a href="informacion-tecnica" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Información Técnica</p>
-                </a>
-              </li>
-              <?php endif ?>
-              <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("generadores") ): ?>
-              <li class="nav-item">
-                <a href="generadores" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Generadores</p>
-                </a>
-              </li>
-              <?php endif ?>
-            </ul>
-          </li>
-
-          <?php endif ?>
-
           <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("maquinaria-tipos") || $usuarioAutenticado->checkPermiso("marcas") || $usuarioAutenticado->checkPermiso("modelos") || $usuarioAutenticado->checkPermiso("colores") || $usuarioAutenticado->checkPermiso("estatus") ||  $usuarioAutenticado->checkPermiso("ubicaciones") || $usuarioAutenticado->checkPermiso("maquinarias") || $usuarioAutenticado->checkPermiso("checklist-maquinarias") || $usuarioAutenticado->checkPermiso("kit-mantenimiento") || $usuarioAutenticado->checkPermiso("obras") ): ?>
 
             <li class="nav-item">
@@ -229,9 +181,9 @@
           <?php endif ?>
 
           <!-- COSTOS -->
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("resumen-costos") || $usuarioAutenticado->checkPermiso("requisiciones") || $usuarioAutenticado->checkPermiso("requisicion-gastos") || $usuarioAutenticado->checkPermiso("gastos") || $usuarioAutenticado->checkPermiso("OrdenCompra") || $usuarioAutenticado->checkPermiso("comprobacion-gastos") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("resumen-costos") || $usuarioAutenticado->checkPermiso("requisiciones") || $usuarioAutenticado->checkPermiso("gastos") || $usuarioAutenticado->checkPermiso("comprobacion-gastos") ): ?>
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "resumen-costos" || Route::getRoute() == "requisiciones" || Route::getRoute() == "requisicion-gastos" || Route::getRoute() == "gastos" || Route::getRoute() == "orden-compra" || Route::getRoute() == "comprobacion-gastos") ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "resumen-costos" || Route::getRoute() == "requisiciones" || Route::getRoute() == "gastos" || Route::getRoute() == "comprobacion-gastos") ? 'active"' : '' ); ?>">
                 <i class="nav-icon 	fas fa-dollar-sign"></i>
                 <p>
                   Costos
@@ -255,27 +207,11 @@
                     </a>
                   </li>
                 <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("requisicion-gastos") ): ?>
-                  <li class="nav-item">
-                    <a href="<?php echo Route::names('requisicion-gastos.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "requisicion-gastos") ? 'active' : '' ); ?>">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Requisición de Gastos</p>
-                    </a>
-                  </li>
-                <?php endif ?>
                 <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("gastos") ): ?>
                   <li class="nav-item">
                     <a href="<?php echo Route::names('gastos.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "gastos") ? 'active' : '' ); ?>">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Gastos</p>
-                    </a>
-                  </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("OrdenCompra") ): ?>
-                  <li class="nav-item">
-                    <a href="<?php echo Route::names('orden-compra.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "orden-compra") ? 'active' : '' ); ?>">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Órdenes de Compra</p>
                     </a>
                   </li>
                 <?php endif ?>
@@ -293,10 +229,10 @@
 
           <?php endif ?>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("estatus-orden-compra") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("servicios") ||  $usuarioAutenticado->checkPermiso("actividad-semanal") || $usuarioAutenticado->checkPermiso("tareas") || $usuarioAutenticado->checkPermiso("gastos") || $usuarioAutenticado->checkPermiso("obras") || $usuarioAutenticado->checkPermiso("traslados") || $usuarioAutenticado->checkPermiso("OrdenCompra") || $usuarioAutenticado->checkPermiso("estimaciones") || $usuarioAutenticado->checkPermiso("generadores") || $usuarioAutenticado->checkPermiso("alertas") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("servicios") ||  $usuarioAutenticado->checkPermiso("actividad-semanal") || $usuarioAutenticado->checkPermiso("tareas") || $usuarioAutenticado->checkPermiso("gastos") || $usuarioAutenticado->checkPermiso("obras") || $usuarioAutenticado->checkPermiso("traslados") || $usuarioAutenticado->checkPermiso("generadores") || $usuarioAutenticado->checkPermiso("alertas") ): ?>
 
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "servicios" || Route::getRoute() == "actividad-semanal" || Route::getRoute() == "tareas" || Route::getRoute() == "generadores" || Route::getRoute() == "alertas" || Route::getRoute() == "traslados" || Route::getRoute() == "estimaciones" )  ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "servicios" || Route::getRoute() == "actividad-semanal" || Route::getRoute() == "tareas" || Route::getRoute() == "generadores" || Route::getRoute() == "alertas" || Route::getRoute() == "traslados")  ? 'active"' : '' ); ?>">
                 <i class="nav-icon fas fa-tools"></i>
                 <p>
                   Servicios
@@ -373,14 +309,6 @@
                   <a href="<?php echo Route::names('generadores.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "generadores") ? 'active' : '' ); ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Generadores</p>
-                  </a>
-                </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("estimaciones") ): ?>
-                <li class="nav-item">
-                  <a href="<?php echo Route::names('estimaciones.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "estimaciones") ? 'active' : '' ); ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Estimaciones</p>
                   </a>
                 </li>
                 <?php endif ?>
@@ -477,10 +405,10 @@
 
           <?php endif ?>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("proveedores") || $usuarioAutenticado->checkPermiso("servicio-estatus") || $usuarioAutenticado->checkPermiso("estatus-orden-compra") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("proveedores") || $usuarioAutenticado->checkPermiso("servicio-estatus") ): ?>
 
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "empleados" || Route::getRoute() == "proveedores" || Route::getRoute() == "servicio-estatus" || Route::getRoute() == "estatus-orden-compra" ) ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "empleados" || Route::getRoute() == "proveedores" || Route::getRoute() == "servicio-estatus" ) ? 'active"' : '' ); ?>">
                 <i class="nav-icon fas fa-list-alt"></i>
                 <p>
                   Catálogos
@@ -509,14 +437,6 @@
                   <a href="<?php echo Route::names('servicio-estatus.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "servicio-estatus") ? 'active' : '' ); ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Estatus</p>
-                  </a>
-                </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("estatus-orden-compra") ): ?>
-                <li class="nav-item">
-                  <a href="<?php echo Route::names('estatus-orden-compra.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "estatus-orden-compra") ? 'active' : '' ); ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Estatus Orden Compra</p>
                   </a>
                 </li>
                 <?php endif ?>
@@ -631,16 +551,6 @@
                   </a>
                 </li>
                 <?php endif ?>
-
-
-                  <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("conf-ordenes-compra") ): ?>
-                  <li class="nav-item">
-                    <a href="<?php echo Route::routes('configuracion-ordenes-compra'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "configuracion-ordenes-compra") ? 'active' : '' ); ?>">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Ordenes Compra</p>
-                    </a>
-                  </li>
-                  <?php endif ?>
                   
                 <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("conf-puesto-tipo") ): ?>
                 <li class="nav-item">

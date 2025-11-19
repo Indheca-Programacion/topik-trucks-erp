@@ -18,10 +18,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Conexión exitosa al servidor"
-            echo "Conexión exitosa al servidor"
-            echo "Conexión exitosa al servidor"
-            echo "Conexión exitosa al servidor"
-
 
             cd ${{ secrets.WORK_DIR }}
             echo "📥 Actualizando repositorio..."

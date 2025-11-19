@@ -37,13 +37,13 @@ use App\Route;
     <!-- small box -->
     <div class="small-box bg-warning">
         <div class="inner">
-            <h3><?php echo $cantidadRequisiciones; ?></h3>
-            <p>Requisiciones</p>
+            <h3><?php echo 0;//SE quieto la cantidad de requisiciones ?></h3>
+            <p>Presupuestos</p>
         </div>
         <div class="icon">
-            <i class="fas fa-tools"></i>
+            <i class="fas fa-file-invoice-dollar"></i>
         </div>
-        <a href="<?php echo Route::names('requisiciones.index'); ?>" class="small-box-footer">
+        <a href="#" class="small-box-footer">
             Más info <i class="fas fa-arrow-circle-right"></i>
         </a>
     </div>

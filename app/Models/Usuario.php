@@ -15,7 +15,7 @@ use App\Policies\UsuarioPolicy;
 class Usuario extends UsuarioPolicy
 {
     static protected $fillable = [
-        'usuario', 'activo', 'contrasena', 'cambiarContrasena', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'correo', 'foto', 'fotoAnterior', 'firma', 'firmaAnterior', 'empresaId', 'ubicacionId','perfiles'
+        'usuario', 'activo', 'contrasena', 'cambiarContrasena', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'correo', 'foto', 'fotoAnterior', 'firma', 'firmaAnterior', 'empresaId', 'ubicacionId','perfiles', 'salario', 'costoManoObra'
     ];
 
     static protected $type = [
@@ -34,6 +34,8 @@ class Usuario extends UsuarioPolicy
         'ubicacionId' => 'integer',
         'ultimoIngreso' => 'date',
         'usuarioIdCreacion' => 'integer',
+        'salario' => 'decimal',
+        'costoManoObra' => 'decimal'
     ];
 
     protected $bdName = CONST_BD_SECURITY;
@@ -105,6 +107,8 @@ class Usuario extends UsuarioPolicy
                 $this->ultimoIngreso = $respuesta["ultimoIngreso"];
                 $this->nombreCompleto = fNombreCompleto($respuesta["nombre"], $respuesta["apellidoPaterno"], $respuesta["apellidoMaterno"]);
                 $this->fechaCreacion = $respuesta["fechaCreacion"];
+                $this->salario = $respuesta["salario"];
+                $this->costoManoObra = $respuesta["costoManoObra"];
             }
 
             return $respuesta;
@@ -250,10 +254,14 @@ class Usuario extends UsuarioPolicy
         $arrayPDOParam["firma"] = self::$type["firma"];
         $arrayPDOParam["empresaId"] = self::$type["empresaId"];
         $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
+        $arrayPDOParam["salario"] = self::$type["salario"];
+        $arrayPDOParam["costoManoObra"] = self::$type["costoManoObra"];
 
+        $datos["salario"] = str_replace(",", "", $datos["salario"]);
+        $datos["costoManoObra"] = str_replace(",", "", $datos["costoManoObra"]);
 
         $lastId = 0;
-        $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName (usuario, contrasena, nombre, apellidoPaterno, apellidoMaterno, correo, foto, firma, empresaId,ubicacionId) VALUES (:usuario, :contrasena, :nombre, :apellidoPaterno, :apellidoMaterno, :correo, :foto, :firma, :empresaId, :ubicacionId)", $datos, $arrayPDOParam, $error, $lastId);
+        $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName (usuario, contrasena, nombre, apellidoPaterno, apellidoMaterno, correo, foto, firma, empresaId,ubicacionId, salario, costoManoObra) VALUES (:usuario, :contrasena, :nombre, :apellidoPaterno, :apellidoMaterno, :correo, :foto, :firma, :empresaId, :ubicacionId, :salario, :costoManoObra)", $datos, $arrayPDOParam, $error, $lastId);
 
         if ( $respuesta ) {
 
@@ -353,15 +361,19 @@ class Usuario extends UsuarioPolicy
         $arrayPDOParam["firma"] = self::$type["firma"];
         $arrayPDOParam["empresaId"] = self::$type["empresaId"];
         $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
+        $arrayPDOParam["salario"] = self::$type["salario"];
+        $arrayPDOParam["costoManoObra"] = self::$type["costoManoObra"];
+
+        $datos["salario"] = str_replace(",", "", $datos["salario"]);
+        $datos["costoManoObra"] = str_replace(",", "", $datos["costoManoObra"]);
 
         if ( $datos["contrasena"] != "") {
 
-            $respuesta = Conexion::queryExecute($this->bdName, "UPDATE $this->tableName SET contrasena = :contrasena, nombre = :nombre, apellidoPaterno = :apellidoPaterno, apellidoMaterno = :apellidoMaterno, correo = :correo, foto = :foto, firma = :firma, empresaId = :empresaId, ubicacionId = :ubicacionId WHERE id = :id", $datos, $arrayPDOParam, $error);
+            $respuesta = Conexion::queryExecute($this->bdName, "UPDATE $this->tableName SET contrasena = :contrasena, nombre = :nombre, apellidoPaterno = :apellidoPaterno, apellidoMaterno = :apellidoMaterno, correo = :correo, foto = :foto, firma = :firma, empresaId = :empresaId, ubicacionId = :ubicacionId, salario = :salario, costoManoObra = :costoManoObra WHERE id = :id", $datos, $arrayPDOParam, $error);
 
         } else {
 
-            $respuesta = Conexion::queryExecute($this->bdName, "UPDATE $this->tableName SET nombre = :nombre, apellidoPaterno = :apellidoPaterno, apellidoMaterno = :apellidoMaterno, correo = :correo, foto = :foto, firma = :firma, empresaId = :empresaId, ubicacionId = :ubicacionId WHERE id = :id", $datos, $arrayPDOParam, $error);
-
+            $respuesta = Conexion::queryExecute($this->bdName, "UPDATE $this->tableName SET nombre = :nombre, apellidoPaterno = :apellidoPaterno, apellidoMaterno = :apellidoMaterno, correo = :correo, foto = :foto, firma = :firma, empresaId = :empresaId, ubicacionId = :ubicacionId, salario = :salario, costoManoObra = :costoManoObra WHERE id = :id", $datos, $arrayPDOParam, $error);
         }
 
         if ( $respuesta ) {

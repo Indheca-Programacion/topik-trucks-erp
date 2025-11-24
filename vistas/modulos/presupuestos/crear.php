@@ -67,9 +67,9 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-			<form method="POST" action="<?php echo Route::names('clientes.store'); ?>">
+			<form method="POST" id="formSendCliente">
 				<?php include "vistas/modulos/clientes/formulario.php"; ?>
-				<button type="submit" class="btn btn-outline-primary">
+				<button type="button" class="btn btn-outline-primary" id="btnGuardarCliente">
 					<i class="fas fa-save"></i> Guardar Cliente
 				</button>										
 				<div id="msgSendCliente"></div>

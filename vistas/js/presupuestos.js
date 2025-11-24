@@ -468,4 +468,48 @@ $(function(){
 		$(servicioToDelete).remove();
 	});
 
+	/*==============================================================
+	Agregar nuevo cliente desde el modal	
+	==============================================================*/
+	$('#btnGuardarCliente').on('click', function (e) {
+		e.preventDefault();
+		guardarClienteModal();
+	});
+
+	function guardarClienteModal() {
+		let formularioCliente = $('#formSendCliente');
+		let msgSendCliente = $('#msgSendCliente');
+		let btnGuardarCliente = $('#btnGuardarCliente');
+
+		// btnGuardarCliente.prop('disabled', true);
+		msgSendCliente.html("<span class='list-group-item list-group-item-success'>Enviando Datos ... por favor espere!</span>");
+		$.ajax({
+			url: rutaAjax+'app/Ajax/ClienteAjax.php',
+			method: 'POST',
+			data: formularioCliente.serialize(),
+			dataType: "json",
+			success:function(respuesta) {
+				if ( respuesta.error ) {
+					let elementErrorValidacion = msgSendCliente;
+					elementErrorValidacion.html('<div class="alert alert-danger alert-dismissable my-2"><button type="button" class="close" data-dismiss="alert">&times;</button><ul><li>'+respuesta.errorMessage+'</li></ul></div>');
+					// btnGuardarCliente.prop('disabled', false);
+					return;
+				}
+				// Agregar el nuevo cliente al select
+				let clienteSelect = $('#clienteId');
+				clienteSelect.append(new Option(respuesta.cliente.nombre, respuesta.cliente.id, true, true));
+				clienteSelect.trigger('change');
+				// Cerrar el modal
+				$('#modalAgregarCliente').modal('hide');
+				// Resetear el formulario
+				formularioCliente[0].reset();
+				btnGuardarCliente.prop('disabled', false);
+				msgSendCliente.html('');
+
+				crearToast('bg-success', 'Cliente agregado correctamente.', '', 'Se ha agregado un nuevo cliente al sistema.');
+			}
+		})
+	}
+
+
 });

@@ -75,7 +75,7 @@ class Cliente extends ClientePolicy
                 $this->telefono = $respuesta["telefono"];
                 $this->correo = $respuesta["correo"];
                 $this->observaciones = $respuesta["observaciones"];
-                $this->metodoPago = $respuesta["metodoPago"];
+                // $this->metodoPago = $respuesta["metodoPago"];
                 $this->usuarioIdCreacion = $respuesta["usuarioIdCreacion"];
                 $this->usuarioIdActualizacion = $respuesta["usuarioIdActualizacion"];
 
@@ -95,14 +95,20 @@ class Cliente extends ClientePolicy
         $arrayPDOParam["telefono"] = self::$type["telefono"];
         $arrayPDOParam["correo"] = self::$type["correo"];
         $arrayPDOParam["observaciones"] = self::$type["observaciones"];
-        $arrayPDOParam["metodoPago"] = self::$type["metodoPago"];
+        // $arrayPDOParam["metodoPago"] = self::$type["metodoPago"];
         $arrayPDOParam["usuarioIdCreacion"] = self::$type["usuarioIdCreacion"];
 
         $datos["usuarioIdCreacion"] = usuarioAutenticado()["id"];
 
         $campos = fCreaCamposInsert($arrayPDOParam);
 
-        return Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName ".$campos, $datos, $arrayPDOParam, $error);
+        $lastId = 0;
+        $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName ".$campos, $datos, $arrayPDOParam, $error, $lastId);
+        if ( $respuesta ) {
+            $this->id = $lastId;
+        }
+
+        return $respuesta;
 
     }
 

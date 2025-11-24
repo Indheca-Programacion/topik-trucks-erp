@@ -47,6 +47,11 @@ $(function(){
 
 	$('.select2').select2();
 
+	$('.select2Add').select2({
+	tags: true
+	// ,theme: 'bootstrap4'
+});
+
 	$('.input-group.date').datetimepicker({
         format: 'DD/MMMM/YYYY'
     });
@@ -509,6 +514,280 @@ $(function(){
 				crearToast('bg-success', 'Cliente agregado correctamente.', '', 'Se ha agregado un nuevo cliente al sistema.');
 			}
 		})
+	}
+
+	/*==============================================================
+	Agregar nueva maquinaria desde el modal	
+	==============================================================*/
+	$('#btnGuardarMaquinaria').on('click', function (e) {
+		e.preventDefault();
+		guardarMaquinariaModal();
+	});
+
+	function guardarMaquinariaModal() {
+		let formularioMaquinaria = $('#formSendMaquinaria');
+		let msgSendMaquinaria = $('#msgSendMaquinaria');
+		let btnGuardarMaquinaria = $('#btnGuardarMaquinaria');
+		// btnGuardarMaquinaria.prop('disabled', true);
+		msgSendMaquinaria.html("<span class='list-group-item list-group-item-success'>Enviando Datos ... por favor espere!</span>");
+		$.ajax({
+			url: rutaAjax+'app/Ajax/MaquinariaAjax.php',
+			method: 'POST',
+			data: formularioMaquinaria.serialize(),
+			dataType: "json",
+			success:function(respuesta) {
+				if ( respuesta.error ) {
+					let listaErrores = '';
+					if ( respuesta.errors){
+						Object.values(respuesta.errors).forEach( function(valor) {
+							listaErrores += '<li>'+valor+'</li>';
+						});
+					}
+
+					let elementErrorValidacion = msgSendMaquinaria;
+					elementErrorValidacion.html('<div class="alert alert-danger alert-dismissable my-2"><button type="button" class="close" data-dismiss="alert">&times;</button><ul>'+listaErrores+'</ul></div>');
+					// btnGuardarMaquinaria.prop('disabled', false);
+					return;
+				}
+				// Agregar la nueva maquinaria al select
+				let maquinariaSelect = $('#maquinariaId');
+				maquinariaSelect.append(new Option(respuesta.maquinaria.descripcion, respuesta.maquinaria.id, true, true));
+				maquinariaSelect.trigger('change');
+				// Cerrar el modal
+				$('#modalAgregarMaquinaria').modal('hide');
+				// Resetear el formulario
+				formularioMaquinaria[0].reset();
+				btnGuardarMaquinaria.prop('disabled', false);
+				msgSendMaquinaria.html('');
+				crearToast('bg-success', 'Maquinaria agregada correctamente.', '', 'Se ha agregado una nueva maquinaria al sistema.');
+			}
+		})
+	}
+
+	let campoMaquinariaTipoId = document.getElementById('maquinariaTipoId');
+	let campoMarcaId = document.getElementById('marcaId');
+	let campoModeloId = document.getElementById('modeloId');
+	let campoColorId = document.getElementById('colorId');
+	let campoEstatusId = document.getElementById('estatusId');
+	let campoUbicacionId = document.getElementById('ubicacionId');
+	let campoAlmacenId = document.getElementById('almacenId');
+	
+	let agregandoCatalogo = false;
+
+	$(document).ready(function(){
+
+		// Deshabilitar todos los botones de Agregar Catalogos
+		$('#btnAddMaquinariaTipoId').attr('disabled','disabled');
+		$('#btnAddMarcaId').attr('disabled','disabled');
+		// $(campoModeloId).attr('disabled','disabled'); // Se habilita cuando está seleccionada una Marca
+		$('#btnAddModeloId').attr('disabled','disabled');
+		$('#btnAddColorId').attr('disabled','disabled');
+		$('#btnAddEstatusId').attr('disabled','disabled');
+
+	});
+
+	$(campoMaquinariaTipoId).on('change', function (e) {
+
+		if ( agregandoCatalogo ) return;
+	
+		let atributo = campoMaquinariaTipoId.querySelector('option[value="'+ this.value +'"]').getAttribute('data-select2-tag');
+
+		if ( atributo ) $('#btnAddMaquinariaTipoId').removeAttr('disabled');
+		else $('#btnAddMaquinariaTipoId').attr('disabled','disabled');
+
+	});
+
+	$('#btnAddMaquinariaTipoId').on('click', function (e) {
+	
+		$('#btnAddMaquinariaTipoId').attr('disabled','disabled');
+		$(campoMaquinariaTipoId).attr('disabled','disabled');
+
+		agregandoCatalogo = true;
+		ajaxEnviar(campoMaquinariaTipoId, "nombreMaquinariaTipo", rutaAjax+'app/Ajax/MaquinariaTipoAjax.php');
+
+	});
+
+	$(campoMarcaId).on('change', function (e) {
+
+		if ( agregandoCatalogo ) return;
+
+		// Eliminar los tags nuevos que no se hayan intentado grabar
+		// newTags.forEach(function callback(currentValue, index, array) {
+		// 	if ( valorActual != currentValue.value ) valueTagEliminar = currentValue.value;
+		// });
+		// if ( valueTagEliminar != null ) campoMarcaId.querySelector('option[value="'+ valueTagEliminar +'"]').remove();
+	
+		let atributo = campoMarcaId.querySelector('option[value="'+ this.value +'"]').getAttribute('data-select2-tag');
+
+		if ( atributo ) $('#btnAddMarcaId').removeAttr('disabled');
+		else {
+			$('#btnAddMarcaId').attr('disabled','disabled');
+
+			// Consultar los modelos de la marca seleccionada
+			campoModeloId.innerHTML = '<option value="">Selecciona un Modelo</option>';
+			if ( campoMarcaId.value != '' ) {
+
+			  	fetch( rutaAjax+'app/Ajax/ModeloAjax.php?marcaId='+campoMarcaId.value, {
+					method: 'GET', // *GET, POST, PUT, DELETE, etc.
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					headers: {
+					'Content-Type': 'application/json'
+					}
+			  	} )
+				.then( response => response.json() )
+				.catch( error => console.log('Error:', error) )
+				.then( data => {
+					data.datos.modelos.forEach(function callback(currentValue, index, array) {
+						$(campoModeloId).append('<option value="'+currentValue.id+'">'+currentValue.descripcion+'</option>');
+					});
+				}); // .then( data => {
+
+			} // if ( campoMarcaId.value != '' )
+
+		};
+
+	});
+
+	$('#btnAddMarcaId').on('click', function (e) {
+	
+		$('#btnAddMarcaId').attr('disabled','disabled');
+		$(campoMarcaId).attr('disabled','disabled');
+
+		agregandoCatalogo = true;
+		ajaxEnviar(campoMarcaId, "nombreMarca", rutaAjax+'app/Ajax/MarcaAjax.php');
+
+	});
+
+	$(campoModeloId).on('change', function (e) {
+
+		if ( agregandoCatalogo ) return;
+	
+		let atributo = campoModeloId.querySelector('option[value="'+ this.value +'"]').getAttribute('data-select2-tag');
+
+		// if ( atributo ) $('#btnAddModeloId').removeAttr('disabled');
+		if ( atributo && campoMarcaId.value != '' ) $('#btnAddModeloId').removeAttr('disabled');
+		else $('#btnAddModeloId').attr('disabled','disabled');
+
+	});
+
+	$('#btnAddModeloId').on('click', function (e) {
+	
+		$('#btnAddModeloId').attr('disabled','disabled');
+		$(campoModeloId).attr('disabled','disabled');
+
+		agregandoCatalogo = true;
+		ajaxEnviar(campoModeloId, "nombreModelo", rutaAjax+'app/Ajax/ModeloAjax.php');
+
+	});
+
+	$(campoColorId).on('change', function (e) {
+
+		if ( agregandoCatalogo ) return;
+	
+		let atributo = campoColorId.querySelector('option[value="'+ this.value +'"]').getAttribute('data-select2-tag');
+
+		if ( atributo ) $('#btnAddColorId').removeAttr('disabled');
+		else $('#btnAddColorId').attr('disabled','disabled');
+
+	});
+
+	$('#btnAddColorId').on('click', function (e) {
+	
+		$('#btnAddColorId').attr('disabled','disabled');
+		$(campoColorId).attr('disabled','disabled');
+
+		agregandoCatalogo = true;
+		ajaxEnviar(campoColorId, "nombreColor", rutaAjax+'app/Ajax/ColorAjax.php');
+
+	});
+
+	$(campoEstatusId).on('change', function (e) {
+
+		if ( agregandoCatalogo ) return;
+	
+		let atributo = campoEstatusId.querySelector('option[value="'+ this.value +'"]').getAttribute('data-select2-tag');
+
+		if ( atributo ) $('#btnAddEstatusId').removeAttr('disabled');
+		else $('#btnAddEstatusId').attr('disabled','disabled');
+
+	});
+
+	$('#btnAddEstatusId').on('click', function (e) {
+	
+		$('#btnAddEstatusId').attr('disabled','disabled');
+		$(campoEstatusId).attr('disabled','disabled');
+
+		agregandoCatalogo = true;
+		ajaxEnviar(campoEstatusId, "nombreEstatus", rutaAjax+'app/Ajax/EstatusAjax.php');
+
+	});
+
+	
+	function ajaxEnviar(objetoCampo, nombreCampoPost, rutaUrl){
+
+		let token = $('input[name="_token"]').val();
+		var nombreValor = objetoCampo.value;
+
+		let datos = new FormData();
+		datos.append("_token", token);
+		// Agregar el valor de la MarcaId
+		if ( objetoCampo.getAttribute('name') == 'modeloId' ) datos.append('marcaId', campoMarcaId.value);
+		datos.append(nombreCampoPost, nombreValor);
+
+		$.ajax({
+		    url: rutaUrl,
+		    method: "POST",
+		    data: datos,
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    dataType: "json",
+		    success: function(respuesta) {
+
+		    	// Si la respuesta es positiva pudo grabar el nuevo registro
+		    	if (respuesta.respuesta) {
+
+		    		let respuestaId = respuesta.respuesta["id"];
+
+		    		$(objetoCampo).parent().after('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>'+respuesta.respuestaMessage+'</div>');
+
+					let lastOption = objetoCampo.lastChild;
+					$(lastOption).after('<option value="'+respuestaId+'" selected>'+nombreValor+'</option>');
+
+		    	} else {
+
+		    		$(objetoCampo).parent().after('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>'+respuesta.errorMessage+'</div>');
+
+		    		$(objetoCampo).val(null).trigger('change');
+
+			    }
+
+	    		setTimeout(function(){ 
+	    			$(".alert").remove();
+	    		}, 5000);
+
+		    	$(objetoCampo).removeAttr('disabled');
+
+		    	agregandoCatalogo = false;
+
+		    },
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+				$(objetoCampo).parent().after('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button>Hubo un error al intentar grabar el registro, intente de nuevo.</div>');
+
+		    	$(objetoCampo).val(null).trigger('change');
+
+		    	setTimeout(function(){ 
+	    			$(".alert").remove();
+	    		}, 5000);
+
+		    	$(objetoCampo).removeAttr('disabled');
+
+		    	agregandoCatalogo = false;
+
+			}
+		})
+
 	}
 
 

@@ -15,7 +15,7 @@ use App\Policies\MaquinariaPolicy;
 class Maquinaria extends MaquinariaPolicy
 {
     static protected $fillable = [
-        'empresaId', 'numeroEconomico', 'numeroFactura', 'maquinariaTipoId', 'modeloId', 'year', 'descripcion', 'serie', 'colorId', 'estatusId', 'ubicacionId', 'almacenId', 'observaciones','obraId', 'fugas', 'transmision', 'sistema', 'motor', 'pintura', 'seguridad'
+        'empresaId', 'numeroEconomico', 'numeroFactura', 'maquinariaTipoId', 'modeloId', 'year', 'descripcion', 'serie', 'colorId', 'estatusId', 'ubicacion', 'almacenId', 'observaciones','obraId', 'fugas', 'transmision', 'sistema', 'motor', 'pintura', 'seguridad'
     ];
 
     static protected $type = [
@@ -30,7 +30,7 @@ class Maquinaria extends MaquinariaPolicy
         'serie' => 'string',
         'colorId' => 'integer',
         'estatusId' => 'integer',
-        'ubicacionId' => 'integer',
+        'ubicacion' => 'string',
         'almacenId' => 'integer',
         'obraId' => 'integer',
         'observaciones' => 'string',
@@ -96,7 +96,6 @@ class Maquinaria extends MaquinariaPolicy
                 INNER JOIN  marcas MA ON MO.marcaId = MA.id
                 LEFT JOIN   colores C ON M.colorId = C.id
                 INNER JOIN  estatus E ON M.estatusId = E.id
-                INNER JOIN  ubicaciones U ON M.ubicacionId = U.id
                 INNER JOIN  almacenes A ON M.almacenId = A.id";
 
         foreach ($arrayFiltros as $key => $value) {
@@ -120,8 +119,7 @@ class Maquinaria extends MaquinariaPolicy
         if ( is_null($valor) ) {
 
             return Conexion::queryAll($this->bdName, 
-            "SELECT M.*, EM.nombreCorto AS 'empresas.nombreCorto', MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion', MA.descripcion AS 'marcas.descripcion', C.descripcion AS 'colores.descripcion', E.descripcion AS 'estatus.descripcion', U.descripcion AS 'ubicaciones.descripcion', A.descripcion AS 'almacenes.descripcion',
-            O.descripcion AS 'obras.descripcion'
+            "SELECT M.*, EM.nombreCorto AS 'empresas.nombreCorto', MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion', MA.descripcion AS 'marcas.descripcion', C.descripcion AS 'colores.descripcion', E.descripcion AS 'estatus.descripcion'
             FROM $this->tableName M 
             INNER JOIN empresas EM ON M.empresaId = EM.id 
             INNER JOIN maquinaria_tipos MT ON M.maquinariaTipoId = MT.id 
@@ -129,9 +127,6 @@ class Maquinaria extends MaquinariaPolicy
             INNER JOIN marcas MA ON MO.marcaId = MA.id 
             LEFT JOIN colores C ON M.colorId = C.id 
             INNER JOIN estatus E ON M.estatusId = E.id 
-            INNER JOIN ubicaciones U ON M.ubicacionId = U.id 
-            INNER JOIN almacenes A ON M.almacenId = A.id 
-            LEFT JOIN obras O ON M.obraId = O.id 
             ORDER BY M.maquinariaTipoId, M.descripcion", $error);
 
         } else {
@@ -139,7 +134,7 @@ class Maquinaria extends MaquinariaPolicy
             if ( is_null($item) ) {
 
                 $respuesta = Conexion::queryUnique($this->bdName, 
-                "SELECT M.*, MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion', MA.descripcion AS 'marcas.descripcion', U.descripcion AS 'ubicaciones.descripcion', ( SELECT        CD.horoOdometro
+                "SELECT M.*, MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion', MA.descripcion AS 'marcas.descripcion', ( SELECT        CD.horoOdometro
                         FROM            combustible_detalles CD
                         INNER JOIN  combustibles C ON CD.combustibleId = C.id
                         WHERE           CD.maquinariaId = M.id
@@ -149,7 +144,6 @@ class Maquinaria extends MaquinariaPolicy
                 INNER JOIN maquinaria_tipos MT ON M.maquinariaTipoId = MT.id 
                 INNER JOIN modelos MO ON M.modeloId = MO.id 
                 INNER JOIN marcas MA ON MO.marcaId = MA.id 
-                INNER JOIN ubicaciones U ON M.ubicacionId = U.id 
                 WHERE M.$this->keyName = $valor", $error);
 
             } else {
@@ -161,9 +155,7 @@ class Maquinaria extends MaquinariaPolicy
             if ( $respuesta ) {
                 $this->id = $respuesta["id"];
                 $this->empresaId = $respuesta["empresaId"];
-                $this->obraId = $respuesta["obraId"];
                 $this->numeroEconomico = $respuesta["numeroEconomico"];
-                $this->numeroFactura = $respuesta["numeroFactura"];
                 $this->maquinariaTipoId = $respuesta["maquinariaTipoId"];
                 $this->modeloId = $respuesta["modeloId"];
                 $this->year = $respuesta["year"];
@@ -171,8 +163,7 @@ class Maquinaria extends MaquinariaPolicy
                 $this->serie = $respuesta["serie"];
                 $this->colorId = $respuesta["colorId"];
                 $this->estatusId = $respuesta["estatusId"];
-                $this->ubicacionId = $respuesta["ubicacionId"];
-                $this->almacenId = $respuesta["almacenId"];
+                $this->ubicacion = $respuesta["ubicacion"];
                 $this->observaciones = $respuesta["observaciones"];
                 $this->fugas = $respuesta["fugas"];
                 $this->transmision = $respuesta["transmision"];
@@ -275,22 +266,25 @@ class Maquinaria extends MaquinariaPolicy
         $arrayPDOParam = array();
         $arrayPDOParam["empresaId"] = self::$type["empresaId"];
         $arrayPDOParam["numeroEconomico"] = self::$type["numeroEconomico"];
-        $arrayPDOParam["numeroFactura"] = self::$type["numeroFactura"];
         $arrayPDOParam["maquinariaTipoId"] = self::$type["maquinariaTipoId"];
         $arrayPDOParam["modeloId"] = self::$type["modeloId"];
         $arrayPDOParam["year"] = self::$type["year"];
         $arrayPDOParam["descripcion"] = self::$type["descripcion"];
         $arrayPDOParam["serie"] = self::$type["serie"];
         $arrayPDOParam["colorId"] = self::$type["colorId"];
-        if(isset($datos["obraId"])) $arrayPDOParam["obraId"] = self::$type["obraId"];
         $arrayPDOParam["estatusId"] = self::$type["estatusId"];
-        $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
-        $arrayPDOParam["almacenId"] = self::$type["almacenId"];
+        $arrayPDOParam["ubicacion"] = self::$type["ubicacion"];
         $arrayPDOParam["observaciones"] = self::$type["observaciones"];
 
         $campos = fCreaCamposInsert($arrayPDOParam);
 
-        return Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName " . $campos, $datos, $arrayPDOParam, $error);
+        $lastId = 0;
+        $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO $this->tableName " . $campos, $datos, $arrayPDOParam, $error, $lastId);
+        if ( $respuesta ) {
+            $this->id = $lastId;
+        }
+        
+        return $respuesta;
 
     }
 
@@ -311,7 +305,6 @@ class Maquinaria extends MaquinariaPolicy
         $arrayPDOParam["colorId"] = self::$type["colorId"];
         $arrayPDOParam["estatusId"] = self::$type["estatusId"];
         $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
-        $arrayPDOParam["almacenId"] = self::$type["almacenId"];
         $arrayPDOParam["obraId"] = self::$type["obraId"];
         $arrayPDOParam["observaciones"] = self::$type["observaciones"];
         $arrayPDOParam["fugas"] = self::$type["fugas"]; 

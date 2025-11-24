@@ -64,6 +64,31 @@ class PresupuestosController
         $servicioEstatus = New \App\Models\ServicioEstatus;
         $servicioStatus = $servicioEstatus->consultar();
 
+        // $maquinariaTipos = \App\Conexion::queryAll(CONST_BD_APP, "SELECT * FROM xmaquinaria_tipos ORDER BY descripcion", $error);
+        require_once "app/Models/MaquinariaTipo.php";
+        $maquinariaTipo = New \App\Models\MaquinariaTipo;
+        $maquinariaTipos = $maquinariaTipo->consultar();
+
+        // $marcas = \App\Conexion::queryAll(CONST_BD_APP, "SELECT * FROM xmarcas ORDER BY descripcion", $error);
+        require_once "app/Models/Marca.php";
+        $marca = New \App\Models\Marca;
+        $marcas = $marca->consultar();
+
+        // $modelos = \App\Conexion::queryAll(CONST_BD_APP, "SELECT * FROM xmodelos ORDER BY descripcion", $error);
+        require_once "app/Models/Modelo.php";
+        $modelo = New \App\Models\Modelo;
+        $modelos = $modelo->consultar();
+
+        // $colores = \App\Conexion::queryAll(CONST_BD_APP, "SELECT * FROM xcolores ORDER BY descripcion", $error);
+        require_once "app/Models/Color.php";
+        $color = New \App\Models\Color;
+        $colores = $color->consultar();
+
+        // $estatus = \App\Conexion::queryAll(CONST_BD_APP, "SELECT * FROM xestatus ORDER BY descripcion", $error);
+        require_once "app/Models/Estatus.php";
+        $status = New \App\Models\Estatus;
+        $estatus = $status->consultar();
+
         $formularioEditable = true;
         $permitirModificarFechas = true;
         

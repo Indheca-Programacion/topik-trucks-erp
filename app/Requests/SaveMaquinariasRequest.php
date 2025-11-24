@@ -2,7 +2,11 @@
 
 namespace App\Requests;
 
-require_once "app/Requests/Request.php";
+if ( file_exists ( "app/Requests/Request.php" ) ) {
+    require_once "app/Requests/Request.php";
+} else {
+    require_once "../Requests/Request.php";
+}
 
 use App\Models\Maquinaria;
 

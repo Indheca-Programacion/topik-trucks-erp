@@ -11,12 +11,14 @@ require_once "../conexion.php";
 require_once "../Models/Usuario.php";
 require_once "../Models/Maquinaria.php";
 require_once "../Controllers/Autorizacion.php";
+require_once "../Requests/SaveMaquinariasRequest.php";
 
 use App\Route;
 use App\Models\Usuario;
 use App\Models\Maquinaria;
 use App\Controllers\Autorizacion;
 use App\Controllers\Validacion;
+use App\Requests\SaveMaquinariasRequest;
 
 class MaquinariaAjax
 {
@@ -237,6 +239,60 @@ class MaquinariaAjax
 
         echo json_encode($respuesta);
     }
+
+    /*=============================================
+    CREAR MAQUINARIA
+    =============================================*/
+    public function crear()
+    {
+        try {
+            
+            $request = SaveMaquinariasRequest::validated();
+
+            if ( errors() ) {
+
+                $respuesta = [
+                    'codigo' => 500,
+                    'error' => true,
+                    'errors' => errors()
+                ];
+
+                unset($_SESSION[CONST_SESSION_APP]["errors"]);
+
+                echo json_encode($respuesta);
+                return;
+
+            }
+            
+            $maquinaria = New Maquinaria;
+            $request['empresaId'] = 7;
+            $response = $maquinaria->crear($request);
+
+            $maquinaria->consultar(null, $maquinaria->id);
+            $newMaquinaria = [
+                'id' => $maquinaria->id,
+                'descripcion' => $maquinaria->descripcion
+            ];
+
+
+            $respuesta = [
+                'error' => false,
+                'respuesta' => $response,
+                'respuestaMessage' => "Maquinaria creada correctamente.",
+                'maquinaria' =>  $newMaquinaria
+            ];
+        } catch (\Exception $e) {
+
+            $respuesta = [
+                'codigo' => 500,
+                'error' => true,
+                'errorMessage' => $e->getMessage()
+            ];
+
+        }
+
+        echo json_encode($respuesta);
+    }
 }
 
 $maquinariaAjax = new MaquinariaAjax();
@@ -259,6 +315,14 @@ if ( isset($_POST["accion"])) {
         $maquinariaAjax->token = $_POST["_token"];
         $maquinariaAjax->archivoId = $_POST["archivoId"];
         $maquinariaAjax->eliminarImagen();
+    } elseif ( $_POST["accion"] == 'crear' ) {
+        /*=============================================
+        CREAR MAQUINARIA
+        =============================================*/
+
+        $maquinariaAjax->token = $_POST["_token"];
+        $maquinariaAjax->crear();
+
     } else {
 
         $respuesta = [

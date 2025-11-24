@@ -6,29 +6,18 @@
 
 			<div class="card-body">
 
-				<input type="hidden" name="_token[]" value="<?php echo createToken(); ?>">
-
 				<div class="row">
-
-					<div class="col-md-6 form-group">
-
-						<label for="empresaId">Empresa:</label>
-						<select name="empresaId[]" id="empresaId" class="custom-select form-controls">						
-							<option value="">Selecciona una Empresa</option>
-							<?php foreach($empresas as $empresa) { ?>
-							<option value="<?php echo $empresa["id"]; ?>"
-								><?php echo mb_strtoupper(fString($empresa["razonSocial"])); ?>
-							</option>
-							<?php } ?>
-						</select>
-
-					</div>
 
 					<div class="col-md-6 form-group">
 						<label for="fechaSolicitud">Fecha Solicitud:</label>
 						<div class="input-group date" id="fechaSolicitudDTP" data-target-input="nearest">
 							<input type="date" id="fechaSolicitud" name="fechaSolicitud[]" value="<?php echo date("Y-m-d"); ?>" class="form-control form-control-sm" placeholder="Ingresa la fecha de solicitud">
 						</div>
+					</div>
+
+					<div class="col-md-6 form-group">
+						<label for="maquinariaUbicacionDescripcion">Ubicación:</label>
+						<input type="text" name="ubicacion[]" id="ubicacion" value="" class="form-control form-control-sm text-uppercase">
 					</div>
 
 				</div>
@@ -99,52 +88,24 @@
 
 				</div>
 
-				<div class="row">
-
-					<div class="col-md-6 form-group">
-						<label for="maquinariaUbicacionDescripcion">Ubicación:</label>
-						<input type="text" name="ubicacion[]" id="ubicacion" value="" class="form-control form-control-sm text-uppercase">
-					</div>
-
-				</div>
 				<hr>
 
-				<!-- <div class="form-group">
+				<div class="form-group">
 					<label for="descripcion">Evidencia del trabajo terminado:</label>
 					<div class="subir-fotos mb-1">
 
-						<?php if ( $formularioEditable ) : ?>
-							<button type="button" class="btn btn-info mb-2" id="btnSubirFotos">
-								<i class="fas fa-images"></i> Subir Fotos
-							</button>
-						<?php endif; ?>
-
-						<?php if ( isset($servicio->id) ) : ?>
-
-						<?php if ( $formularioEditable ) : ?>
-							<button type="button" class="btn btn-info mb-2 float-right" id="verImagenes" servicioId="<?php echo $servicio->id; ?>" folio="<?php echo $folio; ?>" verBotonEliminar="true" data-toggle="modal" data-target="#modalVerImagenes" <?php echo ( $servicio->cant_imagenes == 0 ) ? 'disabled' : '' ?>>
-								<i class="fas fa-eye"></i> Ver 
-						<?php else: ?>
-							<button type="button" class="btn btn-info mb-2 float-left" id="verImagenes" servicioId="<?php echo $servicio->id; ?>" folio="<?php echo $folio; ?>" verBotonEliminar="false" data-toggle="modal" data-target="#modalVerImagenes" <?php echo ( $servicio->cant_imagenes == 0 ) ? 'disabled' : '' ?>>
-								<i class="fas fa-eye"></i> Ver Fotos 
-						<?php endif; ?>
-							<?php if (  $servicio->cant_imagenes > 0 ) : ?>
-							<span class="badge badge-light"><?php echo $servicio->cant_imagenes; ?></span>
-							<?php endif; ?>
+						<button type="button" class="btn btn-info mb-2 btnSubirFotos" data-id="1">
+							<i class="fas fa-images"></i> Subir Fotos
 						</button>
-
-						<?php endif; ?>
 
 						<span class="previsualizar">
 						</span>
 
-						<input type="file" class="form-control form-control-sm d-none" id="imagenes" name="imagenes[]" multiple>
+						<input type="file" class="form-control form-control-sm d-none" id="imagenes_1" name="imagenes_1[]" multiple>
 
 					</div>
-					<?php if ( $formularioEditable ) : ?>
 					<div class="mb-1 text-muted">Archivos permitidos JPG O PNG (con capacidad máxima de 1MB)</div>
-					<?php endif; ?>
-				</div> -->
+				</div>
 
 			</div> <!-- <div class="box-body"> -->
 

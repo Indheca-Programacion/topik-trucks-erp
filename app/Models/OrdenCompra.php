@@ -117,7 +117,6 @@ class OrdenCompra extends OrdenCompraPolicy
                 S.descripcion AS 'estatus.descripcion',
                 S.colorTexto AS 'estatus.colorTexto', 
                 S.colorFondo AS 'estatus.colorFondo',
-                SER.folio AS 'servicio.folio',
                 CASE WHEN P.personaFisica = 1 THEN TRIM(CONCAT(P.nombre, ' ', P.apellidoPaterno, ' ', IFNULL(P.apellidoMaterno, ''))) WHEN P.personaFisica = 0 THEN P.razonSocial END AS 'proveedor'
             FROM 
                 $this->tableName OC

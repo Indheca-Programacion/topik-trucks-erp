@@ -32,7 +32,6 @@
 	}
 ?>
 <input type="hidden" id="_token" name="_token" value="<?php echo createToken(); ?>">
-<input type="hidden" id="periodo" name="periodo" value="<?php echo date('W'); ?>">
 
 <!-- Stepper -->
 <div class="bs-stepper-header" role="tablist">
@@ -131,7 +130,7 @@
             <div class="form-group">
                 <label for="clienteId">¿Es un cliente registrado?</label>
 				<div class="input-group">
-					<select id="clienteId" class="form-control select2">
+					<select id="clienteId" name="clienteId" class="form-control select2">
 						<option value="">Seleccione un cliente</option>
 						<?php foreach ($clientes as $cliente): ?>
 							<option value="<?= $cliente["id"] ?>"><?= $cliente["nombreCompleto"] ?></option>
@@ -203,7 +202,7 @@
         <i class="fas fa-save"></i> Continuar Levantamiento
     </button>
 
-    <button type="button" id="btnCrearPresupuesto" class="btn btn-outline-primary d-none" >
+    <button type="button" id="btnSend" class="btn btn-outline-primary d-none" >
         <i class="fas fa-plus"></i> Crear presupuesto
     </button>
 

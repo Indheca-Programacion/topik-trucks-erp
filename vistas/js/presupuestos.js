@@ -129,7 +129,7 @@ $(function(){
 				$(tbody).append(row);
 			});
 
-			$('#btnCrearPresupuesto').removeClass("d-none");
+			$('#btnSend').removeClass("d-none");
         }
 
     });
@@ -165,6 +165,7 @@ $(function(){
             step2Trigger.classList.remove("active");
             step3Trigger.classList.remove("active");
         }
+		$('#btnSend').addClass("d-none");
 
         // Ocultar el botón anterior si estamos en el step 1
         if (!step1.classList.contains("d-none")) {
@@ -176,16 +177,21 @@ $(function(){
 	/*==============================================
 	Abrir el input al presionar el botón Subir Fotos
 	==============================================*/
-	$("#btnSubirFotos").click(function() {
-		document.getElementById('imagenes').click();
+	$(document).on('click', '.btnSubirFotos', function() {
+		let dataId = $(this).data('id');
+		document.getElementById('imagenes_' + dataId).click();
 	})
 
 	/*===========================================================
 	Validar tipo y tamaño de las imágenes (Evidencia fotográfica)
 	===========================================================*/
-	$("#imagenes").change(function() {
+	$(document).on('change', 'input[type="file"][id^="imagenes"]', function() {
 
-		$("div.subir-fotos span.previsualizar").html('');
+		let inputFile = $(this);
+		let servicioContainer = inputFile.closest('.servicios-levantamiento');
+		let previewContainer = servicioContainer.find('span.previsualizar');
+		
+		previewContainer.html('');
 		let archivos = this.files;
 		let error = false;
 
@@ -200,8 +206,6 @@ $(function(){
 			if ( archivo["type"] != "image/jpeg" && archivo["type"] != "image/png" ) {
 
 				error = true;
-				// $("#imagenes").val("");
-				// $("div.subir-fotos span.previsualizar").html('');
 
 				Swal.fire({
 					title: 'Error en el tipo de archivo',
@@ -213,8 +217,6 @@ $(function(){
 			} else if ( archivo["size"] > 1000000 ) {
 
 				error = true;
-				// $("#imagenes").val("");
-				// $("div.subir-fotos span.previsualizar").html('');
 
 				Swal.fire({
 					title: 'Error en el tamaño del archivo',
@@ -235,7 +237,7 @@ $(function(){
 											<img src="${rutaImagen}" class="img-fluid img-thumbnail" style="width: 100%">
 										</picture>
 										<p class="font-italic text-info mb-0">${archivo["name"]}</p>`;
-					$("div.subir-fotos span.previsualizar").append(elementPicture);
+					previewContainer.append(elementPicture);
 				})
 
 			}
@@ -243,14 +245,14 @@ $(function(){
 		}
 
 		if ( error ) {
-			$("#imagenes").val("");
+			inputFile.val("");
 
 			setTimeout(() => {
-				$("div.subir-fotos span.previsualizar").html('');
-			}, "1000");
+				previewContainer.html('');
+			}, 1000);
 		}
 
-	}) // $("#fotos").change(function(){
+	})
 
 	let modalVerImagenes = document.querySelector('#modalVerImagenes');
 	/*==============================================================
@@ -424,12 +426,29 @@ $(function(){
 		
 		headingDiv.querySelector('.mb-0').appendChild(botonEliminar);
 
-		// Limpiar valores de los inputs
+		// Actualizar data-id del botón btnSubirFotos
+		let btnSubirFotos = primerServicio.querySelector('.btnSubirFotos');
+		if (btnSubirFotos) {
+			btnSubirFotos.setAttribute('data-id', nuevoIndice);
+		}
+
+		// Limpiar valores de los inputs y actualizar name de imagenes[]
 		primerServicio.querySelectorAll('input, textarea, select').forEach(input => {
 			if (input.type !== 'hidden') {
 				input.value = '';
+				// Actualizar el name del input file para separar por servicio
+				if (input.type === 'file') {
+					input.name = `imagenes_${nuevoIndice}[]`;
+					input.id = `imagenes_${nuevoIndice}`;
+				}
 			}
 		});
+
+		// Limpiar previsualización de imágenes si existe
+		let previsualizar = primerServicio.querySelector('.previsualizar');
+		if (previsualizar) {
+			previsualizar.innerHTML = '';
+		}
 
 		// Agregar el nuevo servicio al accordion
 		accordionLevantamientos.appendChild(primerServicio);

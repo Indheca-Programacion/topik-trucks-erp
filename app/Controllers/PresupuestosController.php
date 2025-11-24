@@ -75,30 +75,32 @@ class PresupuestosController
     public function store()
     {
 
-        Autorizacion::authorize('create', New Proveedor);
+        Autorizacion::authorize('update', new Presupuesto);
+        
+        $request = SavePresupuestoRequest::validated();
 
-        $request = SaveProveedoresRequest::validated();
+        // var_dump($request);
+        // die();
 
-        $proveedor = New Proveedor;
-        $respuesta = $proveedor->crear($request);
+        $presupuesto = New Presupuesto;
+        $respuesta = $presupuesto->crear($request,$_FILES);
 
         if ( $respuesta ) {
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-success',
-                                                           'titulo' => 'Crear Proveedor',
+                                                           'titulo' => 'Crear Presupuesto',
                                                            'subTitulo' => 'OK',
-                                                           'mensaje' => 'El proveedor fue creado correctamente' );
-            header("Location:" . Route::names('proveedores.index'));
+                                                           'mensaje' => 'El presupuesto fue creado correctamente' );
+            header("Location:" . Route::names('presupuestos.index'));
 
         } else {
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-                                                           'titulo' => 'Crear Proveedor',
+                                                           'titulo' => 'Crear Presupuesto',
                                                            'subTitulo' => 'Error',
                                                            'mensaje' => 'Hubo un error al procesar, de favor intente de nuevo' );
 
-            header("Location:" . Route::names('proveedores.create'));
-
+            header("Location:" . Route::names('presupuestos.create'));
         }
         
         die();
@@ -177,7 +179,7 @@ class PresupuestosController
 
     public function update($id)
     {
-        Autorizacion::authorize('update', new Proveedor);
+        Autorizacion::authorize('update', new Presupuesto);
 
         $request = SaveProveedoresRequest::validated($id);
 

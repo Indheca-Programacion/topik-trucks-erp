@@ -11,8 +11,8 @@ class SavePresupuestoRequest extends Request
 	static public function rules($id)
     {
         $rules = [
-            'maquinariaId' => 'required|integer||exists:'.CONST_BD_SECURITY.'.maquinarias:id',
-            'clienteId' => 'required|integer||exists:'.CONST_BD_SECURITY.'.clientes:id',
+            'maquinariaId' => 'required|integer|exists:'.CONST_BD_SECURITY.'.maquinarias:id',
+            'clienteId' => 'required|integer|exists:'.CONST_BD_SECURITY.'.clientes:id',
             'fuente' => 'required|string|max:255'
         ];
 

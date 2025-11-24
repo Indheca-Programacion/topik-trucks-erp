@@ -140,8 +140,7 @@ class Requisicion extends RequisicionPolicy
                 INNER JOIN  maquinarias M ON S.maquinariaId = M.id
                 INNER JOIN  ubicaciones U ON S.ubicacionId = U.id
                 INNER JOIN  usuarios US ON R.usuarioIdCreacion = US.id
-                INNER JOIN  servicio_estatus SE ON R.servicioEstatusId = SE.id
-                left join   obras O ON O.id = S.obraId";
+                INNER JOIN  servicio_estatus SE ON R.servicioEstatusId = SE.id";
 
         if ( count($arrayFiltros) == 0 ) {
             $query .= " WHERE       R.servicioEstatusId <> 4";
@@ -175,24 +174,17 @@ class Requisicion extends RequisicionPolicy
             $fechaActual = date('Y-m-d', strtotime('+1 days'));
             // Calcular la fecha de dos meses
             $fechaInicio = date('Y-m-d', strtotime('-2 months'));
-            $query = "SELECT    R.*, E.nombreCorto AS 'empresas.nombreCorto',
-                                SC.descripcion AS 'servicio_centros.descripcion',
+            $query = "SELECT    R.*,
                                 M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie',
-                                U.descripcion AS 'ubicaciones.descripcion',
-                                O.descripcion AS 'obras.descripcion',
                                 US.nombre AS 'usuarios.nombre', US.apellidoPaterno AS 'usuarios.apellidoPaterno', US.apellidoMaterno AS 'usuarios.apellidoMaterno',
                                 SE.descripcion AS 'servicio_estatus.descripcion', SE.colorTexto AS 'servicio_estatus.colorTexto', SE.colorFondo AS 'servicio_estatus.colorFondo'
                     FROM        {$this->tableName} R
                     INNER JOIN  servicios S ON R.servicioId = S.id
-                    INNER JOIN  empresas E ON S.empresaId = E.id
-                    INNER JOIN  servicio_centros SC ON S.servicioCentroId = SC.id
                     INNER JOIN  maquinarias M ON S.maquinariaId = M.id
-                    INNER JOIN  ubicaciones U ON S.ubicacionId = U.id
                     INNER JOIN  usuarios US ON R.usuarioIdCreacion = US.id
                     INNER JOIN  servicio_estatus SE ON R.servicioEstatusId = SE.id
-                    left join   obras O ON O.id = S.obraId
                     WHERE       R.servicioEstatusId <> 4 AND R.fechaCreacion BETWEEN '$fechaInicio' AND '$fechaActual'
-                    ORDER BY    R.fechaCreacion DESC, E.id, SC.id, S.numero DESC, R.numero DESC 
+                    ORDER BY    R.fechaCreacion DESC, R.numero DESC 
                     ";
             return Conexion::queryAll($this->bdName, $query, $error);
 
@@ -281,7 +273,6 @@ class Requisicion extends RequisicionPolicy
                     INNER JOIN  ubicaciones U ON S.ubicacionId = U.id
                     INNER JOIN  usuarios US ON R.usuarioIdCreacion = US.id
                     INNER JOIN  servicio_estatus SE ON R.servicioEstatusId = SE.id
-                    left join   obras O ON O.id = S.obraId
                     WHERE       (R.servicioEstatusId = 2 or R.servicioEstatusId = 14) AND R.fechaCreacion
                     ORDER BY    R.fechaCreacion DESC, E.id, SC.id, S.numero DESC, R.numero DESC 
                     ", $error);

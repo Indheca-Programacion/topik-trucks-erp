@@ -122,21 +122,19 @@ class Servicio extends ServicioPolicy
     =============================================*/
     public function consultarFiltros($arrayFiltros = array())
     {
-        $query = "SELECT    S.*, E.nombreCorto AS 'empresas.nombreCorto', SC.descripcion AS 'servicio_centros.descripcion',
+        $query = "SELECT    S.*, E.nombreCorto AS 'empresas.nombreCorto',
                             M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie',
                             MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion',
-                            MA.descripcion AS 'marcas.descripcion', U.descripcion AS 'ubicaciones.descripcion',
+                            MA.descripcion AS 'marcas.descripcion',
                             MAT.descripcion AS 'mantenimiento_tipos.descripcion', ST.descripcion AS 'servicio_tipos.descripcion',
                             SE.descripcion AS 'servicio_estatus.descripcion', SE.colorTexto AS 'servicio_estatus.colorTexto', SE.colorFondo AS 'servicio_estatus.colorFondo',
                             US.nombre AS 'usuarios.nombre', US.apellidoPaterno AS 'usuarios.apellidoPaterno', US.apellidoMaterno AS 'usuarios.apellidoMaterno'
                 FROM        $this->tableName S
                 INNER JOIN  empresas E ON S.empresaId = E.id
-                INNER JOIN  servicio_centros SC ON S.servicioCentroId = SC.id
                 INNER JOIN  maquinarias M ON S.maquinariaId = M.id
                 INNER JOIN  maquinaria_tipos MT ON M.maquinariaTipoId = MT.id
                 INNER JOIN  modelos MO ON M.modeloId = MO.id
                 INNER JOIN  marcas MA ON MO.marcaId = MA.id
-                INNER JOIN  ubicaciones U ON S.ubicacionId = U.id
                 INNER JOIN  mantenimiento_tipos MAT ON S.mantenimientoTipoId = MAT.id
                 INNER JOIN  servicio_tipos ST ON S.servicioTipoId = ST.id
                 INNER JOIN  servicio_estatus SE ON S.servicioEstatusId = SE.id
@@ -171,28 +169,25 @@ class Servicio extends ServicioPolicy
 
         if ( is_null($valor) ) {
 
-            $query = "SELECT S.*, E.nombreCorto AS 'empresas.nombreCorto', SC.descripcion AS 'servicio_centros.descripcion',
+            $query = "SELECT S.*,
                     M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie',
                     MT.descripcion AS 'maquinaria_tipos.descripcion', MO.descripcion AS 'modelos.descripcion',
-                    MA.descripcion AS 'marcas.descripcion', U.descripcion AS 'ubicaciones.descripcion',
+                    MA.descripcion AS 'marcas.descripcion',
                     MAT.descripcion AS 'mantenimiento_tipos.descripcion', ST.descripcion AS 'servicio_tipos.descripcion',
                     SE.descripcion AS 'servicio_estatus.descripcion', SE.colorTexto AS 'servicio_estatus.colorTexto', SE.colorFondo AS 'servicio_estatus.colorFondo',
                     ( SELECT COUNT(SI.id) FROM servicio_imagenes SI WHERE SI.servicioId = S.id ) AS cant_imagenes,
                     US.nombre AS 'usuarios.nombre', US.apellidoPaterno AS 'usuarios.apellidoPaterno', US.apellidoMaterno AS 'usuarios.apellidoMaterno'
                 FROM        {$this->tableName} S
-                INNER JOIN  empresas E ON S.empresaId = E.id
-                INNER JOIN  servicio_centros SC ON S.servicioCentroId = SC.id
                 INNER JOIN  maquinarias M ON S.maquinariaId = M.id
                 INNER JOIN  maquinaria_tipos MT ON M.maquinariaTipoId = MT.id
                 INNER JOIN  modelos MO ON M.modeloId = MO.id
                 INNER JOIN  marcas MA ON MO.marcaId = MA.id
-                INNER JOIN  ubicaciones U ON S.ubicacionId = U.id
                 INNER JOIN  mantenimiento_tipos MAT ON S.mantenimientoTipoId = MAT.id
                 INNER JOIN  servicio_tipos ST ON S.servicioTipoId = ST.id
                 INNER JOIN  servicio_estatus SE ON S.servicioEstatusId = SE.id
                 INNER JOIN  usuarios US ON S.usuarioIdCreacion = US.id
                 WHERE       S.servicioEstatusId <> 4 AND S.servicioEstatusId <> 20 AND S.servicioEstatusId <> 21 AND S.fechaSolicitud >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-                ORDER BY    S.fechaSolicitud DESC, E.id, SC.id, S.numero DESC, M.maquinariaTipoId, M.descripcion";
+                ORDER BY    S.fechaSolicitud DESC, M.maquinariaTipoId, M.descripcion";
 
             return Conexion::queryAll($this->bdName, $query, $error);
 
@@ -338,47 +333,19 @@ class Servicio extends ServicioPolicy
 
     public function crear($datos) {
 
-        // VALIDACION AL CREAR EL TRASLADO
-        $datos["obraId"] = $datos["obraId"] ?? "";
-
-        // Buscar el último folio según la Empresa y Centro de Servicio
-        $lastId = $this->consultarLastId($datos["empresaId"], $datos["servicioCentroId"]);
-
-        if ( $lastId === false || $lastId[0] === null ) {
-            $lastId["numero"] = 0;
-            $lastId["empresas.nomenclaturaOT"] = $datos['empresas.nomenclaturaOT'];
-            $lastId["servicio_centros.nomenclaturaOT"] = $datos['servicio_centros.nomenclaturaOT'];
-        }
-
         // Agregar al request para especificar el usuario que creó la Requisición
         $datos["usuarioIdCreacion"] = usuarioAutenticado()["id"];
-        // Agregar al request para especificar numero y folio del Servicio
-        $datos["numero"] = (int) $lastId["numero"] + 1;
-        $datos["folio"] = "{$lastId["empresas.nomenclaturaOT"]}-{$lastId["servicio_centros.nomenclaturaOT"]}-{$datos["numero"]}";
-
-        // Convertir los campos date (fechaLarga) a formato SQL
-        // $datos["fechaSolicitud"] = fFechaSQL($datos["fechaSolicitud"]);
-        if ( isset($datos["fechaSolicitud"]) ) $datos["fechaSolicitud"] = fFechaSQL($datos["fechaSolicitud"]);
-        if ( $datos["fechaProgramacion"] != '' ) $datos["fechaProgramacion"] = fFechaSQL($datos["fechaProgramacion"]);
         // Quitar las comas de los campos decimal
         $datos["horasProyectadas"] = str_replace(',', '', $datos["horasProyectadas"]);
 
         $arrayPDOParam = array();
-        $arrayPDOParam["empresaId"] = self::$type["empresaId"];
-        $arrayPDOParam["servicioCentroId"] = self::$type["servicioCentroId"];
-        $arrayPDOParam["numero"] = self::$type["numero"];
-        $arrayPDOParam["folio"] = self::$type["folio"];
         $arrayPDOParam["maquinariaId"] = self::$type["maquinariaId"];
-        $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
-        $arrayPDOParam["obraId"] = self::$type["obraId"];
+        $arrayPDOParam["ubicacion"] = self::$type["ubicacion"];
         $arrayPDOParam["mantenimientoTipoId"] = self::$type["mantenimientoTipoId"];
         $arrayPDOParam["servicioTipoId"] = self::$type["servicioTipoId"];
         $arrayPDOParam["servicioEstatusId"] = self::$type["servicioEstatusId"];
-        $arrayPDOParam["solicitudTipoId"] = self::$type["solicitudTipoId"];
         $arrayPDOParam["horasProyectadas"] = self::$type["horasProyectadas"];
-        // $arrayPDOParam["fechaSolicitud"] = self::$type["fechaSolicitud"];
         if ( isset($datos["fechaSolicitud"]) ) $arrayPDOParam["fechaSolicitud"] = self::$type["fechaSolicitud"];
-        if ( $datos["fechaProgramacion"] != '' ) $arrayPDOParam["fechaProgramacion"] = self::$type["fechaProgramacion"];
         $arrayPDOParam["descripcion"] = self::$type["descripcion"];
         $arrayPDOParam["usuarioIdCreacion"] = self::$type["usuarioIdCreacion"];
 

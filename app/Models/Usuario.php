@@ -578,7 +578,7 @@ class Usuario extends UsuarioPolicy
 
     public function notificaciones()
     {
-        $query = "SELECT    S.id, S.folio, S.fechaActualizacion, SE.descripcion AS 'servicio_estatus.descripcion',
+        $query = "SELECT    S.id, S.fechaActualizacion, SE.descripcion AS 'servicio_estatus.descripcion',
                             TIMESTAMPDIFF(SECOND, S.fechaActualizacion, NOW()) AS 'tiempoEnSegundos'
                 FROM        servicios S
                 INNER JOIN  servicio_estatus SE ON S.servicioEstatusId = SE.id
@@ -590,7 +590,7 @@ class Usuario extends UsuarioPolicy
         $registros = array();
         foreach ($servicios as $key => $value) {
             $rutaEdit = \App\Route::names('servicios.edit', $value['id']);
-            $folio = mb_strtoupper(fString($value['folio']));
+            $folio = mb_strtoupper(fString($value['id']));
             $estatusDescripcion = mb_strtoupper(fString($value['servicio_estatus.descripcion']));
             $tiempo = formatearTiempoUnidad($value['tiempoEnSegundos']);
 

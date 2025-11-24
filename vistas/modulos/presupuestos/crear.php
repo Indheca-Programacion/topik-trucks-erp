@@ -43,7 +43,7 @@
 					</div> <!-- <div class="card-header"> -->
 					<div class="card-body">
 						<?php include "vistas/modulos/errores/form-messages.php"; ?>
-						<form id="formSend" method="POST" action="<?php echo Route::names('presupuestos.store'); ?>">
+						<form id="formSend" method="POST" action="<?php echo Route::names('presupuestos.store'); ?>" enctype="multipart/form-data">
 							
 							<?php include "vistas/modulos/presupuestos/formulario.php"; ?>									
 							<div id="msgSend"></div>

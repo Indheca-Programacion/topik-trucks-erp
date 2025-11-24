@@ -110,13 +110,11 @@ class HomeController
         $query = "SELECT    EM.razonSocial AS 'empresas.razonSocial', EM.nombreCorto AS 'empresas.nombreCorto',
                             MT.descripcion AS 'maquinariaTipos.descripcion', MT.nombreCorto AS 'maquinariaTipos.nombreCorto',
                             ES.descripcion AS 'estatus.descripcion', ES.nombreCorto AS 'estatus.nombreCorto',
-                            U.descripcion AS 'ubicaciones.descripcion', U.nombreCorto AS 'ubicaciones.nombreCorto',
                             M.numeroEconomico
                 FROM        maquinarias M
                 INNER JOIN  empresas EM ON M.empresaId = EM.id
                 INNER JOIN  maquinaria_tipos MT ON M.maquinariaTipoId = MT.id
                 INNER JOIN  estatus ES ON M.estatusId = ES.id
-                INNER JOIN  ubicaciones U ON M.ubicacionId = U.id
                 WHERE       MT.id IN ( {$diasSinCargaMaquinariaTipos} )
                 AND         ES.id IN ( {$diasSinCargaMaquinariaEstatus} )
                 AND         (SELECT     COUNT(C.fecha)
@@ -145,7 +143,6 @@ class HomeController
             $query = "SELECT    P.horoOdometroUltimo, P.cantidadSiguienteServicio,
                         M.id AS 'maquinarias.id', M.numeroEconomico AS 'maquinarias.numeroEconomico',
                         E.nombreCorto AS 'empresas.nombreCorto',
-                        U.descripcion AS 'ubicaciones.descripcion', U.nombreCorto AS 'ubicaciones.nombreCorto',
                         ES.descripcion AS 'estatus.descripcion',
                         ST.id AS 'servicio_tipos.id', ST.descripcion AS 'servicio_tipos.descripcion', ST.numero AS 'servicio_tipos.numero',
                         ( SELECT        CD.horoOdometro
@@ -157,7 +154,6 @@ class HomeController
                 FROM        programaciones P
                 INNER JOIN  maquinarias M ON P.maquinariaId = M.id
                 INNER JOIN  empresas E ON M.empresaId = E.id
-                INNER JOIN  ubicaciones U ON M.ubicacionId = U.id
                 INNER JOIN  estatus ES ON M.estatusId = ES.id
                 INNER JOIN  servicio_tipos ST ON P.servicioTipoId = ST.id
                 WHERE       ST.id IN ( {$servicioTiposText} )

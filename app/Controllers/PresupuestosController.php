@@ -106,64 +106,23 @@ class PresupuestosController
 
     public function edit($id)
     {
-       Autorizacion::authorize('update', new Proveedor);
+        Autorizacion::authorize('update', new Presupuesto);
 
-        $proveedorArchivos = new ProveedorArchivos;
+        $presupuesto = New Presupuesto;
 
-        $proveedorArchivos->consultarArchivoNombre("CV",$id);
-        $proveedorArchivos->consultarArchivoNombre("OC1",$id);
-        $proveedorArchivos->consultarArchivoNombre("OC2",$id);
-        $proveedorArchivos->consultarArchivoNombre("OC3",$id);
+        if ( $presupuesto->consultar(null , $id) ) {
 
-        $proveedorArchivos->consultarArchivoNombre("ActaConstitutiva",$id);
-        $proveedorArchivos->consultarArchivoNombre("ConstanciaSituacionFiscal",$id);
-        $proveedorArchivos->consultarArchivoNombre("CumplimientoSAT",$id);
-        $proveedorArchivos->consultarArchivoNombre("CumplimientoIMSS",$id);
-        $proveedorArchivos->consultarArchivoNombre("CumplimientoInfonavit",$id);
-        $proveedorArchivos->consultarArchivoNombre("AltaRepse",$id);
-        $proveedorArchivos->consultarArchivoNombre("UltimaInformativa",$id);
+            require_once "app/Models/Maquinaria.php";
+            $maquinaria = new \App\Models\Maquinaria;
+            $maquinarias = $maquinaria->consultar();
 
-        $proveedorArchivos->consultarArchivoNombre("ConstanciaFiscal",$id);
-        $proveedorArchivos->consultarArchivoNombre("OpinionCumplimiento",$id);
-        $proveedorArchivos->consultarArchivoNombre("ComprobanteDomicilio",$id);
-        $proveedorArchivos->consultarArchivoNombre("DatosBancarios",$id);
+            require_once "app/Models/Cliente.php";
+            $cliente = new \App\Models\Cliente;
+            $clientes = $cliente->consultar();
 
-        $proveedorArchivos->consultarArchivoNombre("EstadoCuenta",$id);
-        $proveedorArchivos->consultarArchivoNombre("EstadoFinanciero",$id);
-        $proveedorArchivos->consultarArchivoNombre("UltimaDeclaracionAnual",$id);
-
-        $proveedorArchivos->consultarArchivoNombre("Soporte",$id);
-        $proveedorArchivos->consultarArchivoNombre("Listado",$id);
-        $proveedorArchivos->consultarArchivoNombre("Certificaciones",$id);
-
-        require_once "app/Models/DatosBancarios.php";
-        $datoBancario = new \App\Models\DatosBancarios;
-        $datosBancarios = $datoBancario->consultarDatosBancariosProveedor($id);
-
-        require_once "app/Models/Divisa.php";
-        $divisa = new \App\Models\Divisa;
-        $divisas = $divisa->consultar();
-
-        $permisoProveedor = new PermisoProveedor;
-        $permisos = $permisoProveedor->consultarPermisos($id);
-
-        require_once "app/Models/CategoriaProveedor.php";
-        $categoriaProveedor = new \App\Models\CategoriaProveedor;
-        $categorias = $categoriaProveedor->consultar();
-
-        $proveedor = New Proveedor;
-
-        if ( $proveedor->consultar(null , $id) ) {
-
-            $categoriaPermiso = New CategoriaPermiso;
-            $permisosAsignados = $categoriaPermiso->consultar($proveedor->idCategoria);
-
-            $arrayTipoDocumentos = $proveedorArchivos->mapaDirectorios;
-            $historialObservaciones = $proveedor->observacionePorProveedor();
-
-            $ultimaObservacion = $proveedor->ultimaObservacion();
+            $serviciosPresupuesto = $presupuesto->obtenerServiciosPresupuesto($id);
             
-            $contenido = array('modulo' => 'vistas/modulos/proveedores/editar.php');
+            $contenido = array('modulo' => 'vistas/modulos/presupuestos/editar.php');
 
             include "vistas/modulos/plantilla.php";
         } else {

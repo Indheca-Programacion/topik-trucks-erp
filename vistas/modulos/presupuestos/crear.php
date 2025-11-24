@@ -45,7 +45,7 @@
 						<?php include "vistas/modulos/errores/form-messages.php"; ?>
 						<form id="formSend" method="POST" action="<?php echo Route::names('presupuestos.store'); ?>" enctype="multipart/form-data">
 							
-							<?php include "vistas/modulos/presupuestos/formulario.php"; ?>									
+							<?php include "vistas/modulos/presupuestos/formulario-step.php"; ?>									
 							<div id="msgSend"></div>
 						</form>
 						<?php include "vistas/modulos/errores/form-messages-validation.php"; ?>

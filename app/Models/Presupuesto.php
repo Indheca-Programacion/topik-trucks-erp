@@ -87,6 +87,18 @@ class Presupuesto extends PresupuestoPolicy
 
     }
 
+    public function obtenerServiciosPresupuesto($presupuestoId) {
+        return Conexion::queryAll($this->bdName, "SELECT S.* ,
+                                                    MT.descripcion AS mantenimientoTipo,
+                                                    ST.descripcion AS servicioTipo,
+                                                    SE.descripcion AS servicioEstatus
+                                                    FROM servicios S
+                                                    inner join mantenimiento_tipos MT on S.mantenimientoTipoId = MT.id
+                                                    inner join servicio_tipos ST on S.servicioTipoId = ST.id
+                                                    inner join servicio_estatus SE on S.servicioEstatusId = SE.id
+                                                    WHERE S.presupuestoId = $presupuestoId", $error);
+    }
+
     public function crear($datos,$imagenes = null) {
 
         $arrayPDOParam = array();

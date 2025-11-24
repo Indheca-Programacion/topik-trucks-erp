@@ -72,8 +72,8 @@ class PresupuestoAjax
                 
 
                 $id_presupuesto = $value['id'];
-                $rutaEdit = Route::names('presupuesto.edit', $value['id']);
-                $rutaDestroy = Route::names('presupuesto.destroy', $value['id']);
+                $rutaEdit = Route::names('presupuestos.edit', $value['id']);
+                $rutaDestroy = Route::names('presupuestos.destroy', $value['id']);
 
                 array_push( $registros, [ "consecutivo" => ($key + 1),
                                         "maquinaria" => fString($value["maquinaria"]),

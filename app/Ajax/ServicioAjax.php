@@ -34,8 +34,6 @@ class ServicioAjax
 
 		$columnas = array();
         array_push($columnas, [ "data" => "consecutivo" ]);
-        array_push($columnas, [ "data" => "empresa" ]);
-        array_push($columnas, [ "data" => "centroServicio" ]);
         array_push($columnas, [ "data" => "folio" ]);
         array_push($columnas, [ "data" => "estatus" ]);
         array_push($columnas, [ "data" => "fechaSolicitud" ]);
@@ -46,9 +44,6 @@ class ServicioAjax
         array_push($columnas, [ "data" => "marca" ]);
         array_push($columnas, [ "data" => "modelo" ]);
         array_push($columnas, [ "data" => "serie" ]);
-        array_push($columnas, [ "data" => "ubicacion" ]);
-        array_push($columnas, [ "data" => "fechaProgramacion" ]);
-        array_push($columnas, [ "data" => "fechaFinalizacion" ]);
         array_push($columnas, [ "data" => "descripcion" ]);
         array_push($columnas, [ "data" => "creo" ]);
         array_push($columnas, [ "data" => "acciones" ]);
@@ -60,15 +55,13 @@ class ServicioAjax
         	$rutaEdit = Route::names('servicios.edit', $value['id']);
         	// $rutaDestroy = Route::names('servicios.destroy', $value['id']);
             $rutaPrint = Route::names('servicios.print', $value['id']);
-        	$folio = mb_strtoupper(fString($value['folio']));
+        	$folio = mb_strtoupper(fString($value['id']));
             $creo = $value['usuarios.nombre'] . ' ' . $value['usuarios.apellidoPaterno'];
             if ( !is_null($value['usuarios.apellidoMaterno']) ) $creo .= ' ' . $value['usuarios.apellidoMaterno'];
 
         	array_push( $registros, [ 
                 "consecutivo" => ($key + 1),
-                "empresa" => mb_strtoupper(fString($value["empresas.nombreCorto"])),
-                "centroServicio" => mb_strtoupper(fString($value["servicio_centros.descripcion"])),
-                "folio" => mb_strtoupper(fString($value["folio"])),
+                "folio" => mb_strtoupper(fString($value["id"])),
                 "estatus" => mb_strtoupper(fString($value["servicio_estatus.descripcion"])),
                 "colorTexto" => mb_strtoupper(fString($value["servicio_estatus.colorTexto"])),
                 "colorFondo" => mb_strtoupper(fString($value["servicio_estatus.colorFondo"])),
@@ -79,10 +72,7 @@ class ServicioAjax
                 "marca" => mb_strtoupper(fString($value["marcas.descripcion"])),
                 "modelo" => mb_strtoupper(fString($value["modelos.descripcion"])),
                 "serie" => mb_strtoupper(fString($value["maquinarias.serie"])),
-                "ubicacion" => mb_strtoupper(fString($value["ubicaciones.descripcion"])),
                 "fechaSolicitud" => fFechaLarga($value["fechaSolicitud"]),
-                "fechaProgramacion" => ( is_null($value["fechaProgramacion"]) ? '' : fFechaLarga($value["fechaProgramacion"]) ),
-                "fechaFinalizacion" => ( is_null($value["fechaFinalizacion"]) ? '' : fFechaLarga($value["fechaFinalizacion"]) ),
                 "descripcion" => mb_strtoupper(fString($value["descripcion"])),
                 "creo" => mb_strtoupper(fString($creo)),
                 "acciones" =>   "<a href='{$rutaEdit}' target='_blank' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>

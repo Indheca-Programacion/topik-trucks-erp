@@ -207,23 +207,15 @@ class Servicio extends ServicioPolicy
 
             if ( $respuesta ) {
                 $this->id = $respuesta["id"];
-                $this->empresaId = $respuesta["empresaId"];
-                $this->servicioCentroId = $respuesta["servicioCentroId"];
-                $this->numero = $respuesta["numero"];
-                $this->folio = $respuesta["folio"];
+                $this->folio = $respuesta["id"];
                 $this->maquinariaId = $respuesta["maquinariaId"];
-                $this->ubicacionId = $respuesta["ubicacionId"];
-                $this->obraId = $respuesta["obraId"];
                 $this->horoOdometro = $respuesta["horoOdometro"];
                 $this->mantenimientoTipoId = $respuesta["mantenimientoTipoId"];
                 $this->servicioTipoId = $respuesta["servicioTipoId"];
                 $this->servicioEstatusId = $respuesta["servicioEstatusId"];
-                $this->solicitudTipoId = $respuesta["solicitudTipoId"];
                 $this->horasProyectadas = $respuesta["horasProyectadas"];
                 $this->horasReales = $respuesta["horasReales"];
                 $this->fechaSolicitud = $respuesta["fechaSolicitud"];
-                $this->fechaProgramacion = $respuesta["fechaProgramacion"];
-                $this->fechaFinalizacion = $respuesta["fechaFinalizacion"];
                 $this->descripcion = $respuesta["descripcion"];
                 $this->cant_imagenes = $respuesta["cant_imagenes"];
                 $this->cant_archivos = $respuesta["cant_archivos"];
@@ -240,15 +232,6 @@ class Servicio extends ServicioPolicy
                 $maquinaria = New Maquinaria;
                 $this->maquinaria = $maquinaria->consultar(null, $this->maquinariaId);
 
-                // require_once "app/Models/Ubicacion.php";
-                if ( file_exists ( "app/Models/Ubicacion.php" ) ) {
-                    require_once "app/Models/Ubicacion.php";
-                } else {
-                    require_once "../Models/Ubicacion.php";
-                }
-                $ubicacion = New Ubicacion;
-                $this->ubicacion = $ubicacion->consultar(null, $this->ubicacionId);
-
                 // require_once "app/Models/ServicioEstatus.php";
                 if ( file_exists ( "app/Models/ServicioEstatus.php" ) ) {
                     require_once "app/Models/ServicioEstatus.php";
@@ -258,13 +241,6 @@ class Servicio extends ServicioPolicy
                 $servicioEstatus = New ServicioEstatus;
                 $this->estatus = $servicioEstatus->consultar(null, $this->servicioEstatusId);
 
-                if ( file_exists ( "app/Models/SolicitudTipo.php" ) ) {
-                    require_once "app/Models/SolicitudTipo.php";
-                } else {
-                    require_once "../Models/SolicitudTipo.php";
-                }
-                $solicitudTipo = New SolicitudTipo;
-                $this->solicitudTipo = $solicitudTipo->consultar(null, $this->solicitudTipoId);
             }
 
             return $respuesta;
@@ -311,7 +287,7 @@ class Servicio extends ServicioPolicy
 
     public function consultarRequisiciones() {
 
-        $resultado = Conexion::queryAll($this->bdName, "SELECT R.*, E.nombreCorto AS 'empresas.nombreCorto', SC.descripcion AS 'servicio_centros.descripcion', M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie', SE.descripcion AS 'servicio_estatus.descripcion' FROM requisiciones R INNER JOIN servicios S ON R.servicioId = S.id INNER JOIN empresas E ON S.empresaId = E.id INNER JOIN servicio_centros SC ON S.servicioCentroId = SC.id INNER JOIN maquinarias M ON S.maquinariaId = M.id INNER JOIN servicio_estatus SE ON R.servicioEstatusId = SE.id WHERE R.servicioId = $this->id ORDER BY R.fechaCreacion DESC, E.id, SC.id, S.numero DESC, R.numero DESC", $error);
+        $resultado = Conexion::queryAll($this->bdName, "SELECT R.*, M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie', SE.descripcion AS 'servicio_estatus.descripcion' FROM requisiciones R INNER JOIN servicios S ON R.servicioId = S.id INNER JOIN maquinarias M ON S.maquinariaId = M.id INNER JOIN servicio_estatus SE ON R.servicioEstatusId = SE.id WHERE R.servicioId = $this->id ORDER BY R.fechaCreacion DESC, R.numero DESC", $error);
     
         $this->requisiciones = $resultado;
 
@@ -369,27 +345,14 @@ class Servicio extends ServicioPolicy
         $datos["usuarioIdActualizacion"] = usuarioAutenticado()["id"];
 
         // Convertir los campos date (fechaLarga) a formato SQL
-        // $datos["fechaSolicitud"] = fFechaSQL($datos["fechaSolicitud"]);
-        if ( $datos["fechaProgramacion"] != '' ) $datos["fechaProgramacion"] = fFechaSQL($datos["fechaProgramacion"]);
-        // if ( $datos["fechaFinalizacion"] != '' ) $datos["fechaFinalizacion"] = fFechaSQL($datos["fechaFinalizacion"]);
-        if ( isset($datos["fechaFinalizacion"]) ) $datos["fechaFinalizacion"] = fFechaSQL($datos["fechaFinalizacion"]);
-        // Quitar las comas de los campos decimal
         $datos["horasProyectadas"] = str_replace(',', '', $datos["horasProyectadas"]);
 
         $arrayPDOParam = array();
-        // $arrayPDOParam["empresaId"] = self::$type["empresaId"];
-        // $arrayPDOParam["folio"] = self::$type["folio"];
         $arrayPDOParam["maquinariaId"] = self::$type["maquinariaId"];
-        $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
-        $arrayPDOParam["obraId"] = self::$type["obraId"];
         $arrayPDOParam["mantenimientoTipoId"] = self::$type["mantenimientoTipoId"];
         $arrayPDOParam["servicioTipoId"] = self::$type["servicioTipoId"];
         if ( isset($datos["servicioEstatusId"]) ) $arrayPDOParam["servicioEstatusId"] = self::$type["servicioEstatusId"];
-        $arrayPDOParam["solicitudTipoId"] = self::$type["solicitudTipoId"];
         $arrayPDOParam["horasProyectadas"] = self::$type["horasProyectadas"];
-        // $arrayPDOParam["fechaSolicitud"] = self::$type["fechaSolicitud"];
-        if ( $datos["fechaProgramacion"] != '' ) $arrayPDOParam["fechaProgramacion"] = self::$type["fechaProgramacion"];
-        // if ( $datos["fechaFinalizacion"] != '' ) $arrayPDOParam["fechaFinalizacion"] = self::$type["fechaFinalizacion"];
         if ( isset($datos["fechaFinalizacion"]) ) $arrayPDOParam["fechaFinalizacion"] = self::$type["fechaFinalizacion"];
         $arrayPDOParam["descripcion"] = self::$type["descripcion"];
         $arrayPDOParam["usuarioIdActualizacion"] = self::$type["usuarioIdActualizacion"];

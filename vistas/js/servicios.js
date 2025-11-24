@@ -39,8 +39,8 @@ $(function(){
 				columns: data.datos.columnas,
 
 		        createdRow: function (row, data, index) {
-		        	if ( data.colorTexto != '' ) $('td', row).eq(4).css("color", data.colorTexto);
-		        	if ( data.colorFondo != '' ) $('td', row).eq(4).css("background-color", data.colorFondo);
+		        	if ( data.colorTexto != '' ) $('td', row).eq(2).css("color", data.colorTexto);
+		        	if ( data.colorFondo != '' ) $('td', row).eq(2).css("background-color", data.colorFondo);
 		        },
 
 				buttons: [{ extend: 'copy', text:'Copiar', className: 'btn-info' },

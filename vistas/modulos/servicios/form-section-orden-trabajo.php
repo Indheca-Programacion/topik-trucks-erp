@@ -34,40 +34,12 @@
 				<div class="row">
 
 					<div class="col-md-6 form-group">
-						<label for="servicioCentroId">Centro de Servicio:</label>
-						<select name="servicioCentroId" id="servicioCentroId" class="custom-select form-controls select2" <?php echo ( !$formularioEditable || isset($servicio->id) ) ? ' disabled' : ''; ?>>
-						<?php if ( isset($servicio->id) ) : ?>
-						<!-- <select id="servicioCentroId" class="form-control select2" style="width: 100%" disabled> -->
-						<?php else: ?>
-						<!-- <select name="servicioCentroId" id="servicioCentroId" class="form-control select2Add" style="width: 100%"> -->
-							<option value="">Selecciona un Centro</option>
-						<?php endif; ?>
-							<?php foreach($servicioCentros as $servicioCentro) { ?>
-								<?php if ( strtoupper(substr($servicioCentro["descripcion"], 0,4)) !== 'C.S.' ) continue; ?>
-							<option value="<?php echo $servicioCentro["id"]; ?>"
-								<?php echo $servicioCentroId == $servicioCentro["id"] ? ' selected' : ''; ?>
-								><?php echo mb_strtoupper(fString($servicioCentro["descripcion"])); ?>
-							</option>
-							<?php } ?>
-						</select>
-					</div>
-
-					<div class="col-md-6 form-group">
 						<label for="numero">Folio asignado por sistema:</label>
-						<input type="text" id="numero" value="<?php echo fString($numero); ?>" class="form-control form-control-sm text-uppercase" placeholder="" disabled>
+						<input type="text" id="numero" value="<?php echo fString($folio); ?>" class="form-control form-control-sm text-uppercase" placeholder="" disabled>
 					</div>
-
-				</div>
-
-				<div class="row">
-
+					
 					<div class="col-md-6 form-group">
-						<label for="folio">Folio de Orden de Trabajo:</label>
-						<input type="text" id="folio" value="<?php echo fString($folio); ?>" class="form-control form-control-sm text-uppercase" placeholder="" <?php echo ( !$formularioEditable || isset($servicio->id) ) ? ' disabled' : ' disabled'; ?>>
-					</div>
-
-					<div class="col-md-6 form-group">
-
+	
 						<label for="servicioEstatusId">Estatus:</label>
 						<select <?php echo ( !isset($servicio->id) ) ? 'name="servicioEstatusId"' : ''; ?> id="servicioEstatusId" class="custom-select form-controls select2" <?php echo ( !$formularioEditable || isset($servicio->id) ) ? ' disabled' : ''; ?>>
 						<?php if ( isset($servicio->id) ) : ?>
@@ -85,31 +57,12 @@
 							<?php endif; ?>
 							<?php } ?>
 						</select>
-
+	
 					</div>
 
 				</div>
 
 				<div class="row">
-
-					<div class="col-md-6 form-group">
-
-						<label for="solicitudTipoId">Tipo de Solicitud:</label>
-						<select name="solicitudTipoId" id="solicitudTipoId" class="custom-select form-controls select2" <?php echo !$formularioEditable ? ' disabled' : ''; ?>>
-						<?php if ( isset($servicio->id) ) : ?>
-						<!-- <select id="solicitudTipoId" class="form-control select2" style="width: 100%" disabled> -->
-						<?php else: ?>
-							<option value="">Selecciona un Tipo de Solicitud</option>
-						<?php endif; ?>
-							<?php foreach($solicitudTipos as $solicitudTipo) { ?>
-							<option value="<?php echo $solicitudTipo["id"]; ?>"
-								<?php echo $solicitudTipoId == $solicitudTipo["id"] ? ' selected' : ''; ?>
-								><?php echo mb_strtoupper(fString($solicitudTipo["descripcion"])); ?>
-							</option>
-							<?php } ?>
-						</select>
-
-					</div>
 
 					<div class="col-md-6 form-group">
 						<label for="fechaSolicitud">Fecha Solicitud:</label>
@@ -233,43 +186,14 @@
 					</div>
 
 					<div class="col-md-6 form-group">
-						<label for="maquinariaUbicacionDescripcion">Ubicación:</label>
+						<label for="ubicacion">Ubicación:</label>
 						
-						<select name="ubicacionId" id="ubicacionId" class="custom-select form-controls select2" <?php echo !$formularioEditable ? ' disabled' : ''; ?>>
-							<?php if ( !isset($servicio->id) || isset($servicio->id) ) : ?>
-							<!-- <input type="hidden" name="ubicacionId" id="ubicacionId" value="<?php echo fString($ubicacionId); ?>"> -->
-							<?php else: ?>
-								<?php endif; ?> 
-								<option value="">Selecciona Ubicacion</option>
-							<?php foreach($ubicaciones as $ubicacion) { ?>
-								<option value="<?php echo $ubicacion["id"]; ?>"
-									<?php echo $ubicacionId == $ubicacion["id"] ? ' selected' : ''; ?>
-									><?php echo mb_strtoupper(fString($ubicacion["descripcion"])); ?>
-								</option>
-							<?php } ?>
-						</select>
-					</div>
-
-					<div class="col-md-6 form-group">
-						<label for="maquinariaObraDescripcion">Obra:</label>
-						<select name="obraId" id="obraId" class="custom-select form-controls select2" <?php echo !$formularioEditable ? ' disabled' : ''; ?>>
-							<?php if ( !isset($servicio->id) || isset($servicio->id) ) : ?>
-							<!-- <input type="hidden" name="ubicacionId" id="ubicacionId" value="<?php echo fString($obraId); ?>"> -->
-							<?php else: ?>
-								<?php endif; ?> 
-								<option value="">Selecciona Obra</option>
-							<?php foreach($obras as $obra) { ?>
-								<option value="<?php echo $obra["id"]; ?>"
-									<?php echo $obraId == $obra["id"] ? ' selected' : ''; ?>
-									><?php echo mb_strtoupper(fString($obra["descripcion"])); ?>
-								</option>
-							<?php } ?>
-						</select>
+						<input type="text" name="ubicacion" id="ubicacion" value="<?php echo fString($maquinariaUbicacionDescripcion); ?>" class="form-control form-control-sm text-uppercase">
 					</div>
 
 				</div>
 
-				<?php if ( isset($servicio->id) && $servicio->solicitudTipo['nombreCorto'] == 'PROGRAMADO' ) : ?>
+				<?php if ( isset($servicio->id) ) : ?>
 					<div class="row">
 						<div class="col-md-6 form-group">
 							<label for="horoOdometro">Horómetro / Odómetro:</label>
@@ -295,32 +219,6 @@
 				<div class="form-group d-none">
 					<label for="maquinariaDescripcion">Descripción:</label>
 					<input type="text" name="maquinariaDescripcion" id="maquinariaDescripcion" value="<?php echo fString($maquinariaDescripcion); ?>" class="form-control form-control-sm text-uppercase" readonly>
-				</div>
-
-				<div class="row">
-
-					<div class="col-md-6 form-group">
-						<label for="fechaProgramacion">Fecha de finalización estimada:</label>
-						<div class="input-group date" id="fechaProgramacionDTP" data-target-input="nearest">
-							<input type="text" name="fechaProgramacion" id="fechaProgramacion" value="<?php echo $fechaProgramacion; ?>" class="form-control form-control-sm datetimepicker-input" placeholder="Ingresa la fecha de solicitud" data-target="#fechaProgramacionDTP" <?php echo !$formularioEditable ? ' disabled' : ''; ?>>
-							<div class="input-group-append" data-target="#fechaProgramacionDTP" data-toggle="datetimepicker">
-	                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
-	                        </div>
-						</div>
-					</div>
-
-					<?php if ( isset($servicio->id) ) : ?>
-					<div class="col-md-6 form-group">
-						<label for="fechaFinalizacion">Fecha de finalización real:</label>
-						<div class="input-group date" id="fechaFinalizacionDTP" data-target-input="nearest">
-							<input type="text" name="fechaFinalizacion" id="fechaFinalizacion" value="<?php echo $fechaFinalizacion; ?>" class="form-control form-control-sm datetimepicker-input" placeholder="Ingresa la fecha de solicitud" data-target="#fechaFinalizacionDTP" <?php echo ( $permitirModificarFechas && $servicio->servicioEstatusId == 8 ) ? '' : ' disabled'; ?>>
-							<div class="input-group-append" data-target="#fechaFinalizacionDTP" data-toggle="datetimepicker">
-	                            <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
-	                        </div>
-						</div>
-					</div>
-					<?php endif; ?>
-
 				</div>
 
 				<div class="form-group">
@@ -363,31 +261,6 @@
 					<div class="mb-1 text-muted">Archivos permitidos JPG O PNG (con capacidad máxima de 1MB)</div>
 					<?php endif; ?>
 
-					<div class="subir-archivos mb-1">
-
-						<?php if ( $formularioEditable ) : ?>
-						<button type="button" class="btn btn-info mb-2" id="btnSubirArchivos" servicioId="<?php echo $servicio->id; ?>">
-							<i class="fas fa-folder-open"></i> Subir Documentos
-						</button>
-						<?php endif; ?>
-
-						<button type="button" class="btn btn-info mb-2 float-right" id="verArchivos" servicioId="<?php echo $servicio->id; ?>" folio="<?php echo $folio; ?>" verBotonEliminar="<?php echo $formularioEditable ? 'true' : 'false' ?>" data-toggle="modal" data-target="#modalVerArchivos" <?php echo ( $servicio->cant_archivos == 0 ) ? 'disabled' : '' ?>>
-						<?php if ( $formularioEditable ) : ?>
-							<i class="fas fa-eye"></i> Ver 
-						<?php else: ?>
-							<i class="fas fa-eye"></i> Ver Documentos
-						<?php endif; ?>
-							<?php if ( $servicio->cant_archivos > 0 ) : ?>
-							<span class="badge badge-light"><?php echo $servicio->cant_archivos; ?></span>
-							<?php endif; ?>
-						</button>
-
-						<!-- <input type="file" class="form-control form-control-sm d-none" id="archivos" name="archivos[]" multiple> -->
-
-					</div>
-					<?php if ( $formularioEditable ) : ?>
-					<div class="mb-1 text-muted">Archivos permitidos PDF (con capacidad máxima de 4MB)</div>
-					<?php endif; ?>
 				</div>
 				<?php endif; ?>
 

@@ -64,10 +64,6 @@ class HomeController
         $requisiciones = $requisicion->consultar();
         $cantidadRequisiciones = count($requisiciones);
 
-        $ordenCompra = New OrdenCompra;
-        $ordenes = $ordenCompra->consultar();
-        $cantidadOrdenes = count($ordenes);
-
         $requisicionGasto = New RequisicionGasto;
         $requisicionGastos = $requisicionGasto->consultar();
         $cantidadRequisicionGastos = count($requisicionGastos);
@@ -97,13 +93,12 @@ class HomeController
 
         $horasTrabajadas = Conexion::queryAll(CONST_BD_APP, $query, $error);
 
-        $query = "SELECT    SC.nombreCorto AS 'servicio_centros.nombreCorto', SUM(AD.horas) AS 'actividad_detalles.horas'
+        $query = "SELECT    SUM(AD.horas) AS 'actividad_detalles.horas'
                 FROM        actividad_detalles AD
                 INNER JOIN  actividades A ON AD.actividadId = A.id
                 INNER JOIN  servicios S ON AD.servicioId = S.id
-                INNER JOIN  servicio_centros SC ON S.servicioCentroId = SC.id
-                GROUP BY    SC.nombreCorto
-                ORDER BY    SC.nombreCorto";
+                GROUP BY    AD.fecha
+                ORDER BY    AD.fecha";
 
         $horasTrabajadasCentro = Conexion::queryAll(CONST_BD_APP, $query, $error);
 

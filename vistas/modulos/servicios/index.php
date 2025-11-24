@@ -208,8 +208,6 @@
                 <thead>
                  <tr>
                    <th style="width:10px">#</th>
-                   <th>Empresa</th>
-                   <th>Centro de Servicio</th>
                    <th>Folio</th>
                    <th>Estatus</th>
                    <th>Fecha Solicitud</th>
@@ -220,9 +218,6 @@
                    <th>Marca</th>
                    <th>Modelo</th>
                    <th>Serie</th>
-                   <th>Ubicacion</th>
-                   <th>Fecha Programación</th>
-                   <th>Fecha Finalización</th>
                    <th>Descripción</th>
                    <th>Creó</th>
                    <th>Acciones</th>

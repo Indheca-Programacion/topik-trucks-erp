@@ -60,7 +60,7 @@
               </thead>
 
               <!-- <tbody class="text-uppercase"> -->
-              <tbody>
+              <tbody class="text-uppercase">
               </tbody>
 
              </table>

@@ -79,9 +79,6 @@ class PresupuestosController
         
         $request = SavePresupuestoRequest::validated();
 
-        // var_dump($request);
-        // die();
-
         $presupuesto = New Presupuesto;
         $respuesta = $presupuesto->crear($request,$_FILES);
 

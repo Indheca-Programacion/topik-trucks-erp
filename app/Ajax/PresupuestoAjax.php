@@ -80,7 +80,7 @@ class PresupuestoAjax
                                         "cliente" => fString($value["cliente"]),
                                         "fuente" => fString($value["fuente"]),
                                         "folio_servicios" => fString($value["folio_servicios"]),
-                                        "fecha_creacion" => fString($value["fecha_creacion"]),
+                                        "fecha_creacion" => fFechaLarga($value["fechaCreacion"]),
                                         "creo" => fString($value["creo"]),
                                         "acciones" => "<a href='{$rutaEdit}' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>
                                                         <form method='POST' action='{$rutaDestroy}' style='display: inline'>
@@ -114,7 +114,7 @@ class PresupuestoAjax
 
 }
 
-$puestoAjax = new PuestoAjax();
+$presupuestoAjax = new PresupuestoAjax();
 
 if ( isset($_POST["accion"]) ) {
 
@@ -146,15 +146,14 @@ else if ( isset($_GET["accion"]) ) {
     /*=============================================
     MOSTRAR TABLA DE PUESTOS DEL USUARIO
     =============================================*/ 
-    $puestoAjax->id_usuario = $_GET["id_usuario"];
-    $puestoAjax->mostrarTablaPuestoUsuario();
-
+    $presupuestoAjax->id_usuario = $_GET["id_usuario"];
+    $presupuestoAjax->mostrarTablaPuestoUsuario();
 } 
 else {
 
     /*=============================================
-    TABLA DE PUESTOS
+    TABLA DE PRESUPUESTOS
     =============================================*/
-    $puestoAjax->mostrarTabla();
+    $presupuestoAjax->mostrarTabla();
 
 }

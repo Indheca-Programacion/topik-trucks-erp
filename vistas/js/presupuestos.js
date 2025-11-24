@@ -3,7 +3,7 @@ $(function(){
 	let tableList = document.getElementById('tablaPresupuestos');
 
 	// LLamar a la funcion fAjaxDataTable() para llenar el Listado
-	if ( tableList != null ) fAjaxDataTable(rutaAjax+'app/Ajax/Presupuesto.php', '#tablaPresupuestos');
+	if ( tableList != null ) fAjaxDataTable(rutaAjax+'app/Ajax/PresupuestoAjax.php', '#tablaPresupuestos');
 
 	// Confirmar la eliminación del Color
 	$(tableList).on("click", "button.eliminar", function (e) {

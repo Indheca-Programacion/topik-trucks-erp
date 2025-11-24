@@ -48,7 +48,18 @@ class Presupuesto extends PresupuestoPolicy
 
         if ( is_null($valor) ) {
 
-            return Conexion::queryAll($this->bdName, "SELECT * FROM $this->tableName", $error);
+            return Conexion::queryAll($this->bdName, "SELECT P.* ,
+                                                        M.descripcion AS maquinaria,
+                                                        C.nombreCompleto AS cliente,
+                                                        (SELECT GROUP_CONCAT(id SEPARATOR ', ') 
+                                                         FROM servicios 
+                                                         WHERE presupuestoId = P.id) AS folio_servicios,
+                                                        concat(U.nombre,' ',U.apellidoMaterno, ' ', ifnull(U.apellidoPaterno, '')) AS creo
+                                                        FROM $this->tableName P
+                                                        inner join maquinarias M on P.maquinariaId = M.id
+                                                        inner join clientes C on P.clienteId = C.id
+                                                        inner join usuarios U on P.usuarioIdCreacion = U.id
+                                                        ORDER BY P.id DESC", $error);
 
         } else {
 

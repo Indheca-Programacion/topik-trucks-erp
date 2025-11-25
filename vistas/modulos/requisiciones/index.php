@@ -209,12 +209,9 @@
                 <thead>
                  <tr>
                    <th style="width:10px">#</th>
-                   <th>Empresa</th>
-                   <!-- <th>Centro de Servicio</th> -->
                    <th>Folio</th>
                    <th>Estatus</th>
                    <th>Fecha Requisición</th>
-                   <th>Obra</th>
                    <th>Ubicacion Maquinaria</th>
                    <th>Solicitó</th>
                    <th>Número Económico</th>

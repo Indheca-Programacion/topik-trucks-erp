@@ -28,8 +28,8 @@ $(function(){
 				columns: data.datos.columnas,
 
 		        createdRow: function (row, data, index) {
-		        	if ( data.colorTexto != '' ) $('td', row).eq(3).css("color", data.colorTexto);
-		        	if ( data.colorFondo != '' ) $('td', row).eq(3).css("background-color", data.colorFondo);
+		        	if ( data.colorTexto != '' ) $('td', row).eq(2).css("color", data.colorTexto);
+		        	if ( data.colorFondo != '' ) $('td', row).eq(2).css("background-color", data.colorFondo);
 		        },
 
 				buttons: [{ extend: 'copy', text:'Copiar', className: 'btn-info' },
@@ -1053,6 +1053,7 @@ $(function(){
 	// Agregar Partida
 	function agregarPartida(){
 		let elementCantidad = document.getElementById("cantidad");
+		let elementCosto = document.getElementById("costo");
 		let elementUnidad = document.getElementById("unidad");
 		let elementNumeroParte = document.getElementById("numeroParte");
 		let elementConcepto = document.getElementById("concepto");
@@ -1060,6 +1061,7 @@ $(function(){
 		let elementFotos = document.getElementById("fotos");
 
 		let cantidad = elementCantidad.value;
+		let costo = elementCosto.value;
 		let unidad = elementUnidad.value.trim();
 		let numeroParte = elementNumeroParte.value.trim();
 		let concepto = elementConcepto.value.trim();
@@ -1071,6 +1073,11 @@ $(function(){
 
 		elementCantidad.classList.remove("is-invalid");
 		elementPadre = elementCantidad.parentElement;
+		newDiv = elementPadre.querySelector('div.invalid-feedback');
+		if ( newDiv != null ) elementPadre.removeChild(newDiv);
+
+		elementCosto.classList.remove("is-invalid");
+		elementPadre = elementCosto.parentElement;
 		newDiv = elementPadre.querySelector('div.invalid-feedback');
 		if ( newDiv != null ) elementPadre.removeChild(newDiv);
 
@@ -1109,6 +1116,28 @@ $(function(){
 			newDiv.classList.add("invalid-feedback");
 	  		newContent = document.createTextNode("El campo Cantidad debe ser máximo de 8 dígitos.");
 		 	newDiv.appendChild(newContent); //añade texto al div creado.
+			elementPadre.appendChild(newDiv);
+
+			errores = true;
+		}
+
+		// if ( parseFloat(costo) == 0 ) {
+		if ( parseFloat(costo) < 0.01 ) {
+			elementCosto.classList.add("is-invalid");
+			elementPadre = elementCosto.parentElement;
+			newDiv = document.createElement("div");
+			newDiv.classList.add("invalid-feedback");
+	  		newContent = document.createTextNode("El campo Costo Unitario no puede ser menor a 0.01.");
+		 	newDiv.appendChild(newContent); //añade texto al div creado.
+			elementPadre.appendChild(newDiv);
+
+		} else if ( costo.length > 15 ) {
+			elementCosto.classList.add("is-invalid");
+			elementPadre = elementCosto.parentElement;
+			newDiv = document.createElement("div");
+			newDiv.classList.add("invalid-feedback");
+	  		newContent = document.createTextNode("El campo Costo Unitario debe ser máximo de 13 dígitos.");
+		 	newDiv.appendChild(newContent);
 			elementPadre.appendChild(newDiv);
 
 			errores = true;
@@ -1184,22 +1213,14 @@ $(function(){
 
 		let tableRequisicionDetalles = document.querySelector('#tablaRequisicionDetalles tbody');
 		let registros = tableRequisicionDetalles.querySelectorAll('tr');
-		// let ultimaPartida = tableRequisicionDetalles.lastElementChild;
-		// let partida = ( ultimaPartida === null ) ? 1 : parseInt(ultimaPartida.getAttribute('partida')) + 1;
 
 		let registrosNuevos = tableRequisicionDetalles.querySelectorAll('tr[nuevo]');
 		let partida = registrosNuevos.length + 1;
 
-		// let elementRow = `<tr nuevo partida="${partida}">
-		// 					<td partida class="text-right"><span>${registros.length + 1}</span><input type="hidden" name="detalles[partida][]" value="${partida}"></td>
-		// 					<td class="text-right">${cantidad}<input type="hidden" name="detalles[cantidad][]" value="${cantidad}"></td>
-		// 					<td>${unidad}<input type="hidden" name="detalles[unidad][]" value="${unidad}"></td>
-		// 					<td>${numeroParte}<input type="hidden" name="detalles[numeroParte][]" value="${numeroParte}"></td>
-		// 					<td>${concepto}<input type="hidden" name="detalles[concepto][]" value="${concepto}"></td>
-		// 				</tr>`;
 		let elementRow = `<tr nuevo partida="${partida}">
 							<td partida class="text-right"><span>${registros.length + 1}</span><input type="hidden" name="detalles[partida][]" value="${partida}"></td>
 							<td class="text-right">${cantidad}<input type="hidden" name="detalles[cantidad][]" value="${cantidad}"></td>
+							<td class="text-right">${costo}<input type="hidden" name="detalles[costo][]" value="${costo}"></td>
 							<td>${unidad}</td>
 							<td>${codigo}</td>
 							<td numeroParte>${numeroParte}</td>

@@ -1,8 +1,8 @@
 <?php
 	$archivo = '';
 	if ( isset($requisicion->id) ) {
-		$empresaId = $requisicion->servicio['empresaId'];
-		$folio = $requisicion->folio;
+		$empresaId = 7;
+		$folio = $requisicion->id;
 		$maquinariaId = $requisicion->servicio['maquinariaId'];
 		$actualServicioEstatusId = $requisicion->servicioEstatusId;
 		$servicioEstatusId = isset($old["servicioEstatusId"]) ? $old["servicioEstatusId"] : $requisicion->servicioEstatusId;
@@ -17,14 +17,15 @@
 		// Datos de la Maquinaria
 		$maquinariaSerie = $requisicion->maquinaria['serie'];
 
+		$costoUnitario = '0.00';
 		$cantidad = '0.00';
 		$unidad = '';
 		$numeroParte = '';
 		$concepto = '';
 	} else {
 		$servicioId = $servicio->id;
-		$empresaId = $servicio->empresaId;
-		$folio = $servicio->folio;
+		$empresaId = 7;
+		$folio = $servicio->id;
 		$maquinariaId = $servicio->maquinariaId;
 		$actualServicioEstatusId = '';
 		$servicioEstatusId = isset($old["servicioEstatusId"]) ? $old["servicioEstatusId"] : "";
@@ -38,6 +39,7 @@
 		$maquinariaSerie = $servicio->maquinaria['serie'];
 
 		$cantidad = '0.00';
+		$costoUnitario = '0.00';
 		$unidad = '';
 		$numeroParte = '';
 		$concepto = '';
@@ -461,6 +463,11 @@
 						</div>
 
 						<div class="col-sm-6 form-group">
+							<label for="costo">Costo Unitario:</label>
+							<input type="text" id="costo" value="<?php echo $costoUnitario; ?>" class="form-control form-control-sm campoConDecimal" placeholder="Ingresa el precio unitario">
+						</div>
+
+						<div class="col-sm-6 form-group">
 							<label for="unidad">Unidad:</label>
 							<input type="text" id="unidad" value="<?php echo fString($unidad); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa la unidad">
 						</div>
@@ -523,6 +530,7 @@
 					<tr>
 						<th class="text-right" style="min-width: 80px;">Partida</th>
 						<th class="text-right">Cant.</th>
+						<th class="text-right">Costo Unitario</th>
 						<th>Unidad</th>
 						<th style="min-width: 160px;">Código</th>
 						<th style="min-width: 160px;">Num. de Parte</th>
@@ -546,6 +554,7 @@
 							<?php endif; ?>
 						</td>
 						<td class="text-right"><?php echo $detalle['cantidad']; ?></td>
+						<td class="text-right"><?php echo $detalle['costo']; ?></td>
 						<td><?php echo fString($detalle['unidad']); ?></td>
 						<td><?php echo $detalle['codigoId']; ?></td>
 						<td><?php echo $detalle['numeroParte']; ?></td>

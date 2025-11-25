@@ -59,11 +59,9 @@ class RequisicionAjax
 
 		$columnas = array();
         array_push($columnas, [ "data" => "consecutivo" ]);
-        array_push($columnas, [ "data" => "empresa" ]);
         array_push($columnas, [ "data" => "folio" ]);
         array_push($columnas, [ "data" => "estatus" ]);
         array_push($columnas, [ "data" => "fechaRequisicion" ]);
-        array_push($columnas, [ "data" => "obra",  "title" => "Obra" ]);
         array_push($columnas, [ "data" => "ubicacion",  "title" => "Ubicacion Maquinaria" ]);
         array_push($columnas, [ "data" => "solicito" ]);
         array_push($columnas, [ "data" => "numeroEconomico" ]);
@@ -76,9 +74,8 @@ class RequisicionAjax
         $registros = array();
         foreach ($requisiciones as $key => $value) {
         	$rutaEdit = Route::names('requisiciones.edit', $value['id']);
-        	// $rutaDestroy = Route::names('requisiciones.destroy', $value['id']);
             $rutaPrint = Route::names('requisiciones.print', $value['id']);
-        	$folio = mb_strtoupper(fString($value['folio']));
+        	$folio = mb_strtoupper(fString($value['id']));
             $solicito = $value['usuarios.nombre'] . ' ' . $value['usuarios.apellidoPaterno'];
             if ( !is_null($value['usuarios.apellidoMaterno']) ) $solicito .= ' ' . $value['usuarios.apellidoMaterno'];
 
@@ -101,13 +98,11 @@ class RequisicionAjax
 
         	array_push( $registros, [
                 "consecutivo" => ($key + 1),
-        		"empresa" => fString($value["empresas.nombreCorto"]),
-        		"folio" => fString($value["folio"]),
+        		"folio" => fString($value["id"]),
         		"estatus" => fString($value["servicio_estatus.descripcion"]),
                 "colorTexto" => mb_strtoupper(fString($value["servicio_estatus.colorTexto"])),
                 "colorFondo" => mb_strtoupper(fString($value["servicio_estatus.colorFondo"])),
         		"fechaRequisicion" => fFechaLarga($value["fechaCreacion"]),
-        		"obra" => fString($value["obras.descripcion"]),
         		"ubicacion" => fString($value["ubicaciones.descripcion"]),
                 "solicito" => fString($solicito),
                 "ordenCompra" => fString($foliosConcatenados),
@@ -116,15 +111,6 @@ class RequisicionAjax
         		"acciones" =>  "<a href='{$rutaEdit}' target='_blank' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>
                                 <a href='{$rutaPrint}' target='_blank' class='btn btn-xs btn-info'><i class='fas fa-print'></i></a>" ] );
         }
-
-        // "acciones" => "<a href='{$rutaEdit}' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>
-        //                                              <form method='POST' action='{$rutaDestroy}' style='display: inline'>
-        //                                                   <input type='hidden' name='_method' value='DELETE'>
-        //                                                   <input type='hidden' name='_token' value='{$token}'>
-        //                                                   <button type='button' class='btn btn-xs btn-danger eliminar' folio='{$folio}'>
-        //                                                      <i class='far fa-times-circle'></i>
-        //                                                   </button>
-        //                                              </form>"
 
         $respuesta = array();
         $respuesta['codigo'] = 200;

@@ -15,14 +15,12 @@ use App\Policies\RequisicionPolicy;
 class Requisicion extends RequisicionPolicy
 {
     static protected $fillable = [
-        'servicioId', 'numero', 'folio', 'servicioEstatusId', 'detalles', 'detalle_imagenes', 'comprobanteArchivos', 'ordenesArchivos', 'observacion', 'facturaArchivos', 'cotizacionArchivos', 'valeArchivos','soporteArchivos', 'partidasEliminadas', 'actualServicioEstatusId', 'servicio','tipoRequisicion','fechaRequerida'
+        'servicioId', 'servicioEstatusId', 'detalles', 'detalle_imagenes', 'comprobanteArchivos', 'ordenesArchivos', 'observacion', 'facturaArchivos', 'cotizacionArchivos', 'valeArchivos','soporteArchivos', 'partidasEliminadas', 'actualServicioEstatusId', 'servicio','tipoRequisicion','fechaRequerida'
     ];
 
     static protected $type = [
         'id' => 'integer',
         'servicioId' => 'integer',
-        'numero' => 'integer',
-        'folio' => 'string',
         'servicioEstatusId' => 'integer',
         'usuarioIdCreacion' => 'integer',
         'usuarioIdActualizacion' => 'integer',
@@ -176,6 +174,7 @@ class Requisicion extends RequisicionPolicy
             $fechaInicio = date('Y-m-d', strtotime('-2 months'));
             $query = "SELECT    R.*,
                                 M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie',
+                                M.ubicacion as 'ubicaciones.descripcion',
                                 US.nombre AS 'usuarios.nombre', US.apellidoPaterno AS 'usuarios.apellidoPaterno', US.apellidoMaterno AS 'usuarios.apellidoMaterno',
                                 SE.descripcion AS 'servicio_estatus.descripcion', SE.colorTexto AS 'servicio_estatus.colorTexto', SE.colorFondo AS 'servicio_estatus.colorFondo'
                     FROM        {$this->tableName} R
@@ -184,7 +183,7 @@ class Requisicion extends RequisicionPolicy
                     INNER JOIN  usuarios US ON R.usuarioIdCreacion = US.id
                     INNER JOIN  servicio_estatus SE ON R.servicioEstatusId = SE.id
                     WHERE       R.servicioEstatusId <> 4 AND R.fechaCreacion BETWEEN '$fechaInicio' AND '$fechaActual'
-                    ORDER BY    R.fechaCreacion DESC, R.numero DESC 
+                    ORDER BY    R.fechaCreacion DESC, R.id DESC 
                     ";
             return Conexion::queryAll($this->bdName, $query, $error);
 
@@ -204,8 +203,6 @@ class Requisicion extends RequisicionPolicy
 
                 $this->id = $respuesta["id"];
                 $this->servicioId = $respuesta["servicioId"];
-                $this->numero = $respuesta["numero"];
-                $this->folio = $respuesta["folio"];
                 $this->servicioEstatusId = $respuesta["servicioEstatusId"];
                 $this->usuarioIdCreacion = $respuesta["usuarioIdCreacion"];
                 $this->usuarioIdActualizacion = $respuesta["usuarioIdActualizacion"];
@@ -234,14 +231,6 @@ class Requisicion extends RequisicionPolicy
                 }
                 $maquinaria = New Maquinaria;
                 $this->maquinaria = $maquinaria->consultar(null, $this->servicio['maquinariaId']);
-
-                if ( file_exists ( "app/Models/Ubicacion.php" ) ) {
-                    require_once "app/Models/Ubicacion.php";
-                } else {
-                    require_once "../Models/Ubicacion.php";
-                }
-                $ubicacion = New Ubicacion;
-                $this->ubicacion = $ubicacion->consultar(null, $this->servicio['ubicacionId']);
 
                 if ( file_exists ( "app/Models/ServicioEstatus.php" ) ) {
                     require_once "app/Models/ServicioEstatus.php";
@@ -566,28 +555,16 @@ class Requisicion extends RequisicionPolicy
 
     public function crear($datos) {
 
-        // Buscar el último folio según el campo servicioId
-        $lastId = $this->consultarLastId($datos["servicioId"]);
-
-        if ( $lastId === false || $lastId["servicios.folio"] == null || $lastId["numero"] == null ) {
-
-            $lastId = $this->consultarFolio($datos["servicioId"]);
-        }
-
         // Agregar al request para especificar el usuario que creó la Requisición
         if (!isset($datos["usuarioIdCreacion"])) {
             $datos["usuarioIdCreacion"] = usuarioAutenticado()["id"];
         }
 
         // Agregar al request para especificar numero y folio del Servicio
-        $datos["numero"] = (int) ($lastId["numero"] ?? 0) + 1;
-        $datos["folio"] = "{$lastId["servicios.folio"]}-r{$datos["numero"]}";
         $datos["fechaRequerida"] = fFechaSQL($datos["fechaRequerida"]);
 
         $arrayPDOParam = array();
         $arrayPDOParam["servicioId"] = self::$type["servicioId"];
-        $arrayPDOParam["numero"] = self::$type["numero"];
-        $arrayPDOParam["folio"] = self::$type["folio"];
         $arrayPDOParam["servicioEstatusId"] = self::$type["servicioEstatusId"];
         $arrayPDOParam["usuarioIdCreacion"] = self::$type["usuarioIdCreacion"];
         if (isset($datos["proveedorId"])) {
@@ -596,10 +573,6 @@ class Requisicion extends RequisicionPolicy
 
         $arrayPDOParam["tipoRequisicion"] = self::$type["tipoRequisicion"];
         $arrayPDOParam["fechaRequerida"] = self::$type["fechaRequerida"];
-
-        if (isset($datos["servicio"])) {
-            $arrayPDOParam["servicio"] = self::$type["servicio"];
-        }
         
         $campos = fCreaCamposInsert($arrayPDOParam);
 
@@ -610,7 +583,6 @@ class Requisicion extends RequisicionPolicy
         if ( $respuesta ) {
 
             $this->id = $requisicionId;
-            $this->folio = $datos["folio"];
             
             $arrayDetalles = isset($datos['detalles']) ? $datos['detalles'] : null;
             $arrayDetalleImagenes = isset($datos['detalle_imagenes']) ? $datos['detalle_imagenes'] : null;
@@ -699,11 +671,6 @@ class Requisicion extends RequisicionPolicy
 
         // Agregar al request para especificar el usuario que actualizó la Requisición
         $datos["usuarioIdActualizacion"] = usuarioAutenticado()["id"];
-
-        // var_dump($datos);
-        // var_dump($datos['detalles']);
-        // var_dump($datos['detalle_imagenes']);
-        // die();
 
         $arrayPDOParam = array();
         if ( isset($datos["servicioEstatusId"]) ) $arrayPDOParam["servicioEstatusId"] = self::$type["servicioEstatusId"];

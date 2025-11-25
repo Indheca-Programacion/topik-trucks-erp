@@ -167,12 +167,8 @@ class RequisicionesController
         $request = SaveRequisicionesRequest::validated();
 
 
-        if ( !isset($request['comprobanteArchivos']) && !isset($request['ordenesArchivos']) && !isset($request['detalles']) && !isset($request['facturaArchivos']) && !isset($request['cotizacionArchivos']) && !isset($request['valeArchivos']) ) {
+        if ( !isset($request['comprobanteArchivos']) && !isset($request['ordenesArchivos']) && !isset($request['detalles']) && !isset($request['facturaArchivos']) && !isset($request['cotizacionArchivos']) && !isset($request['valeArchivos']) && !isset($request['soporteArchivos']) ) {
 
-            // $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-            //                                                'titulo' => 'Crear Requisicion',
-            //                                                'subTitulo' => 'Error',
-            //                                                'mensaje' => 'Debe capturar al menos una partida, de favor intente de nuevo' );
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
                                                            'titulo' => 'Crear Requisicion',
                                                            'subTitulo' => 'Error',
@@ -183,18 +179,6 @@ class RequisicionesController
             die();            
 
         }
-        // elseif ( !isset($request['detalles']) && ( !isset($request['comprobanteArchivos']) || ( count($request['comprobanteArchivos']['name']) == 1 && $request['comprobanteArchivos']['name'][0] == '' ) ) && ( !isset($request['ordenesArchivos']) || ( count($request['ordenesArchivos']['name']) == 1 && $request['ordenesArchivos']['name'][0] == '' ) ) && ( count($request['facturaArchivos']['name']) == 1 && $request['facturaArchivos']['name'][0] == '' ) && ( count($request['cotizacionArchivos']['name']) == 1 && $request['cotizacionArchivos']['name'][0] == '' ) ) {
-
-            // $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-            //                                                'titulo' => 'Crear Requisicion',
-            //                                                'subTitulo' => 'Error',
-            //                                                'mensaje' => 'Debe capturar al menos una partida o subir un comprobante de pago u órden de compra o una factura o cotización, de favor intente de nuevo' );
-            // $servicioId = $request['servicioId'];
-            // header("Location:" . Route::routes('servicios.crear-requisicion', $servicioId));
-
-            // die();
-
-        // }
 
         $requisicion = New Requisicion;
         $respuesta = $requisicion->crear($request);
@@ -428,13 +412,8 @@ class RequisicionesController
         if ( isset($_REQUEST['servicioId']) || isset($_REQUEST['servicioEstatusId']) || isset($_REQUEST['observacion']) ) $request = SaveRequisicionesRequest::validated($id);
         else $request = Request::value($id);
 
-        // if ( !isset($request['servicioEstatusId']) && !isset($request['detalles']) && ( count($request['facturaArchivos']['name']) == 1 && $request['facturaArchivos']['name'][0] == '' ) && ( count($request['cotizacionArchivos']['name']) == 1 && $request['cotizacionArchivos']['name'][0] == '' ) && !isset($request['partidasEliminadas']) ) {
         if ( !isset($request['servicioEstatusId']) && !isset($request['detalles']) && !isset($request['facturaArchivos']) && !isset($request['cotizacionArchivos']) && !isset($request['valeArchivos']) && !isset($request['partidasEliminadas']) ) {
 
-            // $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-            //                                                'titulo' => 'Actualizar Requisicion',
-            //                                                'subTitulo' => 'Error',
-            //                                                'mensaje' => 'Debe capturar al menos una partida o subir una factura o cotización, de favor intente de nuevo' );
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
                                                            'titulo' => 'Actualizar Requisicion',
                                                            'subTitulo' => 'Error',

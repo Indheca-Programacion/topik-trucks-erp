@@ -216,6 +216,7 @@ class Servicio extends ServicioPolicy
                 $this->horasProyectadas = $respuesta["horasProyectadas"];
                 $this->horasReales = $respuesta["horasReales"];
                 $this->fechaSolicitud = $respuesta["fechaSolicitud"];
+                $this->ubicacion = $respuesta["ubicacion"];
                 $this->descripcion = $respuesta["descripcion"];
                 $this->cant_imagenes = $respuesta["cant_imagenes"];
                 $this->cant_archivos = $respuesta["cant_archivos"];

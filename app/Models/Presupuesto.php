@@ -169,6 +169,7 @@ class Presupuesto extends PresupuestoPolicy
                 $arrayPDOParam["mantenimientoTipoId"] = 'integer';
                 $arrayPDOParam["servicioTipoId"] = 'integer';
                 $arrayPDOParam["descripcion"] = 'string';
+                $arrayPDOParam["ubicacion"] = 'string';
                 $arrayPDOParam["servicioEstatusId"] = 'integer';
                 $arrayPDOParam["maquinariaId"] = 'integer';
                 $arrayPDOParam["horasProyectadas"] = 'integer';
@@ -179,6 +180,7 @@ class Presupuesto extends PresupuestoPolicy
                 $datosInsert["mantenimientoTipoId"] = $mantenimientoTipoId;
                 $datosInsert["servicioTipoId"] = $datos["servicioTipoId"][$index];
                 $datosInsert["descripcion"] = $datos["descripcion"][$index];
+                $datosInsert["ubicacion"] = $datos["ubicacion"][$index];
                 
                 $datosInsert["presupuestoId"] = $this->id;
                 $datosInsert["servicioEstatusId"] = 1;

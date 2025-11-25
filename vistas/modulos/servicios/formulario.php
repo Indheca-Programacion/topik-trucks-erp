@@ -26,7 +26,7 @@
 		// Datos de la Maquinaria
 		$maquinariaTipoDescripcion = isset($old["maquinariaTipoDescripcion"]) ? $old["maquinariaTipoDescripcion"] : $servicio->maquinaria['maquinaria_tipos.descripcion'];
 		// $maquinariaUbicacionDescripcion = isset($old["maquinariaUbicacionDescripcion"]) ? $old["maquinariaUbicacionDescripcion"] : $servicio->maquinaria['ubicaciones.descripcion'];
-		$maquinariaUbicacionDescripcion = isset($old["maquinariaUbicacionDescripcion"]) ? $old["maquinariaUbicacionDescripcion"] : $servicio->descripcion;
+		$maquinariaUbicacionDescripcion = isset($old["maquinariaUbicacionDescripcion"]) ? $old["maquinariaUbicacionDescripcion"] : $servicio->ubicacion;
 		$maquinariaMarcaDescripcion = isset($old["maquinariaMarcaDescripcion"]) ? $old["maquinariaMarcaDescripcion"] : $servicio->maquinaria['marcas.descripcion'];
 		$maquinariaModeloDescripcion = isset($old["maquinariaModeloDescripcion"]) ? $old["maquinariaModeloDescripcion"] : $servicio->maquinaria['modelos.descripcion'];
 		$maquinariaDescripcion = isset($old["maquinariaDescripcion"]) ? $old["maquinariaDescripcion"] : $servicio->maquinaria['descripcion'];

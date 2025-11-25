@@ -287,7 +287,7 @@ class Servicio extends ServicioPolicy
 
     public function consultarRequisiciones() {
 
-        $resultado = Conexion::queryAll($this->bdName, "SELECT R.*, M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie', SE.descripcion AS 'servicio_estatus.descripcion' FROM requisiciones R INNER JOIN servicios S ON R.servicioId = S.id INNER JOIN maquinarias M ON S.maquinariaId = M.id INNER JOIN servicio_estatus SE ON R.servicioEstatusId = SE.id WHERE R.servicioId = $this->id ORDER BY R.fechaCreacion DESC, R.numero DESC", $error);
+        $resultado = Conexion::queryAll($this->bdName, "SELECT R.*, M.numeroEconomico AS 'maquinarias.numeroEconomico', M.serie AS 'maquinarias.serie', SE.descripcion AS 'servicio_estatus.descripcion' FROM requisiciones R INNER JOIN servicios S ON R.servicioId = S.id INNER JOIN maquinarias M ON S.maquinariaId = M.id INNER JOIN servicio_estatus SE ON R.servicioEstatusId = SE.id WHERE R.servicioId = $this->id ORDER BY R.fechaCreacion DESC", $error);
     
         $this->requisiciones = $resultado;
 

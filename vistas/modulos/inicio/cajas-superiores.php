@@ -43,7 +43,7 @@ use App\Route;
         <div class="icon">
             <i class="fas fa-file-invoice-dollar"></i>
         </div>
-        <a href="#" class="small-box-footer">
+        <a href="<?php echo Route::names('presupuestos.index'); ?>" class="small-box-footer">
             Más info <i class="fas fa-arrow-circle-right"></i>
         </a>
     </div>

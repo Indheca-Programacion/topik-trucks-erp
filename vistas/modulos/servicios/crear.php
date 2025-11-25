@@ -56,5 +56,5 @@
 </div>
 
 <?php
-	array_push($arrayArchivosJS, 'vistas/js/servicios.js?v=1.21');
+	array_push($arrayArchivosJS, 'vistas/js/servicios.js?v=1.22');
 ?>

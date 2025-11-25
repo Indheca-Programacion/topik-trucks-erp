@@ -108,6 +108,6 @@
 </div>
 
 <?php
-	array_push($arrayArchivosJS, 'vistas/js/servicios.js?v=1.21');
+	array_push($arrayArchivosJS, 'vistas/js/servicios.js?v=1.22');
 	array_push($arrayArchivosJS, 'vistas/js/servicio-requisiciones.js?v=1.00');
 ?>

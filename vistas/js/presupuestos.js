@@ -196,9 +196,19 @@ $(function(){
 		let servicioContainer = inputFile.closest('.servicios-levantamiento');
 		let previewContainer = servicioContainer.find('span.previsualizar');
 		
-		previewContainer.html('');
 		let archivos = this.files;
 		let error = false;
+
+		// Crear un DataTransfer para mantener los archivos anteriores
+		let dt = new DataTransfer();
+		
+		// Agregar archivos anteriores si existen
+		if (inputFile.data('archivosAnteriores')) {
+			let archivosAnteriores = inputFile.data('archivosAnteriores');
+			for (let i = 0; i < archivosAnteriores.length; i++) {
+				dt.items.add(archivosAnteriores[i]);
+			}
+		}
 
 		for (let i = 0; i < archivos.length; i++) {
 
@@ -207,7 +217,6 @@ $(function(){
 			/*================================================
 			VALIDAMOS QUE EL FORMATO DEL ARCHIVO SEA JPG O PNG
 			================================================*/
-			
 			if ( archivo["type"] != "image/jpeg" && archivo["type"] != "image/png" ) {
 
 				error = true;
@@ -220,6 +229,9 @@ $(function(){
 				})
 
 			} else {
+
+				// Agregar archivo válido al DataTransfer
+				dt.items.add(archivo);
 
 				let datosImagen = new FileReader;
 				datosImagen.readAsDataURL(archivo);
@@ -239,11 +251,16 @@ $(function(){
 		}
 
 		if ( error ) {
-			inputFile.val("");
-
-			setTimeout(() => {
-				previewContainer.html('');
-			}, 1000);
+			// Restaurar solo los archivos anteriores válidos si hay error
+			if (inputFile.data('archivosAnteriores')) {
+				this.files = inputFile.data('archivosAnteriores');
+			} else {
+				inputFile.val("");
+			}
+		} else {
+			// Guardar todos los archivos acumulados
+			this.files = dt.files;
+			inputFile.data('archivosAnteriores', dt.files);
 		}
 
 	})

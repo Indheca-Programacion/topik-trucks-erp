@@ -171,9 +171,11 @@ class Presupuesto extends PresupuestoPolicy
                 $arrayPDOParam["descripcion"] = 'string';
                 $arrayPDOParam["servicioEstatusId"] = 'integer';
                 $arrayPDOParam["maquinariaId"] = 'integer';
+                $arrayPDOParam["horasProyectadas"] = 'integer';
                 $arrayPDOParam["usuarioIdCreacion"] = 'integer';
                 
                 $datosInsert = array();
+                $datosInsert["horasProyectadas"] = str_replace(',', '', $datos["horasProyectadas"][$index]);
                 $datosInsert["mantenimientoTipoId"] = $mantenimientoTipoId;
                 $datosInsert["servicioTipoId"] = $datos["servicioTipoId"][$index];
                 $datosInsert["descripcion"] = $datos["descripcion"][$index];
@@ -191,7 +193,7 @@ class Presupuesto extends PresupuestoPolicy
 
                     // Insertar las imágenes asociadas a este servicio
                     if ( isset($imagenes["imagenes_" . ($index+1)]) ) {
-                        $this->insertarImagenes($imagenes["imagenes_" . ($index+1)], $lastId);
+                        if ( isset($imagenes["imagenes_" . ($index+1)]['name'][0]) && $imagenes["imagenes_" . ($index+1)]['name'][0] != '' ) $respuesta = $this->insertarImagenes($imagenes["imagenes_" . ($index+1)], $lastId);
                     }
 
                 }

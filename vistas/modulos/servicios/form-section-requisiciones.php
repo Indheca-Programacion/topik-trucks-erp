@@ -38,7 +38,7 @@
                   	<?php foreach($servicio->requisiciones as $key => $value) { ?>
                     <tr>
                       <td><?php echo $key+1; ?></td>
-                      <td class="text-uppercase"><?php echo fString($value['folio']); ?></td>
+                      <td class="text-uppercase"><?php echo fString($value['id']); ?></td>
                       <td class="text-uppercase"><?php echo fString($value['servicio_estatus.descripcion']); ?></td>
                       <td><?php echo fFechaLarga($value["fechaCreacion"]); ?></td>
                       <td><a href="<?php echo Route::names('requisiciones.edit', $value['id']); ?>" class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a></td>

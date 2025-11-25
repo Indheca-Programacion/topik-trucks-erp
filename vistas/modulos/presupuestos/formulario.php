@@ -2,10 +2,12 @@
     $maquinariaId = isset($old["maquinariaId"]) ? $old["maquinariaId"] : $presupuesto->maquinariaId;
     $clienteId = isset($old["clienteId"]) ? $old["clienteId"] : $presupuesto->clienteId;
     $fuente = isset($old["fuente"]) ? $old["fuente"] : $presupuesto->fuente;
+
+    use App\Route;
 ?>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-success card-outline">
             <div class="card-header">
                 <h3 class="card-title">Información del Presupuesto</h3>
@@ -48,30 +50,39 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card card-warning card-outline">
             <div class="card-header">
                 <h3 class="card-title">Servicios del Presupuesto</h3>
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-striped table-sm">
                     <thead>
                         <tr>
+                            <th>#</th>
+                            <th>Folio</th>
                             <th>Descripción</th>
                             <th>Estatus</th>
                             <th>Costo</th>
+                            <th style="width: 80px">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="text-uppercase">
                         <?php
                             if ( isset($serviciosPresupuesto) && count($serviciosPresupuesto) > 0 ) :
-                                foreach ( $serviciosPresupuesto as $servicio ) :
+                                foreach ( $serviciosPresupuesto as $key => $servicio ) :
                         ?>
                             <tr>
+                                <td><?= $key+1 ?></td>
+                                <td><?= $servicio["id"] ?></td>
                                 <td><?= $servicio["descripcion"] ?></td>
                                 <td><?= $servicio["servicioEstatus"] ?></td>
                                 <td>$ 0</td>
-                                <!-- <td>$ <?= number_format( $servicio["costo"], 2 ) ?></td> -->
+                                <td>
+                                    <a class="btn btn-xs btn-warning" target="_blank" href="<?= Route::names("servicios.edit",$servicio["id"])?>">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
                             </tr>
                         <?php
                                 endforeach;

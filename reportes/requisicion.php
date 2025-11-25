@@ -280,7 +280,7 @@ $pdf->setY(250);
 
 // $ubicacion = mb_strtoupper(fString($requisicion->maquinaria['ubicaciones.descripcion']));
 
-$ubicacion = mb_strtoupper(fString($obra->descripcion ?? $requisicion->ubicacion['descripcion'] ));
+$ubicacion = mb_strtoupper(fString($obra->descripcion ?? $requisicion->ubicacion ));
 // $mantenimientoTipoDescripcion = mb_strtoupper(fString($mantenimientoTipo->descripcion));
 
 $pdf->Rect(5, 250, 200, 11, 'D', array(), array(222,222,222));

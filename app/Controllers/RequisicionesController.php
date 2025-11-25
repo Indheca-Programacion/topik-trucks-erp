@@ -609,7 +609,7 @@ class RequisicionesController
 
             require_once "app/Models/Empresa.php";
             $empresa = New \App\Models\Empresa;
-            $empresa->consultar(null, $requisicion->servicio['empresaId']);
+            $empresa->consultar(null, 7);
 
             require_once "app/Models/MantenimientoTipo.php";
             $mantenimientoTipo = New \App\Models\MantenimientoTipo;
@@ -674,11 +674,8 @@ class RequisicionesController
                 unset($usuario);
             }
 
-            if ( $requisicion->servicio['empresaId'] == 2) {
-                include "reportes/requisicion_indheca.php";
-            } else {
+            
                 include "reportes/requisicion.php";
-            }
 
 
         } else {

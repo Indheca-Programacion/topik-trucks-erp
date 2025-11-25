@@ -499,7 +499,7 @@ class RequisicionAjax
 
         require_once "../../app/Models/Empresa.php";
         $empresa = New \App\Models\Empresa;
-        $empresa->consultar(null, $requisicion->servicio['empresaId']);
+        $empresa->consultar(null, 7);
 
         require_once "../../app/Models/MantenimientoTipo.php";
         $mantenimientoTipo = New \App\Models\MantenimientoTipo;

@@ -162,29 +162,27 @@ class PresupuestosController
     {
         Autorizacion::authorize('update', new Presupuesto);
 
-        $request = SaveProveedoresRequest::validated($id);
+        $request = SavePresupuestoRequest::validated($id);
 
-        $proveedor = New Proveedor;
-        $proveedor->id = $id;
-        $respuesta = $proveedor->actualizar($request);
-
+        $presupuesto = New Presupuesto;
+        $presupuesto->id = $id;
+        $respuesta = $presupuesto->actualizar($request);
         if ( $respuesta ) {
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-success',
-                                                           'titulo' => 'Actualizar Proveedor',
+                                                           'titulo' => 'Actualizar Presupuesto',
                                                            'subTitulo' => 'OK',
-                                                           'mensaje' => 'El proveedor fue actualizado correctamente' );
-            header("Location:" . Route::names('proveedores.index'));
+                                                           'mensaje' => 'El presupuesto fue actualizado correctamente' );
+            header("Location:" . Route::names('presupuestos.index'));
 
         } else {            
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-                                                           'titulo' => 'Actualizar Proveedor',
+                                                           'titulo' => 'Actualizar Presupuesto',
                                                            'subTitulo' => 'Error',
                                                            'mensaje' => 'Hubo un error al procesar, de favor intente de nuevo' );
             
-            header("Location:" . Route::names('proveedores.edit', $id));
-
+            header("Location:" . Route::names('presupuestos.edit', $id));
         }
         
         die();
@@ -193,41 +191,40 @@ class PresupuestosController
     public function destroy($id)
     {
         
-        Autorizacion::authorize('delete', new Proveedor);
+        Autorizacion::authorize('delete', new Presupuesto);
 
         // Sirve para validar el Token
-        if ( !SaveProveedoresRequest::validatingToken($error) ) {
+        if ( !SavePresupuestoRequest::validatingToken($error) ) {
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-                                                           'titulo' => 'Eliminar Proveedor',
+                                                           'titulo' => 'Eliminar Presupuesto',
                                                            'subTitulo' => 'Error',
                                                            'mensaje' => $error );
-            header("Location:" . Route::names('proveedores.index'));
+            header("Location:" . Route::names('presupuestos.index'));
             die();
 
         }
 
-        $proveedor = New Proveedor;
-        // $proveedor->id = $id;
-        $proveedor->consultar(null , $id); // Para tener la ruta de la foto
-        $respuesta = $proveedor->eliminar();
+        $presupuesto = New Presupuesto;
+        // $presupuesto->id = $id;
+        $presupuesto->consultar(null , $id); // Para tener la ruta de la foto
+        $respuesta = $presupuesto->eliminar();
 
         if ( $respuesta ) {
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-success',
-                                                           'titulo' => 'Eliminar Proveedor',
+                                                           'titulo' => 'Eliminar Presupuesto',
                                                            'subTitulo' => 'OK',
-                                                           'mensaje' => 'El proveedor fue eliminado correctamente' );
+                                                           'mensaje' => 'El presupuesto fue eliminado correctamente' );
 
-            header("Location:" . Route::names('proveedores.index'));
-
+            header("Location:" . Route::names('presupuestos.index'));
         } else {            
 
             $_SESSION[CONST_SESSION_APP]["flash"] = array( 'clase' => 'bg-danger',
-                                                           'titulo' => 'Eliminar Proveedor',
+                                                           'titulo' => 'Eliminar Presupuesto',
                                                            'subTitulo' => 'Error',
-                                                           'mensaje' => 'Hubo un error al procesar, de favor intente de nuevo. *** Tome en cuenta que si existen registros que hacen referencia a este proveedor no se podrá eliminar ***' );
-            header("Location:" . Route::names('proveedores.index'));
+                                                           'mensaje' => 'Hubo un error al procesar, de favor intente de nuevo. *** Tome en cuenta que si existen registros que hacen referencia a este presupuesto no se podrá eliminar ***' );
+            header("Location:" . Route::names('presupuestos.index'));
 
         }
         

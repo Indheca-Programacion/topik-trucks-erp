@@ -63,5 +63,5 @@
 </div>
 
 <?php
-	array_push($arrayArchivosJS, 'vistas/js/presupuestos.js');
+	array_push($arrayArchivosJS, 'vistas/js/presupuestos.js?v=1.01');
 ?>

@@ -219,17 +219,6 @@ $(function(){
 					confirmButtonText: '¡Cerrar!'
 				})
 
-			} else if ( archivo["size"] > 1000000 ) {
-
-				error = true;
-
-				Swal.fire({
-					title: 'Error en el tamaño del archivo',
-					text: '¡El archivo "'+archivo["name"]+'" no debe pesar más de 1MB!',
-					icon: 'error',
-					confirmButtonText: '¡Cerrar!'
-				})
-
 			} else {
 
 				let datosImagen = new FileReader;

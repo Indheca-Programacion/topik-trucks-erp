@@ -36,9 +36,6 @@
                 Listado de Servicios
               </h3>
               <div class="card-tools">
-                <a href="<?=Route::names('servicios.create')?>" class="btn btn-outline-primary ml-1 float-right">
-                  <i class="fas fa-plus"></i> Crear servicio
-                </a>
                 <div class="btn-group float-right" role="group" aria-label="Basic example">
                   <button type="button" class="btn btn-outline-info" id="btnVerFiltros" data-toggle="collapse" data-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
                     <i class="fas fa-eye"></i> Filtros

@@ -124,7 +124,7 @@ class Cliente extends ClientePolicy
         $arrayPDOParam["telefono"] = self::$type["telefono"];
         $arrayPDOParam["correo"] = self::$type["correo"];
         $arrayPDOParam["observaciones"] = self::$type["observaciones"];
-        $arrayPDOParam["metodoPago"] = self::$type["metodoPago"];
+        // $arrayPDOParam["metodoPago"] = self::$type["metodoPago"];
         $arrayPDOParam["usuarioIdActualizacion"] = self::$type["usuarioIdActualizacion"];
 
         $datos["usuarioIdActualizacion"] = usuarioAutenticado()["id"];

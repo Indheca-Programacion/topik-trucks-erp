@@ -402,10 +402,15 @@ class Route{
 
 				$ruta == "comprobacion-gastos" ||
 				$ruta == "presupuestos" ||
+				$ruta == "clientes" ||
 
 		    	$ruta == "salir") {
 
 				switch ( $ruta ) {
+					case "clientes":
+						require_once "app/Controllers/ClientesController.php";
+						self::execute($rutas, new \App\Controllers\ClientesController);
+						break;
 					case "presupuestos":
 						require_once "app/Controllers/PresupuestosController.php";
 						self::execute($rutas, new \App\Controllers\PresupuestosController);

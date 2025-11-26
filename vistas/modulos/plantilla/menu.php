@@ -381,10 +381,10 @@
 
           <?php endif ?>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("proveedores") || $usuarioAutenticado->checkPermiso("servicio-estatus") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("proveedores") || $usuarioAutenticado->checkPermiso("servicio-estatus") || $usuarioAutenticado->checkPermiso("clientes") ): ?>
 
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "empleados" || Route::getRoute() == "proveedores" || Route::getRoute() == "servicio-estatus" ) ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "empleados" || Route::getRoute() == "proveedores" || Route::getRoute() == "servicio-estatus" || Route::getRoute() == "clientes" ) ? 'active"' : '' ); ?>">
                 <i class="nav-icon fas fa-list-alt"></i>
                 <p>
                   Catálogos
@@ -457,6 +457,17 @@
                     <a href="<?php echo Route::names('solicitud-tipos.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "solicitud-tipos") ? 'active' : '' ); ?>">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Tipos de Solicitud</p>
+                    </a>
+                  </li>
+                <?php endif ?>
+                <!----------------------
+                | CLIENTES
+                ------------------------>
+                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("clientes") ): ?>
+                  <li class="nav-item">
+                    <a href="<?php echo Route::names('clientes.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "clientes") ? 'active' : '' ); ?>">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Clientes</p>
                     </a>
                   </li>
                 <?php endif ?>

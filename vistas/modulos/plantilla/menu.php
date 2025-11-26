@@ -43,10 +43,10 @@
             </a>
           </li>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("maquinaria-tipos") || $usuarioAutenticado->checkPermiso("marcas") || $usuarioAutenticado->checkPermiso("modelos") || $usuarioAutenticado->checkPermiso("colores") || $usuarioAutenticado->checkPermiso("estatus") ||  $usuarioAutenticado->checkPermiso("ubicaciones") || $usuarioAutenticado->checkPermiso("maquinarias") || $usuarioAutenticado->checkPermiso("checklist-maquinarias") || $usuarioAutenticado->checkPermiso("kit-mantenimiento") || $usuarioAutenticado->checkPermiso("obras") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("maquinaria-tipos") || $usuarioAutenticado->checkPermiso("marcas") || $usuarioAutenticado->checkPermiso("modelos") || $usuarioAutenticado->checkPermiso("colores") || $usuarioAutenticado->checkPermiso("estatus") || $usuarioAutenticado->checkPermiso("maquinarias") || $usuarioAutenticado->checkPermiso("checklist-maquinarias") || $usuarioAutenticado->checkPermiso("kit-mantenimiento") ): ?>
 
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "maquinaria-tipos" || Route::getRoute() == "marcas" || Route::getRoute() == "modelos" || Route::getRoute() == "colores" || Route::getRoute() == "estatus" || Route::getRoute() == "ubicaciones" || Route::getRoute() == "maquinarias" || Route::getRoute() == "checklist-maquinarias" || Route::getRoute() == "kit-mantenimiento" || Route::getRoute() == "obras" ) ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "maquinaria-tipos" || Route::getRoute() == "marcas" || Route::getRoute() == "modelos" || Route::getRoute() == "colores" || Route::getRoute() == "estatus" || Route::getRoute() == "maquinarias" || Route::getRoute() == "checklist-maquinarias" || Route::getRoute() == "kit-mantenimiento" ) ? 'active"' : '' ); ?>">
                 <i class="nav-icon fas fa-truck"></i>
                 <p>
                   Maquinaria
@@ -91,22 +91,6 @@
                   <a href="<?php echo Route::names('estatus.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "estatus") ? 'active' : '' ); ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Estatus</p>
-                  </a>
-                </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("ubicaciones") ): ?>
-                <li class="nav-item">
-                  <a href="<?php echo Route::names('ubicaciones.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "ubicaciones") ? 'active' : '' ); ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Ubicaciones</p>
-                  </a>
-                </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("obras") ): ?>
-                <li class="nav-item">
-                  <a href="<?php echo Route::names('obras.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "obras") ? 'active' : '' ); ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Obras</p>
                   </a>
                 </li>
                 <?php endif ?>
@@ -381,10 +365,10 @@
 
           <?php endif ?>
 
-          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("proveedores") || $usuarioAutenticado->checkPermiso("servicio-estatus") || $usuarioAutenticado->checkPermiso("clientes") ): ?>
+          <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("servicio-centros") || $usuarioAutenticado->checkPermiso("unidades") || $usuarioAutenticado->checkPermiso("mantenimiento-tipos") || $usuarioAutenticado->checkPermiso("servicio-tipos") ||  $usuarioAutenticado->checkPermiso("solicitud-tipos") || $usuarioAutenticado->checkPermiso("empleados") || $usuarioAutenticado->checkPermiso("servicio-estatus") || $usuarioAutenticado->checkPermiso("clientes") ): ?>
 
             <li class="nav-item">
-              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "empleados" || Route::getRoute() == "proveedores" || Route::getRoute() == "servicio-estatus" || Route::getRoute() == "clientes" ) ? 'active"' : '' ); ?>">
+              <a href="#" class="nav-link <?php echo ( (Route::getRoute() == "servicio-centros" || Route::getRoute() == "unidades" || Route::getRoute() == "mantenimiento-tipos" || Route::getRoute() == "servicio-tipos" || Route::getRoute() == "solicitud-tipos" || Route::getRoute() == "empleados" || Route::getRoute() == "servicio-estatus" || Route::getRoute() == "clientes" ) ? 'active"' : '' ); ?>">
                 <i class="nav-icon fas fa-list-alt"></i>
                 <p>
                   Catálogos
@@ -397,14 +381,6 @@
                   <a href="<?php echo Route::names('empleados.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "empleados") ? 'active' : '' ); ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Empleados</p>
-                  </a>
-                </li>
-                <?php endif ?>
-                <?php if ( $usuarioAutenticado->checkAdmin() || $usuarioAutenticado->checkPermiso("proveedores") ): ?>
-                <li class="nav-item">
-                  <a href="<?php echo Route::names('proveedores.index'); ?>" class="nav-link <?php echo ( (Route::getRoute() == "proveedores") ? 'active' : '' ); ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Proveedores</p>
                   </a>
                 </li>
                 <?php endif ?>

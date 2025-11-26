@@ -36,7 +36,6 @@ class MaquinariaAjax
         array_push($columnas, [ "data" => "empresa" ]);
         array_push($columnas, [ "data" => "tipoMaquinaria" ]);
         array_push($columnas, [ "data" => "numeroEconomico" ]);
-        array_push($columnas, [ "data" => "numeroFactura" ]);
         array_push($columnas, [ "data" => "descripcion" ]);
         array_push($columnas, [ "data" => "marca" ]);
         array_push($columnas, [ "data" => "modelo" ]);
@@ -44,8 +43,6 @@ class MaquinariaAjax
         array_push($columnas, [ "data" => "serie" ]);
         array_push($columnas, [ "data" => "color" ]);
         array_push($columnas, [ "data" => "estatus" ]);
-        array_push($columnas, [ "data" => "ubicacion" ]);
-        array_push($columnas, [ "data" => "almacen" ]);
         array_push($columnas, [ "data" => "acciones" ]);
 
         $token = createToken();
@@ -61,7 +58,6 @@ class MaquinariaAjax
                 "empresa" => fString($value["empresas.nombreCorto"]),
                 "tipoMaquinaria" => fString($value["maquinaria_tipos.descripcion"]),
                 "numeroEconomico" => fString($value["numeroEconomico"]),
-                "numeroFactura" => fString($value["numeroFactura"]),
                 "descripcion" => fString($value["descripcion"]),
                 "marca" => fString($value["marcas.descripcion"]),
                 "modelo" => fString($value["modelos.descripcion"]),
@@ -69,8 +65,6 @@ class MaquinariaAjax
                 "serie" => fString($value["serie"]),
                 "color" => fString($value["colores.descripcion"]),
                 "estatus" => fString($value["estatus.descripcion"]),
-                "ubicacion" => fString($value["ubicaciones.descripcion"]),
-                "almacen" => fString($value["almacenes.descripcion"]),
                 "acciones" =>  "<a href='{$rutaEdit}' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>
                                 <form method='POST' action='{$rutaDestroy}' style='display: inline'>
                                     <input type='hidden' name='_method' value='DELETE'>
@@ -129,7 +123,6 @@ class MaquinariaAjax
         array_push($columnas, [ "data" => "empresa" ]);
         array_push($columnas, [ "data" => "tipoMaquinaria" ]);
         array_push($columnas, [ "data" => "numeroEconomico" ]);
-        array_push($columnas, [ "data" => "numeroFactura" ]);
         array_push($columnas, [ "data" => "descripcion" ]);
         array_push($columnas, [ "data" => "marca" ]);
         array_push($columnas, [ "data" => "modelo" ]);
@@ -137,8 +130,6 @@ class MaquinariaAjax
         array_push($columnas, [ "data" => "serie" ]);
         array_push($columnas, [ "data" => "color" ]);
         array_push($columnas, [ "data" => "estatus" ]);
-        array_push($columnas, [ "data" => "ubicacion" ]);
-        array_push($columnas, [ "data" => "almacen" ]);
         array_push($columnas, [ "data" => "acciones" ]);
 
         $token = createToken();
@@ -155,7 +146,6 @@ class MaquinariaAjax
                 "empresa" => fString($value["empresas.nombreCorto"]),
                 "tipoMaquinaria" => fString($value["maquinaria_tipos.descripcion"]),
                 "numeroEconomico" => fString($value["numeroEconomico"]),
-                "numeroFactura" => fString($value["numeroFactura"]),
                 "descripcion" => fString($value["descripcion"]),
                 "marca" => fString($value["marcas.descripcion"]),
                 "modelo" => fString($value["modelos.descripcion"]),
@@ -163,8 +153,6 @@ class MaquinariaAjax
                 "serie" => fString($value["serie"]),
                 "color" => fString($value["colores.descripcion"]),
                 "estatus" => fString($value["estatus.descripcion"]),
-                "ubicacion" => fString($value["ubicaciones.descripcion"]),
-                "almacen" => fString($value["almacenes.descripcion"]),
                 "acciones" =>  "<a href='{$rutaEdit}' class='btn btn-xs btn-warning'><i class='fas fa-pencil-alt'></i></a>
                                 <form method='POST' action='{$rutaDestroy}' style='display: inline'>
                                     <input type='hidden' name='_method' value='DELETE'>

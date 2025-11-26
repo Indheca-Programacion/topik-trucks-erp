@@ -3,7 +3,6 @@
 	if ( isset($maquinaria->id) ) {
 		$empresaId = isset($old["empresaId"]) ? $old["empresaId"] : $maquinaria->empresaId;
 		$numeroEconomico = isset($old["numeroEconomico"]) ? $old["numeroEconomico"] : $maquinaria->numeroEconomico;
-		$numeroFactura = isset($old["numeroFactura"]) ? $old["numeroFactura"] : $maquinaria->numeroFactura;
 		$maquinariaTipoId = isset($old["maquinariaTipoId"]) ? $old["maquinariaTipoId"] : $maquinaria->maquinariaTipoId;
 		$marcaId = isset($old["marcaId"]) ? $old["marcaId"] : $maquinaria->modelo["marcaId"];
 		$modeloId = isset($old["modeloId"]) ? $old["modeloId"] : $maquinaria->modeloId;
@@ -12,9 +11,7 @@
 		$serie = isset($old["serie"]) ? $old["serie"] : $maquinaria->serie;
 		$colorId = isset($old["colorId"]) ? $old["colorId"] : $maquinaria->colorId;
 		$estatusId = isset($old["estatusId"]) ? $old["estatusId"] : $maquinaria->estatusId;
-		$ubicacionId = isset($old["ubicacionId"]) ? $old["ubicacionId"] : $maquinaria->ubicacionId;
-		$almacenId = isset($old["almacenId"]) ? $old["almacenId"] : $maquinaria->almacenId;
-		$obraId = isset($old["obraId"]) ? $old["obraId"] : $maquinaria->obraId;
+		$ubicacion = isset($old["ubicacion"]) ? $old["ubicacion"] : $maquinaria->ubicacion;
 		$observaciones = isset($old["observaciones"]) ? $old["observaciones"] : $maquinaria->observaciones;
 		$fugas = isset($old["fugas"]) ? $old["fugas"] : $maquinaria->fugas;
 		$transmision = isset($old["transmision"]) ? $old["transmision"] : $maquinaria->transmision;
@@ -25,7 +22,6 @@
 	} else {
 		$empresaId = isset($old["empresaId"]) ? $old["empresaId"] : "";
 		$numeroEconomico = isset($old["numeroEconomico"]) ? $old["numeroEconomico"] : "";
-		$numeroFactura = isset($old["numeroFactura"]) ? $old["numeroFactura"] : "";
 		$maquinariaTipoId = isset($old["maquinariaTipoId"]) ? $old["maquinariaTipoId"] : "";
 		$marcaId = isset($old["marcaId"]) ? $old["marcaId"] : "";
 		$modeloId = isset($old["modeloId"]) ? $old["modeloId"] : "";
@@ -34,9 +30,7 @@
 		$serie = isset($old["serie"]) ? $old["serie"] : "";
 		$colorId = isset($old["colorId"]) ? $old["colorId"] : "";
 		$estatusId = isset($old["estatusId"]) ? $old["estatusId"] : "";
-		$ubicacionId = isset($old["ubicacionId"]) ? $old["ubicacionId"] : "";
-		$almacenId = isset($old["almacenId"]) ? $old["almacenId"] : "";
-		$obraId = isset($old["obraId"]) ? $old["obraId"] : "";
+		$ubicacion = isset($old["ubicacion"]) ? $old["ubicacion"] : "";
 		$observaciones = isset($old["observaciones"]) ? $old["observaciones"] : "";
 		$fugas = isset($old["fugas"]) ? $old["fugas"] : "";
 		$transmision = isset($old["transmision"]) ? $old["transmision"] : "";

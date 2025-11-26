@@ -221,7 +221,7 @@ class Maquinaria extends MaquinariaPolicy
 
     public function consultarServicios()
     {
-        $resultado = Conexion::queryAll($this->bdName, "SELECT S.*, E.nombreCorto AS 'empresas.nombreCorto', ST.descripcion AS 'servicio_tipos.descripcion', SE.descripcion AS 'servicio_estatus.descripcion' FROM servicios S INNER JOIN empresas E ON S.empresaId = E.id INNER JOIN servicio_tipos ST ON S.servicioTipoId = ST.id INNER JOIN servicio_estatus SE ON S.servicioEstatusId = SE.id  WHERE S.maquinariaId = $this->id ORDER BY S.fechaSolicitud DESC, S.folio DESC", $error);
+        $resultado = Conexion::queryAll($this->bdName, "SELECT S.*, ST.descripcion AS 'servicio_tipos.descripcion', SE.descripcion AS 'servicio_estatus.descripcion' FROM servicios S INNER JOIN servicio_tipos ST ON S.servicioTipoId = ST.id INNER JOIN servicio_estatus SE ON S.servicioEstatusId = SE.id  WHERE S.maquinariaId = $this->id ORDER BY S.fechaSolicitud DESC", $error);
         
         $this->servicios = $resultado;
     }
@@ -296,7 +296,6 @@ class Maquinaria extends MaquinariaPolicy
         $arrayPDOParam = array();
         $arrayPDOParam["empresaId"] = self::$type["empresaId"];
         $arrayPDOParam["numeroEconomico"] = self::$type["numeroEconomico"];
-        $arrayPDOParam["numeroFactura"] = self::$type["numeroFactura"];
         $arrayPDOParam["maquinariaTipoId"] = self::$type["maquinariaTipoId"];
         $arrayPDOParam["modeloId"] = self::$type["modeloId"];
         $arrayPDOParam["year"] = self::$type["year"];
@@ -304,8 +303,7 @@ class Maquinaria extends MaquinariaPolicy
         $arrayPDOParam["serie"] = self::$type["serie"];
         $arrayPDOParam["colorId"] = self::$type["colorId"];
         $arrayPDOParam["estatusId"] = self::$type["estatusId"];
-        $arrayPDOParam["ubicacionId"] = self::$type["ubicacionId"];
-        $arrayPDOParam["obraId"] = self::$type["obraId"];
+        $arrayPDOParam["ubicacion"] = self::$type["ubicacion"];
         $arrayPDOParam["observaciones"] = self::$type["observaciones"];
         $arrayPDOParam["fugas"] = self::$type["fugas"]; 
         $arrayPDOParam["transmision"] = self::$type["transmision"];

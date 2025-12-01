@@ -79,6 +79,10 @@ class Presupuesto extends PresupuestoPolicy
                 $this->clienteId = $respuesta["clienteId"];
                 $this->fuente = $respuesta["fuente"];
 
+                require_once "app/Models/ServicioPartida.php";
+                $servicioPartida = new ServicioPartida;
+                $this->partidas = $servicioPartida->obtenerPartidasPresupuesto($this->id);
+
             }
 
             return $respuesta;
@@ -88,7 +92,7 @@ class Presupuesto extends PresupuestoPolicy
     }
 
     public function obtenerServiciosPresupuesto($presupuestoId) {
-        return Conexion::queryAll($this->bdName, "SELECT S.* ,
+        $respuesta = Conexion::queryAll($this->bdName, "SELECT S.* ,
                                                     MT.descripcion AS mantenimientoTipo,
                                                     ST.descripcion AS servicioTipo,
                                                     SE.descripcion AS servicioEstatus
@@ -97,6 +101,22 @@ class Presupuesto extends PresupuestoPolicy
                                                     inner join servicio_tipos ST on S.servicioTipoId = ST.id
                                                     inner join servicio_estatus SE on S.servicioEstatusId = SE.id
                                                     WHERE S.presupuestoId = $presupuestoId", $error);
+        
+        foreach ( $respuesta as $key => $servicio ) {
+            $partidas = Conexion::queryAll($this->bdName, "SELECT * FROM servicio_partidas WHERE servicioId = " . $servicio["id"] . " ORDER BY id", $error);
+            foreach ( $partidas as $pKey => $partidasItem ) {
+                $partidasItem["costoTotal"] = $partidasItem["costo_base"] * $partidasItem["cantidad"];
+                $partidasItem["precioTotal"] = $partidasItem["costoTotal"] + $partidasItem["logistica"] + $partidasItem["mantenimiento"] + $partidasItem["utilidad"];
+                $partidas[$pKey] = $partidasItem;
+            }
+            $respuesta[$key]["subtotal"] = array_sum(array_column($partidas, 'costoTotal'));
+            $respuesta[$key]["comisiones"] = $respuesta[$key]["subtotal"] * 0.05; // Ejemplo: 5% de comisiones
+            $respuesta[$key]["total"] = array_sum(array_column($partidas, 'precioTotal')) + $respuesta[$key]["comisiones"];
+
+            $respuesta[$key]["partidas"] = $partidas;
+        }
+
+        return $respuesta;
     }
 
     public function crear($datos,$imagenes = null) {

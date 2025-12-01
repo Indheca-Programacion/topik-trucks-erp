@@ -145,6 +145,10 @@ class PresupuestosController
             $cliente = new \App\Models\Cliente;
             $clientes = $cliente->consultar();
 
+            require_once "app/Models/Usuario.php";
+            $usuario = new \App\Models\Usuario;
+            $personal = $usuario->consultar();
+
             $serviciosPresupuesto = $presupuesto->obtenerServiciosPresupuesto($id);
 
             $totalPresupuesto = array_sum(array_column($serviciosPresupuesto, 'total'));

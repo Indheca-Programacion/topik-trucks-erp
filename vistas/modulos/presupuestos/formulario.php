@@ -135,6 +135,17 @@
                                             </tfoot>
                                         </table>
                                     </div>
+                                    <!-- <div class="form-group">
+                                        <label for="personalAsignado">Personal Asignado</label>
+                                        <select class="form-control select2Add" multiple="multiple" style="width: 100%;">
+                                            <option value="">Seleccionar personal</option>
+                                            <?php foreach ( $personal as $persona ) : ?>
+                                                <option value="<?= $persona["id"] ?>" <?= in_array( $persona["id"], $servicio["personalAsignado"] ) ? 'selected' : '' ?> >
+                                                    <?= $persona["nombreCompleto"] ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div> -->
                                     <button type="button" class="btn btn-success btnAgregarPartida" data-servicio-id="<?= $servicio["id"] ?>" data-toggle="modal" data-target="#modalAgregarPartida"><i class="fas fa-plus"></i> Agregar Partida</button>
                                     <a href="<?= Route::names('servicios.edit', $servicio["id"]) ?>" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i> Ver Servicio</a>
                                 </div>

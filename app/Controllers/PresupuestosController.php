@@ -146,6 +146,8 @@ class PresupuestosController
             $clientes = $cliente->consultar();
 
             $serviciosPresupuesto = $presupuesto->obtenerServiciosPresupuesto($id);
+
+            $totalPresupuesto = array_sum(array_column($serviciosPresupuesto, 'total'));
             
             $contenido = array('modulo' => 'vistas/modulos/presupuestos/editar.php');
 

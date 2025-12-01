@@ -46,6 +46,12 @@
                             <input type="text" name="fuente" id="fuente" class="form-control form-control-sm text-uppercase" value="<?=  $fuente ?>">
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="totalPresupuesto">Total Presupuesto</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" value="$ <?= isset($totalPresupuesto) ? number_format($totalPresupuesto, 2) : '0.00' ?>" readonly>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>

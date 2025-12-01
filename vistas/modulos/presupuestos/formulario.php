@@ -65,14 +65,14 @@
                             <div class="card-header" id="heading<?= $key ?>">
                                 <h2 class="mb-0">
                                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse<?= $key ?>" aria-expanded="<?= $key === 0 ? 'true' : 'false' ?>" aria-controls="collapse<?= $key ?>">
-                                        <?= $servicio["descripcion"] ?>
+                                        Servicio <?= $servicio["id"] ?> - <?= $servicio["descripcion"] ?>
                                     </button>
                                 </h2>
                             </div>
                             <div id="collapse<?= $key ?>" class="collapse <?= $key === 0 ? 'show' : '' ?>" aria-labelledby="heading<?= $key ?>" data-parent="#accordionServicios">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-sm">
+                                        <table class="table table-striped table-sm text-uppercase">
                                             <thead>
                                                 <tr>
                                                     <th>Partida</th>
@@ -97,7 +97,7 @@
                                                         foreach ( $servicio["partidas"] as $key => $partida ) :
                                                     ?>
                                                         <tr>
-                                                            <td><?= $key + 1 ?></td>
+                                                            <td><?= $key + 1 ?> <button type="button" class="btn btn-danger btn-sm eliminarPartida" data-id="<?= $partida["id"] ?>"><i class="fas fa-trash-alt"></i></button></td>
                                                             <td><?= $partida["cantidad"] ?></td>
                                                             <td><?= $partida["unidad"] ?></td>
                                                             <td><?= $partida["descripcion"] ?></td>
@@ -120,7 +120,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th colspan="9" class="text-right">Comisiones:</th>
-                                                    <th class="text-left"><input type="number" class="form-control form-control-sm" value="<?= number_format($servicio["comisiones"], 2) ?>"></th>
+                                                    <th class="text-left">$ <?= number_format($servicio["comisiones"], 2) ?></th>
                                                 </tr>
                                                 <tr>
                                                     <th colspan="9" class="text-right">Total:</th>
@@ -129,6 +129,8 @@
                                             </tfoot>
                                         </table>
                                     </div>
+                                    <button type="button" class="btn btn-success btnAgregarPartida" data-servicio-id="<?= $servicio["id"] ?>" data-toggle="modal" data-target="#modalAgregarPartida"><i class="fas fa-plus"></i> Agregar Partida</button>
+                                    <a href="<?= Route::names('servicios.edit', $servicio["id"]) ?>" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i> Ver Servicio</a>
                                 </div>
                             </div>
                         </div>

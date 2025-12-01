@@ -145,6 +145,26 @@ class Presupuesto extends PresupuestoPolicy
 
     }
 
+    /*=============================================
+    Agregar partidas a los servicios del presupuesto
+    =============================================*/
+    public function agregarPartidaServicio($datos) {
+        $arrayPDOParam = array();
+        $arrayPDOParam["cantidad"] = self::$type["cantidad"];
+        $arrayPDOParam["unidad"] = self::$type["unidad"];
+        $arrayPDOParam["descripcion"] = self::$type["descripcion"];
+        $arrayPDOParam["costo_base"] = self::$type["costo_base"];
+        $arrayPDOParam["logistica"] = self::$type["logistica"];
+        $arrayPDOParam["mantenimiento"] = self::$type["mantenimiento"];
+        $arrayPDOParam["utilidad"] = self::$type["utilidad"];
+        $arrayPDOParam["presupuestoId"] = self::$type["presupuestoId"];
+        $arrayPDOParam["servicioId"] = self::$type["servicioId"];
+
+        $campos = fCreaCamposInsert($arrayPDOParam);
+
+        return Conexion::queryExecute($this->bdName, "INSERT INTO servicio_partidas ".$campos, $datos, $arrayPDOParam, $error);
+    }
+
     public function actualizar($datos) {
 
         // Agregar al request para actualizar el registro

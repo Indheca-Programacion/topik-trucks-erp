@@ -8,7 +8,7 @@ use PDO;
 class ServicioPartida
 {
     static protected $fillable = [
-        'cantidad', 'unidad', 'descripcion', 'costo_base', 'logistica', 'mantenimiento', 'utilidad', 'presupuestoId', 'servicioId'
+        'id', 'cantidad', 'unidad', 'descripcion', 'costo_base', 'logistica', 'mantenimiento', 'utilidad', 'presupuestoId', 'servicioId'
     ];
 
     static protected $type = [

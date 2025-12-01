@@ -78,6 +78,7 @@ class Presupuesto extends PresupuestoPolicy
                 $this->maquinariaId = $respuesta["maquinariaId"];
                 $this->clienteId = $respuesta["clienteId"];
                 $this->fuente = $respuesta["fuente"];
+                $this->fechaCreacion = $respuesta["fechaCreacion"];
 
                 require_once "app/Models/ServicioPartida.php";
                 $servicioPartida = new ServicioPartida;

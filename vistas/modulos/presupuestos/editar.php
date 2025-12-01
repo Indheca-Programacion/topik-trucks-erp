@@ -49,6 +49,9 @@
 							<button type="button" id="btnSend" class="btn btn-outline-primary">
 								<i class="fas fa-save"></i> Actualizar
 							</button>
+							<a href="<?= Route::names("presupuestos.print",$presupuesto->id) ?>" class="btn btn-outline-secondary" target="_blank">
+								<i class="fas fa-print"></i> Imprimir
+							</a>
 							<div id="msgSend"></div>
 						</form>
 						<?php include "vistas/modulos/errores/form-messages-validation.php"; ?>

@@ -47,7 +47,7 @@ $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->setMargins(20, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->setMargins(20, PDF_MARGIN_TOP, 10);
 $pdf->setHeaderMargin(PDF_MARGIN_HEADER);
 // $pdf->setFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -86,14 +86,14 @@ $pdf->MultiCell(15, 7, "Codigo", 'B', '', 0, 0, 20, '', true, 0, false, true, '7
 $pdf->MultiCell(80, 7, "Concepto", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
 $pdf->MultiCell(15, 7, "cant.", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
 $pdf->MultiCell(15, 7, "U.Med", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
-$pdf->MultiCell(15, 7, "P.U.", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+$pdf->MultiCell(20, 7, "P.U.", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
 $pdf->MultiCell(15, 7, "Desc", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
 $pdf->MultiCell(20, 7, "Total", 'B', 'R', 0, 1, '', '', true, 0, false, true, '7', 'M');
 
 $pdf->SetFont('helvetica', '', 7); // Fuente, Tipo y Tamaño
+$subtotal =0;
 foreach($serviciosPresupuesto as $key => $detalle) {
 	$partidas = $detalle["partidas"];
-	$subtotal =0;
 	foreach($partidas as $key => $partida) {
 		$codigo = mb_strtoupper($partida['codigo']??'');
 		$cantidad = number_format($partida['cantidad'], 2);
@@ -111,7 +111,7 @@ foreach($serviciosPresupuesto as $key => $detalle) {
 		$pdf->MultiCell(10, $altoFila, "{$codigo}", 0, 'C', 0, 0, 20, $y_start, true, 0, false, true, $altoFila, 'M');
 		$pdf->MultiCell(15, $altoFila, "{$cantidad}", 'B', 'C', 0, 0, 115, '', true, 0, false, true, $altoFila, 'M');
 		$pdf->MultiCell(15, $altoFila, "{$unidad}", 'B', 'C', 0, 0, '', '', true, 0, false, true, $altoFila, 'M');
-		$pdf->MultiCell(15, $altoFila, "$ {$precioUnitario}", 'B', 'C', 0, 0, '', '', true, 0, false, true, $altoFila, 'M');
+		$pdf->MultiCell(20, $altoFila, "$ {$precioUnitario}", 'B', 'C', 0, 0, '', '', true, 0, false, true, $altoFila, 'M');
 		$pdf->MultiCell(15, $altoFila, "$ {$descuento}", 'B', 'C', 0, 0, '', '', true, 0, false, true, $altoFila, 'M');
 		$pdf->MultiCell(20, $altoFila, "$ {$importe}", 'B', 'R', 0, 1, '', '', true, 0, false, true, $altoFila, 'M');
 		$subtotal += $partida['costo_base']* $partida['cantidad'];
@@ -120,9 +120,12 @@ foreach($serviciosPresupuesto as $key => $detalle) {
 
 $totalPresupuesto = $subtotal * 1.16; // Incluye IVA
 
-$pdf->MultiCell('', '', "SUB-TOTAL: $ " . number_format($subtotal, 2), 'T', 'R', 0, 1, '', '', true, 0, false, true, $altoFila, 'M');
-$pdf->MultiCell('', '', "IVA: $ " . number_format($subtotal * 0.16, 2), '', 'R', 0, 1, '', '', true, 0, false, true, $altoFila, 'M');
-$pdf->MultiCell('', '', "TOTAL: $ " . number_format($totalPresupuesto, 2), '', 'R', 0, 1, '', '', true, 0, false, true, $altoFila, 'M');
+$pdf->MultiCell(60, '', "SUB-TOTAL: $ ", 'T', 'R', 0, 0, 120, '', true, 0, false, true, 7, 'M');
+$pdf->MultiCell(0, '', number_format($subtotal, 2), 0, 'R', 0, 1, '', '', true, 0, false, true, 7, 'M');
+$pdf->MultiCell(60, '', "IVA: $ " , '', 'R', 0, 0, 120, '', true, 0, false, true, 7, 'M');
+$pdf->MultiCell('', '', number_format($subtotal * 0.16, 2), 0, 'R', 0, 1, '', '', true, 0, false, true, 7, 'M');
+$pdf->MultiCell(60, '', "TOTAL: $ " , '', 'R', 0, 0, 120, '', true, 0, false, true, 7, 'M');
+$pdf->MultiCell('', '', number_format($totalPresupuesto, 2), 0, 'R', 0, 1, '', '', true, 0, false, true, 7, 'M');
 
 $pdf->SetFont('helvetica', 'B', 8); // Fuente, Tipo y Tamaño
 $pdf->MultiCell(30, 14, "Condiciones de Pago:", 0, '', 0, 0, '', '');

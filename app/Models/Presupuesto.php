@@ -104,19 +104,18 @@ class Presupuesto extends PresupuestoPolicy
         
         foreach ( $respuesta as $key => $servicio ) {
             $partidas = Conexion::queryAll($this->bdName, "SELECT * FROM servicio_partidas WHERE servicioId = " . $servicio["id"] . " ORDER BY id", $error);
-            $costoTotal = 0;
             $precioTotal = 0;
             foreach ( $partidas as $pKey => $partidasItem ) {
-                $partidasItem["costoTotal"] = $partidasItem["costo_base"] * $partidasItem["cantidad"];
-                $partidasItem["precioTotal"] = $partidasItem["costoTotal"] + $partidasItem["logistica"] + $partidasItem["mantenimiento"] + $partidasItem["utilidad"];
-                $partidas[$pKey] = $partidasItem;
-                $costoTotal += $partidasItem["costoTotal"];
-                $precioTotal += $partidasItem["precioTotal"];
+                $partidasItem["costoTotal"] = $partidasItem["costo_base"] * $partidasItem["cantidad"]; // Calculo de costo de la partida
+                $partidasItem["precioTotal"] = $partidasItem["costoTotal"] + $partidasItem["logistica"] + $partidasItem["mantenimiento"] + $partidasItem["utilidad"]; // El calculo total de la partida
+                $partidas[$pKey] = $partidasItem; // Asignacion de partidas a los servicios
+                $precioTotal += $partidasItem["precioTotal"]; // Suma del precio total de las partidas
             }
             $respuesta[$key]["subtotal"] = $precioTotal;
             $respuesta[$key]["comisiones"] = $respuesta[$key]["subtotal"] * 0.05; // Ejemplo: 5% de comisiones
             $respuesta[$key]["total"] = $precioTotal + $respuesta[$key]["comisiones"];
             $respuesta[$key]["partidas"] = $partidas;
+            $respuesta[$key]["personalAsignado"] = [1];
         }
 
         return $respuesta;

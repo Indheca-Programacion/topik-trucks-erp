@@ -103,9 +103,28 @@ foreach($serviciosPresupuesto as $key => $detalle) {
 		$descuento = number_format($partida['descuento']??0, 2);
 		$importe = number_format($partida['costo_base']* $partida['cantidad'], 2);
 
+		$part = $key + 1;
+		
 		$y_start = $pdf->GetY();
 
-		$pdf->MultiCell(80, 0, "{$concepto}", 'B', '', 0, 0, 35, '', true, 0);
+		if ( $y_start > 223 && $part == count($partidas) ) {
+			$pdf->AddPage();
+
+			$pdf->SetFont('helvetica', 'B', 8); // Fuente, Tipo y Tamaño
+			$pdf->MultiCell(15, 7, "Codigo", 'B', '', 0, 0, 20, '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(80, 7, "Concepto", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "cant.", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "U.Med", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(20, 7, "P.U.", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "Desc", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(20, 7, "Total", 'B', 'R', 0, 1, '', '', true, 0, false, true, '7', 'M');
+
+			$pdf->SetFont('helvetica', '', 7); // Fuente, Tipo y Tamaño
+
+			$y_start = $pdf->GetY();
+		}
+
+		$pdf->MultiCell(80, 0, "{$concepto}", 'B', '', 0, 1, 35, '', true, 0);
 		$y_end = $pdf->GetY();
 		$altoFila = $y_end - $y_start;
 		$pdf->MultiCell(10, $altoFila, "{$codigo}", 0, 'C', 0, 0, 20, $y_start, true, 0, false, true, $altoFila, 'M');
@@ -115,6 +134,21 @@ foreach($serviciosPresupuesto as $key => $detalle) {
 		$pdf->MultiCell(15, $altoFila, "$ {$descuento}", 'B', 'C', 0, 0, '', '', true, 0, false, true, $altoFila, 'M');
 		$pdf->MultiCell(20, $altoFila, "$ {$importe}", 'B', 'R', 0, 1, '', '', true, 0, false, true, $altoFila, 'M');
 		$subtotal += $partida['costo_base']* $partida['cantidad'];
+
+		if ( $y_end > 270 ) {
+			$pdf->AddPage();
+
+			$pdf->SetFont('helvetica', 'B', 8); // Fuente, Tipo y Tamaño
+			$pdf->MultiCell(15, 7, "Codigo", 'B', '', 0, 0, 20, '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(80, 7, "Concepto", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "cant.", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "U.Med", 'B', 'C', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(20, 7, "P.U.", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(15, 7, "Desc", 'B', '', 0, 0, '', '', true, 0, false, true, '7', 'M');
+			$pdf->MultiCell(20, 7, "Total", 'B', 'R', 0, 1, '', '', true, 0, false, true, '7', 'M');
+
+			$pdf->SetFont('helvetica', '', 7); // Fuente, Tipo y Tamaño
+		}
 	}
 }
 
@@ -152,6 +186,13 @@ $pdf->MultiCell(0, 7, $presupuesto->garantia??'1 AÑO', 0, '', 0, 1, '', '');
 $pdf->MultiCell(0, 7, 'Sin mas que hacer referencia estamos a sus completas órdenes', 0, 'C', 0, 1, '', '');
 
 $pdf->Ln(20);
+
+$y_end = $pdf->GetY();
+
+if ( ($y_end + 30) > $pdf->getPageHeight() ) {
+	$pdf->AddPage(); // Agregar nueva página
+	$pdf->Ln(20);
+}
 
 $pdf->MultiCell(60, 7, ' Aprobada (Nombre, Firma y Sello', 'T', 'C', 0, 1, 120, '');
 

@@ -147,5 +147,5 @@
 </div>
 
 <?php
-  array_push($arrayArchivosJS, 'vistas/js/maquinarias.js?v=1.1');
+  array_push($arrayArchivosJS, 'vistas/js/maquinarias.js?v=1.2');
 ?>

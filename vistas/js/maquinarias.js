@@ -33,7 +33,7 @@ $(function(){
 	});
 
 	// Confirmar la eliminación de la Maquinaria
-	$("button.eliminar").on("click", function (e) {
+	$("#tablaMaquinarias").on("click",".eliminar", function (e) {
 
 		e.preventDefault();
 		var folio = $(this).attr("folio");

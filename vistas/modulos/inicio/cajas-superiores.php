@@ -37,7 +37,7 @@ use App\Route;
     <!-- small box -->
     <div class="small-box bg-warning">
         <div class="inner">
-            <h3><?php echo 0;//SE quieto la cantidad de requisiciones ?></h3>
+            <h3><?php echo $cantidadPresupuestos;//SE quieto la cantidad de requisiciones ?></h3>
             <p>Presupuestos</p>
         </div>
         <div class="icon">

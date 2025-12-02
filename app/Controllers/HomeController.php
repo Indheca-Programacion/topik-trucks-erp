@@ -7,6 +7,7 @@ require_once "app/Models/Usuario.php";
 require_once "app/Models/Maquinaria.php";
 require_once "app/Models/Servicio.php";
 require_once "app/Models/Requisicion.php";
+require_once "app/Models/Presupuesto.php";
 require_once "app/Models/OrdenCompra.php";
 require_once "app/Models/RequisicionGasto.php";
 require_once "app/Models/Tarea.php";
@@ -22,6 +23,7 @@ use App\Models\Usuario;
 use App\Models\Maquinaria;
 use App\Models\Servicio;
 use App\Models\Requisicion;
+use App\Models\Presupuesto;
 use App\Models\OrdenCompra;
 use App\Models\RequisicionGasto;
 use App\Models\Tarea;
@@ -60,9 +62,9 @@ class HomeController
         $servicios = $servicio->consultar();
         $cantidadServicios = count($servicios);
 
-        $requisicion = New Requisicion;
-        $requisiciones = $requisicion->consultar();
-        $cantidadRequisiciones = count($requisiciones);
+        $presupuesto = New Presupuesto;
+        $presupuestos = $presupuesto->consultar();
+        $cantidadPresupuestos = count($presupuestos);
 
         $requisicionGasto = New RequisicionGasto;
         $requisicionGastos = $requisicionGasto->consultar();

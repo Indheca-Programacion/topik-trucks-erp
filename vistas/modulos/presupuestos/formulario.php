@@ -7,7 +7,7 @@
 ?>
 
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-lg-2">
         <div class="card card-success card-outline">
             <div class="card-header">
                 <h3 class="card-title">Información del Presupuesto</h3>
@@ -77,9 +77,9 @@
                             </div>
                             <div id="collapse<?= $key ?>" class="collapse <?= $key === 0 ? 'show' : '' ?>" aria-labelledby="heading<?= $key ?>" data-parent="#accordionServicios">
                                 <div class="card-body">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                                         <table class="table table-striped table-sm text-uppercase">
-                                            <thead>
+                                            <thead style="position: sticky; top: 0; background-color: #fff; z-index: 10;">
                                                 <tr>
                                                     <th>Partida</th>
                                                     <th>Cantidad</th>
@@ -119,7 +119,7 @@
                                                     ?>
                                                 <?php endif; ?>
                                             </tbody>
-                                            <tfoot>
+                                            <tfoot style="position: sticky; bottom: 0; background-color: #fff; z-index: 10;">
                                                 <tr>
                                                     <th colspan="9" class="text-right">Subtotal:</th>
                                                     <th class="text-left">$ <?= number_format($servicio["subtotal"], 2) ?></th>

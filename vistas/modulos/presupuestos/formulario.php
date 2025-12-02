@@ -5,7 +5,7 @@
 
     use App\Route;
 ?>
-
+<input type="hidden" name="_token" value="<?= token(); ?>">
 <div class="row">
     <div class="col-lg-2">
         <div class="card card-success card-outline">
@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="maquinaria_id">Maquinaria <span class="text-danger">*</span></label>
-                            <select name="maquinaria_id" id="maquinaria_id" class="form-control select2" style="width: 100%;">
+                            <label for="maquinariaId">Maquinaria <span class="text-danger">*</span></label>
+                            <select name="maquinariaId" id="maquinariaId" class="form-control select2" style="width: 100%;">
                                 <option value="">Seleccionar maquinaria</option>
                                 <?php foreach ( $maquinarias as $maquinaria ) : ?>
                                     <option value="<?= $maquinaria["id"] ?>" <?= ( isset($presupuesto) && $maquinariaId == $maquinaria["id"] ) ? 'selected' : '' ?> >

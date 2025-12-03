@@ -10,13 +10,17 @@ require_once "../rutas.php";
 require_once "../conexion.php";
 require_once "../Models/Usuario.php";
 require_once "../Models/Presupuesto.php";
+require_once "../Models/ServicioPartida.php";
 require_once "../Controllers/Autorizacion.php";
+require_once "../Requests/SaveServicioPartidaRequest.php";
 
 use App\Route;
 use App\Models\Usuario;
 use App\Models\Presupuesto;
+use App\Models\ServicioPartida;
 use App\Controllers\Autorizacion;
 use App\Controllers\Validacion;
+use App\Requests\SaveServicioPartidaRequest;
 
 class PresupuestoAjax
 {
@@ -112,34 +116,115 @@ class PresupuestoAjax
 		
 	}
 
+    /*=============================================
+    Agregar Partida al Servicio
+    =============================================*/
+    public function agregar()
+    {
+        try {
+            
+            $request = SaveServicioPartidaRequest::validated();
+            if ( errors() ) {
+
+                $respuesta = [
+                    'codigo' => 500,
+                    'error' => true,
+                    'errors' => errors()
+                ];
+
+                unset($_SESSION[CONST_SESSION_APP]["errors"]);
+
+                echo json_encode($respuesta);
+                return;
+
+            }
+
+            require_once "../Models/ServicioPartida.php";
+            $partida = New \App\Models\ServicioPartida;
+            $respuesta = $partida->crear($request);
+
+        } catch (\Exception $e) {
+            $respuesta = [
+                'codigo' => 500, // Código de error para problemas del servidor
+                'error' => true,
+                'errorMessage' => $e->getMessage(), // El mensaje del error
+                'errorCode' => $e->getCode() // Código específico de la excepción, si existe
+            ];
+        }
+        echo json_encode($respuesta);
+    }
+
+    /*=============================================
+    Eliminar Partida del Servicio
+    ==============================================*/
+    public function eliminar()
+    {
+        try {
+            
+            $request = SaveServicioPartidaRequest::validated();
+            if ( errors() ) {
+
+                $respuesta = [
+                    'codigo' => 500,
+                    'error' => true,
+                    'errors' => errors()
+                ];
+
+                unset($_SESSION[CONST_SESSION_APP]["errors"]);
+
+                echo json_encode($respuesta);
+                return;
+
+            }
+
+            require_once "../Models/ServicioPartida.php";
+            $partida = New \App\Models\ServicioPartida;
+            $partida->id = $request['id'];
+            $respuesta = $partida->eliminar();
+
+        } catch (\Exception $e) {
+            $respuesta = [
+                'codigo' => 500, // Código de error para problemas del servidor
+                'error' => true,
+                'errorMessage' => $e->getMessage(), // El mensaje del error
+                'errorCode' => $e->getCode() // Código específico de la excepción, si existe
+            ];
+        }
+        echo json_encode($respuesta);
+    }
 }
 
 $presupuestoAjax = new PresupuestoAjax();
 
 if ( isset($_POST["accion"]) ) {
 
-	if($_POST["accion"] == "asignarPuesto" ){
+	if($_POST["accion"] == "agregarPartida" ){
 
 		/*=============================================
-		ASIGNAR PUESTO
+		Agregar Partida al Servicio
 		=============================================*/ 
-		$puestoAjax->token = $_POST["_token"];
-		$puestoAjax->id_puesto = $_POST["id_puesto"];
-		$puestoAjax->id_usuario = $_POST["id_usuario"];
-		$puestoAjax->id_zona = $_POST["id_zona"];
 
-		$puestoAjax->agregar();
-	}else if($_POST["accion"] == "eliminarPuestoAsignado" ){
-
-		/*=============================================
-		DESIGNAR PUESTO
-		=============================================*/ 
-		$puestoAjax->token = $_POST["_token"];
-		$puestoAjax->id_puesto_usuario = $_POST["id_puesto_usuario"];
-
-		$puestoAjax->eliminarPuesto();
+		$presupuestoAjax->agregar();
 	}
+    else if($_POST["accion"] == "eliminarPartida" ){
 
+		/*=============================================
+		Eliminar Partida del Servicio
+		=============================================*/ 
+
+		$presupuestoAjax->eliminar();
+	}
+    else {
+        /*=============================================
+        Accion desconocida
+        =============================================*/ 
+        $respuesta = [
+            'codigo' => 400,
+            'error' => true,
+            'errorMessage' => 'Acción desconocida'
+        ];
+        echo json_encode($respuesta);
+    }
 } 
 else if ( isset($_GET["accion"]) ) {
 

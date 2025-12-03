@@ -796,5 +796,129 @@ $(function(){
 
 	}
 
+	$('#modalAgregarCliente').on('shown.bs.modal', function () {
+		$('#nombreCliente').trigger('focus');
+	});
+
+	$('#modalAgregarMaquinaria').on('shown.bs.modal', function () {
+		$('#descripcionMaquinaria').trigger('focus');
+	});
+
+	$('#modalAgregarPartida').on('shown.bs.modal', function (event) {
+		let button = $(event.relatedTarget);
+		let servicioId = button.data('servicio-id');
+		$('#servicioId').val(servicioId);
+	});
+
+	$('#modalAgregarPartida').on('hidden.bs.modal', function () {
+		// Limpiar los campos del formulario al cerrar el modal
+		$('#cantidad').val('');
+		$('#unidad').val('');
+		$('#descripcion').val('');
+		$('#costo_base').val('');
+		$('#logistica').val('');
+		$('#mantenimiento').val('');
+		$('#utilidad').val('');
+	});
+
+	$('#btnAgregarPartida').on('click', function (e) {
+		e.preventDefault();
+
+		let formularioPartida = $('#formAgregarPartida');
+
+		$.ajax({
+			url: rutaAjax+'app/Ajax/PresupuestoAjax.php',
+			method: 'POST',
+			data: formularioPartida.serialize(),
+			dataType: "json",
+			success:function(respuesta) {
+				if ( respuesta.error ) {
+					let listaErrores = '';
+					if ( respuesta.errors ){
+						Object.values(respuesta.errors).forEach( function(valor) {
+							listaErrores += '<li>'+valor+'</li>';
+						});
+					}
+					Swal.fire({
+						title: 'Error de validación',
+						html: '<ul class="text-left">'+listaErrores+'</ul>',
+						icon: 'error',
+						confirmButtonText: 'Cerrar'
+					});
+					return;
+				}else{
+					Swal.fire({
+						title: 'Partida agregada',
+						text: 'La partida ha sido agregada correctamente al presupuesto.',
+						icon: 'success',
+						confirmButtonText: 'Cerrar'
+					}).then(() => {
+						location.reload()
+					});
+				}
+				
+			}
+
+		});
+	});
+
+	$('#costo_base, #cantidad').on('input', function () {
+		let costoBase = parseFloat($('#costo_base').val()) || 0;
+		let cantidad = parseFloat($('#cantidad').val()) || 0;
+		let total = costoBase * cantidad;
+		let valorLogistica = total * 0.05; // 5% de logística
+		$('#logistica').val(valorLogistica.toFixed(2));
+		$('#mantenimiento').val((total * 0.05).toFixed(2)); // 5% de mantenimiento
+		$('#utilidad').val((total * 0.15).toFixed(2)); // 15% de utilidad
+	});
+
+	// Delegar el evento para eliminar partidas dinámicamente
+	$('.eliminarPartida').on('click', function () {
+		let partidaId = $(this).data('id');
+
+		Swal.fire({
+			title: '¿Estás seguro de querer eliminar esta partida?',
+			text: "No podrá recuperar esta información!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Sí, quiero eliminarla!',
+			cancelButtonText:  'No!'
+	    }).then((result) => {
+			if ( result.isConfirmed ) {
+				$.ajax({
+					url: rutaAjax+'app/Ajax/PresupuestoAjax.php',
+					method: 'POST',
+					data: {
+						accion: 'eliminarPartida',
+						id: partidaId,
+						_token: $('input[name="_token"]').val()
+					},
+					dataType: "json",
+					success:function(respuesta) {
+						if ( respuesta.error ) {
+							Swal.fire({
+								title: 'Error',
+								text: respuesta.errorMessage,
+								icon: 'error',
+								confirmButtonText: 'Cerrar'
+							});
+							return;
+						}
+						Swal.fire({
+							title: 'Partida eliminada',
+							text: 'La partida ha sido eliminada correctamente del presupuesto.',
+							icon: 'success',
+							confirmButtonText: 'Cerrar'
+						}).then(() => {
+							location.reload()
+						});
+					}
+				});
+			}
+		});
+	});
+
 
 });

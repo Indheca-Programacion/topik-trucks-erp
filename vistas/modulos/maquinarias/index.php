@@ -120,7 +120,6 @@
                    <th>Empresa</th>
                    <th>Tipo de Maquinaria</th>
                    <th>Num. Económico</th>
-                   <th>Num. Factura</th>
                    <th>Descripcion</th>
                    <th>Marca</th>
                    <th>Modelo</th>
@@ -128,8 +127,6 @@
                    <th>Serie</th>
                    <th>Color</th>
                    <th>Estatus</th>
-                   <th>Ubicación</th>
-                   <th>Almacén</th>
                    <th>Acciones</th>
                  </tr> 
                 </thead>
@@ -150,5 +147,5 @@
 </div>
 
 <?php
-  array_push($arrayArchivosJS, 'vistas/js/maquinarias.js?v=1.1');
+  array_push($arrayArchivosJS, 'vistas/js/maquinarias.js?v=1.2');
 ?>

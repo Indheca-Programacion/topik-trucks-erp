@@ -24,7 +24,6 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Empresa</th>
                       <th>Folio</th>
                       <th>Estatus</th>
                       <th>Fecha Solicitud</th>
@@ -37,8 +36,7 @@
                   	<?php foreach($maquinaria->servicios as $key => $value) { ?>
                     <tr>
                       <td><?php echo $key+1; ?></td>
-                      <td class="text-uppercase"><?php echo fString($value['empresas.nombreCorto']); ?></td>
-                      <td class="text-uppercase"><?php echo fString($value['folio']); ?></td>
+                      <td class="text-uppercase"><?php echo fString($value['id']); ?></td>
                       <td class="text-uppercase"><?php echo fString($value['servicio_estatus.descripcion']); ?></td>
                       <td><?php echo fFechaLarga($value["fechaSolicitud"]); ?></td>
                       <td><?php echo ($value["fechaFinalizacion"]) ? fFechaLarga($value["fechaFinalizacion"]) : ''; ?></td>

@@ -39,11 +39,6 @@
 						<input type="text" name="numeroEconomico" value="<?php echo fString($numeroEconomico); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa el número económico">
 					</div>
 
-					<div class="col-md-6 form-group">
-						<label for="numeroFactura">Número de Factura:</label>
-						<input type="text" name="numeroFactura" value="<?php echo fString($numeroFactura); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa el número o folio de Factura">
-					</div>
-
 				</div>
 
 				<div class="row">
@@ -249,79 +244,9 @@
 				<div class="row">
 
 					<div class="col-md-6 form-group">
-						<label for="ubicacionId">Ubicación:</label>
-
-						<div class="input-group">
-
-							<select name="ubicacionId" id="ubicacionId" class="custom-select form-controls select2Add">
-							<?php if ( isset($maquinaria->id) ) : ?>
-							<!-- <select id="ubicacionId" class="form-control select2" style="width: 100%" disabled> -->
-							<?php else: ?>
-								<option value="">Selecciona una Ubicación</option>
-							<?php endif; ?>
-								<?php foreach($ubicaciones as $ubicacion) { ?>
-								<option value="<?php echo $ubicacion["id"]; ?>"
-									<?php echo $ubicacionId == $ubicacion["id"] ? ' selected' : ''; ?>
-									><?php echo mb_strtoupper(fString($ubicacion["descripcion"])); ?>
-								</option>
-								<?php } ?>
-							</select>
-
-							<div class="input-group-append">
-								<button type="button" id="btnAddUbicacionId" class="btn btn-sm btn-success" disabled>
-									<i class="fas fa-plus-circle"></i>
-								</button>
-							</div>
-
-						</div>
-
-					</div>
-
-					<div class="col-md-6 form-group">
-						<label for="almacenId">Almacén:</label>
-
-						<div class="input-group">
-
-							<select name="almacenId" id="almacenId" class="custom-select form-controls select2Add">
-							<?php if ( isset($maquinaria->id) ) : ?>
-							<!-- <select id="almacenId" class="form-control select2" style="width: 100%" disabled> -->
-							<?php else: ?>
-								<option value="">Selecciona un Almacén</option>
-							<?php endif; ?>
-								<?php foreach($almacenes as $almacen) { ?>
-								<option value="<?php echo $almacen["id"]; ?>"
-									<?php echo $almacenId == $almacen["id"] ? ' selected' : ''; ?>
-									><?php echo mb_strtoupper(fString($almacen["descripcion"])); ?>
-								</option>
-								<?php } ?>
-							</select>
-
-							<div class="input-group-append">
-								<button type="button" id="btnAddAlmacenId" class="btn btn-sm btn-success" disabled>
-									<i class="fas fa-plus-circle"></i>
-								</button>
-							</div>
-
-						</div>
-
-					</div>
-
-					<div class="col-md-6 form-group">
-						<label for="obraId">Obra:</label>
-
-							<select name="obraId" id="obraId" class="custom-select form-controls select2Add">
-							<?php if ( isset($maquinaria->id) ) : ?>
-							<!-- <select id="ubicacionId" class="form-control select2" style="width: 100%" disabled> -->
-							<?php else: ?>
-								<option value="">Selecciona una Obra</option>
-							<?php endif; ?>
-								<?php foreach($obras as $obra) { ?>
-								<option value="<?php echo $obra["id"]; ?>"
-									<?php echo $obraId == $obra["id"] ? ' selected' : ''; ?>
-									><?php echo mb_strtoupper(fString($obra["descripcion"])); ?>
-								</option>
-								<?php } ?>
-							</select>
+						<label for="ubicacion">Ubicación:</label>
+						
+						<input type="text" name="ubicacion" value="<?php echo fString($ubicacion); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa la ubicación">
 
 					</div>
 	

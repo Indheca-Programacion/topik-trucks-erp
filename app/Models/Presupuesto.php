@@ -78,6 +78,11 @@ class Presupuesto extends PresupuestoPolicy
                 $this->maquinariaId = $respuesta["maquinariaId"];
                 $this->clienteId = $respuesta["clienteId"];
                 $this->fuente = $respuesta["fuente"];
+                $this->fechaCreacion = $respuesta["fechaCreacion"];
+
+                require_once "app/Models/ServicioPartida.php";
+                $servicioPartida = new ServicioPartida;
+                $this->partidas = $servicioPartida->obtenerPartidasPresupuesto($this->id);
 
             }
 
@@ -88,7 +93,7 @@ class Presupuesto extends PresupuestoPolicy
     }
 
     public function obtenerServiciosPresupuesto($presupuestoId) {
-        return Conexion::queryAll($this->bdName, "SELECT S.* ,
+        $respuesta = Conexion::queryAll($this->bdName, "SELECT S.* ,
                                                     MT.descripcion AS mantenimientoTipo,
                                                     ST.descripcion AS servicioTipo,
                                                     SE.descripcion AS servicioEstatus
@@ -97,6 +102,24 @@ class Presupuesto extends PresupuestoPolicy
                                                     inner join servicio_tipos ST on S.servicioTipoId = ST.id
                                                     inner join servicio_estatus SE on S.servicioEstatusId = SE.id
                                                     WHERE S.presupuestoId = $presupuestoId", $error);
+        
+        foreach ( $respuesta as $key => $servicio ) {
+            $partidas = Conexion::queryAll($this->bdName, "SELECT * FROM servicio_partidas WHERE servicioId = " . $servicio["id"] . " ORDER BY id", $error);
+            $precioTotal = 0;
+            foreach ( $partidas as $pKey => $partidasItem ) {
+                $partidasItem["costoTotal"] = $partidasItem["costo_base"] * $partidasItem["cantidad"]; // Calculo de costo de la partida
+                $partidasItem["precioTotal"] = $partidasItem["costoTotal"] + $partidasItem["logistica"] + $partidasItem["mantenimiento"] + $partidasItem["utilidad"]; // El calculo total de la partida
+                $partidas[$pKey] = $partidasItem; // Asignacion de partidas a los servicios
+                $precioTotal += $partidasItem["precioTotal"]; // Suma del precio total de las partidas
+            }
+            $respuesta[$key]["subtotal"] = $precioTotal;
+            $respuesta[$key]["comisiones"] = $respuesta[$key]["subtotal"] * 0.05; // Ejemplo: 5% de comisiones
+            $respuesta[$key]["total"] = $precioTotal + $respuesta[$key]["comisiones"];
+            $respuesta[$key]["partidas"] = $partidas;
+            $respuesta[$key]["personalAsignado"] = [1];
+        }
+
+        return $respuesta;
     }
 
     public function crear($datos,$imagenes = null) {
@@ -123,6 +146,26 @@ class Presupuesto extends PresupuestoPolicy
 
         return $respuesta;
 
+    }
+
+    /*=============================================
+    Agregar partidas a los servicios del presupuesto
+    =============================================*/
+    public function agregarPartidaServicio($datos) {
+        $arrayPDOParam = array();
+        $arrayPDOParam["cantidad"] = self::$type["cantidad"];
+        $arrayPDOParam["unidad"] = self::$type["unidad"];
+        $arrayPDOParam["descripcion"] = self::$type["descripcion"];
+        $arrayPDOParam["costo_base"] = self::$type["costo_base"];
+        $arrayPDOParam["logistica"] = self::$type["logistica"];
+        $arrayPDOParam["mantenimiento"] = self::$type["mantenimiento"];
+        $arrayPDOParam["utilidad"] = self::$type["utilidad"];
+        $arrayPDOParam["presupuestoId"] = self::$type["presupuestoId"];
+        $arrayPDOParam["servicioId"] = self::$type["servicioId"];
+
+        $campos = fCreaCamposInsert($arrayPDOParam);
+
+        return Conexion::queryExecute($this->bdName, "INSERT INTO servicio_partidas ".$campos, $datos, $arrayPDOParam, $error);
     }
 
     public function actualizar($datos) {

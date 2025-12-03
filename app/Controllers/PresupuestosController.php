@@ -145,7 +145,13 @@ class PresupuestosController
             $cliente = new \App\Models\Cliente;
             $clientes = $cliente->consultar();
 
+            require_once "app/Models/Usuario.php";
+            $usuario = new \App\Models\Usuario;
+            $personal = $usuario->consultar();
+
             $serviciosPresupuesto = $presupuesto->obtenerServiciosPresupuesto($id);
+
+            $totalPresupuesto = array_sum(array_column($serviciosPresupuesto, 'total'));
             
             $contenido = array('modulo' => 'vistas/modulos/presupuestos/editar.php');
 
@@ -230,5 +236,33 @@ class PresupuestosController
         
         die();
 
+    }
+
+    public function print($id)
+    {
+        Autorizacion::authorize('view', new Presupuesto);
+
+        $presupuesto = New Presupuesto;
+
+        if ( $presupuesto->consultar(null , $id) ) {
+
+            require_once "app/Models/Empresa.php";
+            $empresa = new \App\Models\Empresa;
+            $empresa->consultar(null,7);
+
+            require_once "app/Models/Cliente.php";
+            $cliente = new \App\Models\Cliente;
+            $cliente->consultar(null,$presupuesto->clienteId);
+
+            $serviciosPresupuesto = $presupuesto->obtenerServiciosPresupuesto($id);
+
+            $totalPresupuesto = array_sum(array_column($serviciosPresupuesto, 'total'));
+            
+            include "reportes/presupuesto.php";
+        } else {
+            $contenido = array('modulo' => 'vistas/modulos/errores/404.php');
+
+            include "vistas/modulos/plantilla.php";
+        }
     }
 }

@@ -1,6 +1,15 @@
 $(function () {
   let tableList = document.getElementById("tablaEmpresas");
-  const rutaApiTopickTrucks = "http://127.0.0.1:8000/api";
+
+  let rutaApiTopickTrucks;
+
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    rutaApiTopickTrucks = "http://127.0.0.1:8000/api";
+  } else {
+    rutaApiTopickTrucks = "https://topiktrucks.com/api";
+  }
+
+  console.log(rutaApiTopickTrucks);
 
   // LLamar a la funcion fAjaxDataTable() para llenar el Listado
   // if ( tableList != null ) fAjaxDataTable(rutaAjax+'app/Ajax/EmpresaAjax.php', '#tablaEmpresas');
@@ -192,33 +201,32 @@ $(function () {
 
   // LISTA DE ERRORES TIPO VALIDACIONES
   function mostrarListadoErrores(apiErrorResponse) {
-  const validationErrors = apiErrorResponse.errors;
+    const validationErrors = apiErrorResponse.errors;
 
-  let errorListHtml = "<ul>";
+    let errorListHtml = "<ul>";
 
-  for (const field in validationErrors) {
-    if (validationErrors.hasOwnProperty(field)) {
+    for (const field in validationErrors) {
+      if (validationErrors.hasOwnProperty(field)) {
+        // Convertir string a array si no lo es
+        const errors = Array.isArray(validationErrors[field])
+          ? validationErrors[field]
+          : [validationErrors[field]];
 
-      // Convertir string a array si no lo es
-      const errors = Array.isArray(validationErrors[field])
-        ? validationErrors[field]
-        : [validationErrors[field]];
-
-      errors.forEach((mensaje) => {
-        errorListHtml += `<li><strong>${field}:</strong> ${mensaje}</li>`;
-      });
+        errors.forEach((mensaje) => {
+          errorListHtml += `<li><strong>${field}:</strong> ${mensaje}</li>`;
+        });
+      }
     }
+
+    errorListHtml += "</ul>";
+
+    Swal.fire({
+      icon: "error",
+      title: "Se encontraron errores",
+      html: errorListHtml,
+      confirmButtonText: "Entendido",
+    });
   }
-
-  errorListHtml += "</ul>";
-
-  Swal.fire({
-    icon: "error",
-    title: "Se encontraron errores",
-    html: errorListHtml,
-    confirmButtonText: "Entendido",
-  });
-}
 
   // *************************************************
   // ACTUALIZAR DATOS
@@ -236,8 +244,7 @@ $(function () {
   });
 
   function actualizarDatosSesion() {
-
-      let dataSend = {
+    let dataSend = {
       id: $("#sesionId").val(),
       password: $("#passwordSesionPagina").val(),
       password_confirmation: $("#passwordSesionPagina").val(),
@@ -247,14 +254,13 @@ $(function () {
       method: "POST",
       data: JSON.stringify(dataSend),
       contentType: "application/json",
-      dataType: "json", 
+      dataType: "json",
       success: function (respuesta) {
-
-        if(respuesta){
+        if (respuesta) {
           const sesionId = parseInt($("#sesionId").val(), 10) || 0;
           // ACTUALIZAR AJAX
           let dataSend = new FormData();
-          
+
           dataSend.append("accion", "actualizarSesion");
           dataSend.append("_token", $("#_token").val());
           dataSend.append("sesionId", sesionId);
@@ -270,18 +276,17 @@ $(function () {
             dataType: "json",
           })
             .done(function (respuesta) {
-              if(respuesta.error){
+              if (respuesta.error) {
                 mostrarListadoErrores(respuesta);
-                return
+                return;
               }
 
-              mostrarExitoSwal(respuesta.message)
+              mostrarExitoSwal(respuesta.message);
             })
             .fail(function (error) {})
             .always(function () {});
         }
-  
-        
+
         mostrarExitoSwal(respuesta);
       },
       error: function (error) {
@@ -292,7 +297,7 @@ $(function () {
 
   function crearSesion() {
     let dataSend = {
-      name: "JOSUE",
+      name: $("#nombreCorto").val(),
       email: $("#correoSesionPagina").val(),
       password: $("#passwordSesionPagina").val(),
       password_confirmation: $("#passwordSesionPagina").val(),
@@ -302,19 +307,18 @@ $(function () {
       method: "POST",
       data: JSON.stringify(dataSend),
       contentType: "application/json",
-      dataType: "json", 
+      dataType: "json",
       success: function (respuesta) {
-
-        if(respuesta){
+        if (respuesta) {
           const sesionId = parseInt($("#sesionId").val(), 10) || 0;
           // CREAR AJAX
           let dataSend = new FormData();
-          
+
           dataSend.append("accion", "guardarSesion");
           dataSend.append("_token", $("#_token").val());
           dataSend.append("sesionId", respuesta.user.id);
           dataSend.append("empresaId", $("#empresaId").val());
-          dataSend.append("name","JOSUE");
+          dataSend.append("name", $("#nombreCorto").val());
           dataSend.append("email", $("#correoSesionPagina").val());
           dataSend.append("password", $("#passwordSesionPagina").val());
 
@@ -328,17 +332,17 @@ $(function () {
             dataType: "json",
           })
             .done(function (respuesta) {
-              if(respuesta.error){
+              if (respuesta.error) {
                 mostrarListadoErrores(respuesta);
-                return
+                return;
               }
 
-              mostrarExitoSwal(respuesta.message)
+              mostrarExitoSwal(respuesta.message);
             })
             .fail(function (error) {})
             .always(function () {});
         }
-  
+
         mostrarExitoSwal(respuesta);
       },
       error: function (error) {

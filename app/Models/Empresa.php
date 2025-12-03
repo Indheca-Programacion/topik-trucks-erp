@@ -18,7 +18,9 @@ use App\Policies\EmpresaPolicy;
 class Empresa extends EmpresaPolicy
 {
     static protected $fillable = [
-        'razonSocial', 'nombreCorto', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'localidad', 'referencia', 'municipio', 'estado', 'pais', 'codigoPostal', 'nomenclaturaOT', 'logo', 'logoAnterior', 'imagen', 'imagenAnterior'
+        'razonSocial', 'nombreCorto', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'localidad', 'referencia', 'municipio', 'estado', 'pais', 'codigoPostal', 'nomenclaturaOT', 'logo', 'logoAnterior', 'imagen', 'imagenAnterior',
+
+        'empresaId','sesionId','name','email','password'
     ];
 
     static protected $type = [
@@ -38,7 +40,13 @@ class Empresa extends EmpresaPolicy
         'codigoPostal' => 'string',
         'nomenclaturaOT' => 'string',
         'logo' => 'string',
-        'imagen' => 'string'
+        'imagen' => 'string',
+
+        'empresaId' => 'integer',
+        'sesionId' => 'integer',
+        'name' => 'string',
+        'email' => 'string',
+        'password' => 'string'
     ];
 
     protected $bdName = CONST_BD_SECURITY;
@@ -79,7 +87,16 @@ class Empresa extends EmpresaPolicy
 
         } else {
 
-            $respuesta = Conexion::queryUnique($this->bdName, "SELECT * FROM $this->tableName WHERE $this->keyName = $valor", $error);
+            $respuesta = Conexion::queryUnique($this->bdName, "SELECT 
+                                                                    E.*,
+                                                                    ES.sesionId,
+                                                                    ES.email,
+                                                                    ES.password
+                                                                FROM 
+                                                                    $this->tableName E
+                                                                LEFT JOIN empresa_sesion ES ON E.id = ES.empresaId
+                                                                WHERE 
+                                                                    E.$this->keyName = $valor", $error);
 
             if ( $respuesta ) {
                 $this->id = $respuesta["id"];
@@ -99,6 +116,12 @@ class Empresa extends EmpresaPolicy
                 $this->nomenclaturaOT = $respuesta["nomenclaturaOT"];
                 $this->logo = $respuesta["logo"];
                 $this->imagen = $respuesta["imagen"];
+                
+                // EMPRESA SESIÓN
+                
+                $this->sesionId = $respuesta["sesionId"];
+                $this->correoSesionPagina = $respuesta["email"];
+                $this->passwordSesionPagina = $respuesta["password"];
             }
 
             return $respuesta;
@@ -175,6 +198,30 @@ class Empresa extends EmpresaPolicy
 
     }
 
+    public function crearSesion($datos) {
+
+        $datos["password"] = hash('sha256', $datos["password"]);
+
+        $arrayPDOParam = array();
+        $arrayPDOParam["empresaId"] = self::$type["empresaId"];
+        $arrayPDOParam["sesionId"] = self::$type["sesionId"];
+        $arrayPDOParam["name"] = self::$type["name"];
+        $arrayPDOParam["email"] = self::$type["email"];
+        $arrayPDOParam["password"] = self::$type["password"];
+
+        $campos = fCreaCamposInsert($arrayPDOParam);
+
+        $lastId=0;
+
+        $respuesta = Conexion::queryExecute($this->bdName, "INSERT INTO empresa_sesion {$campos}", $datos, $arrayPDOParam, $error,$lastId);
+
+        if ($respuesta) {
+            return $this->id = $lastId;
+        } else {
+            echo "Error: " . $error;
+        }
+    }
+    
     public function actualizar($datos) {
 
         // Agregar al request para actualizar el registro
@@ -267,6 +314,21 @@ class Empresa extends EmpresaPolicy
 
         return $respuesta;
 
+    }
+
+    public function actualizarSesion($datos) {
+
+        $datos[$this->keyName] = $datos["sesionId"];
+        $datos["password"] = hash('sha256', $datos["password"]);
+
+        $arrayPDOParam = array();
+        $arrayPDOParam["password"] = self::$type["password"];
+
+        $campos = fCreaCamposUpdate($arrayPDOParam);
+
+        $arrayPDOParam[$this->keyName] = self::$type[$this->keyName];
+
+        return Conexion::queryExecute($this->bdName, "UPDATE empresa_sesion SET {$campos} WHERE sesionId = :id", $datos, $arrayPDOParam, $error);
     }
 
     public function eliminar() {

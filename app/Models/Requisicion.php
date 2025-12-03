@@ -68,9 +68,6 @@ class Requisicion extends RequisicionPolicy
     public $detalles;
     public $observaciones;
 
-
-    
-
     static public function fillable() {
         return self::$fillable;
     }

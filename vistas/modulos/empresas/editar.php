@@ -64,5 +64,5 @@
 </div>
 
 <?php
-	array_push($arrayArchivosJS, 'vistas/js/empresas.js?v=1.00');
+	array_push($arrayArchivosJS, 'vistas/js/empresas.js?v=1.01');
 ?>

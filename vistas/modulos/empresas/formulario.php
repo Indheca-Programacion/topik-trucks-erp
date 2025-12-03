@@ -18,6 +18,10 @@
 		$logo = $empresa->logo;
 		$imagenAnterior = $empresa->imagen;
 		$imagen = $empresa->imagen;
+		
+		$sesionId = $empresa->sesionId ? $empresa->sesionId : 0;
+		$correoSesionPagina = isset($old["correoSesionPagina"]) ? $old["correoSesionPagina"] : $empresa->correoSesionPagina;
+		$passwordSesionPagina = isset($old["passwordSesionPagina"]) ? $old["passwordSesionPagina"] : "";
 	} else {
 		$razonSocial = isset($old["razonSocial"]) ? $old["razonSocial"] : "";
 		$nombreCorto = isset($old["nombreCorto"]) ? $old["nombreCorto"] : "";
@@ -35,6 +39,11 @@
 		$nomenclaturaOT = isset($old["nomenclaturaOT"]) ? $old["nomenclaturaOT"] : "";
 		$logo = null;
 		$imagen = null;
+
+		$passwordSesionPagina = isset($old["passwordSesionPagina"]) ? $old["passwordSesionPagina"] : "";
+		$correoSesionPagina = isset($old["correoSesionPagina"]) ? $old["correoSesionPagina"] : "";
+		$sesionId = isset($old["sesionId"]) ? $old["sesionId"] : "";
+
 	}
 ?>
 
@@ -46,7 +55,8 @@
 
 			<div class="card-body">
 
-				<input type="hidden" name="_token" value="<?php echo createToken(); ?>">
+				<input type="hidden" id="_token" name="_token" value="<?php echo createToken(); ?>">
+				<input type="hidden" id="empresaId" name="empresaId" value="<?php echo $empresa->id; ?>">
 
 				<div class="form-group">
 					<label for="razonSocial">Razón Social:</label>
@@ -61,7 +71,7 @@
 
 					<div class="col-md-7 form-group">
 						<label for="rfc">Nombre Corto:</label>
-						<input type="text" name="nombreCorto" value="<?php echo fString($nombreCorto); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa el Nombre Corto">
+						<input type="text" id="nombreCorto" name="nombreCorto" value="<?php echo fString($nombreCorto); ?>" class="form-control form-control-sm text-uppercase" placeholder="Ingresa el Nombre Corto">
 					</div>
 
 					<div class="col-md-5 form-group">
@@ -210,5 +220,36 @@
 		</div> <!-- <div class="card card-success card-outline"> -->
 
 	</div> <!-- <div class="col-md-6"> -->
+
+	<?php if ( isset($empresa->id) ) : ?>
+	<div class="col-md-6">
+		<div class="card card-success card-outline">
+			<div class="card-header">
+				<h1 class="card-title">Sesión Pagina Oficial</h1>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<input type="hidden" id="sesionId" name="sesionId" value="<?php echo fString($sesionId); ?>">
+
+					<div class="col-md-6 form-group">
+						<label for="correoSesionPagina">Correo:</label>
+						<input type="text" id="correoSesionPagina" name="correoSesionPagina" value="<?php echo fString($correoSesionPagina); ?>" class="form-control form-control-sm "
+						<?php echo ( (int)($sesionId ?? 0) > 0 ) ? ' disabled' : ''; ?>
+						placeholder="Ingresa el correo">
+					</div>
+					<div class="col-md-6 form-group">
+						<label for="passwordSesionPagina">Contraseña:</label>
+						<input type="password" id="passwordSesionPagina" name="passwordSesionPagina" value="<?php echo fString($passwordSesionPagina); ?>" class="form-control form-control-sm " placeholder="(INGRESA LA NUEVA CONTRASEÑA)">
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<button type="button" id="btnActualizarSesionPagina" class="btn btn-sm btn-outline-primary">
+					<i class="fas fa-save"></i> Actualizar Datos
+				</button>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
 
 </div> <!-- <div class="row"> -->

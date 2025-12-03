@@ -9,8 +9,6 @@ $(function () {
     rutaApiTopickTrucks = "https://topiktrucks.com/api";
   }
 
-  console.log(rutaApiTopickTrucks);
-
   // LLamar a la funcion fAjaxDataTable() para llenar el Listado
   // if ( tableList != null ) fAjaxDataTable(rutaAjax+'app/Ajax/EmpresaAjax.php', '#tablaEmpresas');
   if (tableList != null)
